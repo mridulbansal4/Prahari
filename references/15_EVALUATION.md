@@ -55,7 +55,7 @@ A change cannot merge/deploy if any of: faithfulness < 0.90, citation accuracy <
 - Latency P50/P95 on the investigation path.
 - Resolution precision on the adjudicated set.
 
-**Honesty rule:** these numbers are measured on our curated corpus and are reported as such — never generalised to "SENTINEL is X% accurate on all industrial data." Overclaiming here is exactly the credibility landmine the evidence tiers exist to avoid.
+**Honesty rule:** these numbers are measured on our curated corpus and are reported as such — never generalised to "Prahari is X% accurate on all industrial data." Overclaiming here is exactly the credibility landmine the evidence tiers exist to avoid.
 
 ## 15.7 What we explicitly do *not* claim
 

@@ -43,7 +43,7 @@ export function Login() {
       <div className="col" style={{ width: 560, maxWidth: "90vw" }}>
         <div>
           <div className="t-display-md" style={{ letterSpacing: "0.02em" }}>
-            SENTINEL
+            Prahari
           </div>
           <div className="t-subtitle ink-muted">Industrial Decision Intelligence Operating System</div>
         </div>

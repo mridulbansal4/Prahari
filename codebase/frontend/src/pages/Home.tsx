@@ -156,7 +156,7 @@ function ReliabilityDashboard() {
 
       <div className="grid-2">
         <Panel title="Decision analytics" action={<button className="btn btn-tertiary" onClick={() => nav("/analytics")}>Full dashboard</button>}>
-          {kpis.filter((k) => ["recurrence_rate", "wo_from_sentinel", "correction_to_improvement"].includes(k.key)).map((k) => (
+          {kpis.filter((k) => ["recurrence_rate", "wo_from_prahari", "correction_to_improvement"].includes(k.key)).map((k) => (
             <div key={k.key} className="row between center" style={{ padding: "6px 0", borderBottom: "1px solid var(--hairline-soft)" }}>
               <span className="t-body-sm">{k.label}</span>
               <span className="t-body-sm tabular ink-muted">actual {String(k.actual ?? "—")} · target {k.target}</span>

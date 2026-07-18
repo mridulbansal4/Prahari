@@ -43,4 +43,4 @@ violation is a defect, not a style preference.
 ## Naming (Bible §12.2)
 - Python `snake_case`/`PascalCase`/`UPPER_SNAKE`. Graph labels `PascalCase`, edges
   `UPPER_SNAKE`, properties `snake_case`. API paths `/kebab-case`, JSON fields `snake_case`.
-  Env vars `SENTINEL_<AREA>_<NAME>`.
+  Env vars `PRAHARI_<AREA>_<NAME>`.

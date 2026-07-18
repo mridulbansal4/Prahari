@@ -1,6 +1,6 @@
-# SENTINEL — production store topology (Bible §12.1, §3.9).
+# Prahari — production store topology (Bible §12.1, §3.9).
 # The default `embedded` profile needs NONE of this (ADR-P01); this compose file brings up the
-# full polyglot-persistence stack for `SENTINEL_PROFILE=production`.
+# full polyglot-persistence stack for `PRAHARI_PROFILE=production`.
 version: "3.9"
 
 services:
@@ -44,14 +44,14 @@ services:
   backend:
     build: ./backend
     environment:
-      SENTINEL_PROFILE: production
-      SENTINEL_GRAPH_URI: bolt://neo4j:7687
-      SENTINEL_GRAPH_USER: neo4j
-      SENTINEL_GRAPH_PASSWORD: sentinel-dev
-      SENTINEL_VECTOR_URL: http://qdrant:6333
-      SENTINEL_PG_DSN: postgresql://sentinel:sentinel-dev@postgres:5432/sentinel
-      SENTINEL_REDIS_URL: redis://redis:6379/0
-      # SENTINEL_MODEL_API_KEY: set to enable the cloud reasoning provider (CP-5); unset =
+      PRAHARI_PROFILE: production
+      PRAHARI_GRAPH_URI: bolt://neo4j:7687
+      PRAHARI_GRAPH_USER: neo4j
+      PRAHARI_GRAPH_PASSWORD: sentinel-dev
+      PRAHARI_VECTOR_URL: http://qdrant:6333
+      PRAHARI_PG_DSN: postgresql://sentinel:sentinel-dev@postgres:5432/sentinel
+      PRAHARI_REDIS_URL: redis://redis:6379/0
+      # PRAHARI_MODEL_API_KEY: set to enable the cloud reasoning provider (CP-5); unset =
       # air-gap/local + template-synth fallback (CP-9).
     depends_on:
       neo4j: {condition: service_healthy}

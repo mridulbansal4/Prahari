@@ -18,22 +18,22 @@ graph TB
   Ravi[Ravi — technician<br/>mobile PWA]
   Meera[Meera — reliability<br/>web console]
   Deepak[Deepak — OT security<br/>admin/audit]
-  SENTINEL[[SENTINEL<br/>Industrial Intelligence OS]]
+  Prahari[[Prahari<br/>Industrial Intelligence OS]]
   CMMS[(CMMS / EAM)]
   DMS[(DMS / shared drives)]
   HIST[(Historian / DCS export)]
   MODEL[[LLM provider<br/>abstracted — CP-5]]
 
-  Ravi --> SENTINEL
-  Meera --> SENTINEL
-  Deepak --> SENTINEL
-  SENTINEL -- read-mostly, write-with-consent --> CMMS
-  SENTINEL -- read --> DMS
-  SENTINEL -- read --> HIST
-  SENTINEL -- inference --> MODEL
+  Ravi --> Prahari
+  Meera --> Prahari
+  Deepak --> Prahari
+  Prahari -- read-mostly, write-with-consent --> CMMS
+  Prahari -- read --> DMS
+  Prahari -- read --> HIST
+  Prahari -- inference --> MODEL
 ```
 
-**Trust boundary:** everything inside `SENTINEL` runs in-boundary (customer VPC or air-gap). The only egress is model inference, which is provider-abstracted and, in air-gapped mode, served by a local model (CP-9 fallback).
+**Trust boundary:** everything inside `Prahari` runs in-boundary (customer VPC or air-gap). The only egress is model inference, which is provider-abstracted and, in air-gapped mode, served by a local model (CP-9 fallback).
 
 ## 2.3 C4 — Level 2: Containers
 

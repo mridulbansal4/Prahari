@@ -1,5 +1,5 @@
 # SENTINEL core — modular monolith. Multi-stage; runs the embedded profile by default, or the
-# production profile against the docker-compose store topology (SENTINEL_PROFILE=production).
+# production profile against the docker-compose store topology (PRAHARI_PROFILE=production).
 FROM python:3.12-slim AS base
 WORKDIR /app
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1

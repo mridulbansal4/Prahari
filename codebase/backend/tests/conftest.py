@@ -8,9 +8,9 @@ from pathlib import Path
 import pytest
 
 # Force a throwaway embedded state dir BEFORE importing the app.
-_TMP = Path(tempfile.mkdtemp(prefix="sentinel-test-"))
-os.environ["SENTINEL_STATE_DIR"] = str(_TMP)
-os.environ["SENTINEL_PROFILE"] = "embedded"
+_TMP = Path(tempfile.mkdtemp(prefix="prahari-test-"))
+os.environ["PRAHARI_STATE_DIR"] = str(_TMP)
+os.environ["PRAHARI_PROFILE"] = "embedded"
 
 
 @pytest.fixture(scope="session", autouse=True)

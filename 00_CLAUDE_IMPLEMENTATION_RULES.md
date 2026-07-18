@@ -2,9 +2,9 @@
 
 # CLAUDE IMPLEMENTATION GOVERNANCE
 
-**Project:** SENTINEL — Industrial Intelligence Operating System
+**Project:** Prahari — Industrial Intelligence Operating System
 
-**Purpose:** This document defines the implementation governance for the entire SENTINEL codebase. Every coding session, architectural decision, implementation task, and engineering change must comply with the rules defined here.
+**Purpose:** This document defines the implementation governance for the entire Prahari codebase. Every coding session, architectural decision, implementation task, and engineering change must comply with the rules defined here.
 
 This document has higher priority than every supporting document in this repository.
 
@@ -392,7 +392,7 @@ This hierarchy must never be violated.
 
 # 13. Final Objective
 
-The final SENTINEL codebase must be a faithful implementation of
+The final Prahari codebase must be a faithful implementation of
 
 > **SENTINEL_Product_Requirements_Bible.md**
 

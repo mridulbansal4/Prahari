@@ -70,7 +70,7 @@ Named because the wedge is Indian regulated industry, where air-gap is common.
 
 - Residency recorded per tenant (`06.tenant.data_residency`); enforced by deployment topology (region-pinned or air-gap).
 - No cross-region replication unless the tenant's residency policy allows it.
-- PII minimisation: SENTINEL stores expertise relationships, not HR records.
+- PII minimisation: Prahari stores expertise relationships, not HR records.
 
 ## 8.9 Supply-chain & originality (hackathon-specific)
 
@@ -80,7 +80,7 @@ Named because the wedge is Indian regulated industry, where air-gap is common.
 
 ## 8.10 Compliance posture (product, not legal)
 
-SENTINEL evaluates encoded rules against graph state and produces **evidence + gaps**, attributed to a clause (BR-3). It **never** renders a legal opinion and **never implies completeness** — it reports which clauses are encoded vs not (FM-6). This is the only defensible position and it is what keeps the compliance pillar an asset rather than a liability.
+Prahari evaluates encoded rules against graph state and produces **evidence + gaps**, attributed to a clause (BR-3). It **never** renders a legal opinion and **never implies completeness** — it reports which clauses are encoded vs not (FM-6). This is the only defensible position and it is what keeps the compliance pillar an asset rather than a liability.
 
 ---
 

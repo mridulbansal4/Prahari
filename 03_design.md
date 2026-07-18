@@ -1,10 +1,10 @@
-# SENTINEL Design System
+# Prahari Design System
 
 *Industrial Decision Intelligence Operating System — v1.0*
 
 ---
 version: 1.0
-name: SENTINEL-design-system
+name: Prahari-design-system
 description: "An Industrial Decision Intelligence Operating System interface built on a graphite-black instrument canvas rather than a neutral or blue-black one. A single restrained steel-cyan signal color carries all primary action and focus; every other color in the system is a semantic token tied to a specific operational meaning — evidence, investigation, decision, risk, prediction, simulation, digital twin — never decoration. Display type is set in a compressed weight range (400-650, never lighter, never bolder) with tight line-heights on headlines and relaxed line-heights on data-dense body copy. Corners run small and precise (2-8px) everywhere UI chrome appears, and drop to 0px on every full-bleed data canvas, so the instrument surfaces read as instruments, not cards. Depth is carried entirely by a five-step surface ladder and an occasional cyan instrument-glow — never a shadow. The result reads as a single, quiet, engineered command surface: evidence visible, reasoning visible, AI invisible."
 
 colors:
@@ -506,9 +506,9 @@ components:
 
 ## Overview
 
-SENTINEL runs on a single instrument-grade canvas: `{colors.canvas}` (#0B0D0F), a graphite black with a cool, neutral undertone — dark enough to disappear in a control room, warm enough that it never reads as a "theme." A five-step surface ladder (`{colors.canvas}` → `{colors.surface-1}` → `{colors.surface-2}` → `{colors.surface-3}` → `{colors.surface-4}`) carries every unit of hierarchy in the system. There is no drop shadow anywhere in SENTINEL. Depth is either a surface stepping up, or — on focus, on a live signal, on an active state — a quiet cyan glow. Nothing floats; everything sits at a known level.
+Prahari runs on a single instrument-grade canvas: `{colors.canvas}` (#0B0D0F), a graphite black with a cool, neutral undertone — dark enough to disappear in a control room, warm enough that it never reads as a "theme." A five-step surface ladder (`{colors.canvas}` → `{colors.surface-1}` → `{colors.surface-2}` → `{colors.surface-3}` → `{colors.surface-4}`) carries every unit of hierarchy in the system. There is no drop shadow anywhere in Prahari. Depth is either a surface stepping up, or — on focus, on a live signal, on an active state — a quiet cyan glow. Nothing floats; everything sits at a known level.
 
-One chromatic color, `{colors.signal}`, carries general-purpose action: navigation, links, focus, selection. Every other color in the palette is a semantic instrument reading, not a decoration — evidence is gold, investigation is indigo, decision is blue, knowledge is teal, prediction is violet and dashed, simulation is magenta-violet and always labeled, risk moves along a green-amber-red gradient that never leaves that gradient. A designer or engineer extending SENTINEL should be able to look at any colored element and state, without guessing, what class of information it represents.
+One chromatic color, `{colors.signal}`, carries general-purpose action: navigation, links, focus, selection. Every other color in the palette is a semantic instrument reading, not a decoration — evidence is gold, investigation is indigo, decision is blue, knowledge is teal, prediction is violet and dashed, simulation is magenta-violet and always labeled, risk moves along a green-amber-red gradient that never leaves that gradient. A designer or engineer extending Prahari should be able to look at any colored element and state, without guessing, what class of information it represents.
 
 Type runs on a single family, `Datum Sans`, across the entire hierarchy — display, body, tables, labels, buttons — the way a single instrument typeface would run across every gauge on a console. The weight range is deliberately compressed: nothing lighter than 400, nothing heavier than 650. There is no delicate thin-weight editorial voice and no oversized black display weight; the range itself is the brand's restraint. A companion mono, `Datum Mono`, is reserved for code, logs, IDs, and evidentiary hashes — anywhere the exact character matters more than the voice.
 
@@ -526,7 +526,7 @@ Corners run small and are use-coded, not decorative: 2–8px on every piece of U
 ## Colors
 
 ### Canvas & Surface
-The surface ladder is the single mechanism SENTINEL uses to express hierarchy on a dark ground.
+The surface ladder is the single mechanism Prahari uses to express hierarchy on a dark ground.
 
 | Token | Value | Use |
 |---|---|---|
@@ -578,7 +578,7 @@ Signal is used for general wayfinding and action — "click here to proceed, thi
 | `{colors.offline}` | #565C64 | Asset or sensor offline, or state genuinely unknown — deliberately neutral, never implies severity |
 
 ### Domain Semantics
-This is SENTINEL's signature palette layer — colors that exist because the product's information model requires them, not because a marketing page needed a fifth accent.
+This is Prahari's signature palette layer — colors that exist because the product's information model requires them, not because a marketing page needed a fifth accent.
 
 | Token | Value | Meaning |
 |---|---|---|
@@ -605,14 +605,14 @@ Risk visualizations interpolate through exactly these three stops — never a ra
 |---|---|---|
 | `{colors.overlay-scrim}` | rgba(8,9,10,0.72) | The scrim behind a modal dialog |
 
-Every semantic token above maps to exactly one meaning across the entire product. If a new feature needs a new color, it needs a new named token with a documented meaning — SENTINEL never reaches for an existing token because "it happens to look right" in a new context.
+Every semantic token above maps to exactly one meaning across the entire product. If a new feature needs a new color, it needs a new named token with a documented meaning — Prahari never reaches for an existing token because "it happens to look right" in a new context.
 
 ## Typography
 
 ### Font Family
-SENTINEL runs a single family, **Datum Sans**, across the entire hierarchy — display headlines, body copy, table cells, button labels, status text. Fallback stack: `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`. A companion monospace, **Datum Mono** (fallback: `JetBrains Mono, ui-monospace, "SF Mono", monospace`), is reserved exclusively for code, logs, terminal output, and evidentiary identifiers — anywhere exact characters matter more than voice.
+Prahari runs a single family, **Datum Sans**, across the entire hierarchy — display headlines, body copy, table cells, button labels, status text. Fallback stack: `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`. A companion monospace, **Datum Mono** (fallback: `JetBrains Mono, ui-monospace, "SF Mono", monospace`), is reserved exclusively for code, logs, terminal output, and evidentiary identifiers — anywhere exact characters matter more than voice.
 
-Weight is held to a compressed range: 400 (body), 500 (medium — table headers, metadata), 600 (emphasis — headlines, titles, buttons), and a single custom 650 (structural — the largest display sizes and metric numerals only). SENTINEL never drops to a light editorial weight and never reaches for a black display weight; the narrow range itself communicates engineering restraint rather than either softness or aggression.
+Weight is held to a compressed range: 400 (body), 500 (medium — table headers, metadata), 600 (emphasis — headlines, titles, buttons), and a single custom 650 (structural — the largest display sizes and metric numerals only). Prahari never drops to a light editorial weight and never reaches for a black display weight; the narrow range itself communicates engineering restraint rather than either softness or aggression.
 
 ### Hierarchy
 
@@ -645,14 +645,14 @@ Weight is held to a compressed range: 400 (body), 500 (medium — table headers,
 | `{typography.mobile-display}` | 28px | 650 | 1.15 | 0 | Compressed display for mobile / field tablet |
 
 ### Principles
-- **One family, held to 400–650.** The weight range is the brand's typographic signature: never lighter, never heavier. There is no "light editorial" mode and no "black display" mode anywhere in SENTINEL.
+- **One family, held to 400–650.** The weight range is the brand's typographic signature: never lighter, never heavier. There is no "light editorial" mode and no "black display" mode anywhere in Prahari.
 - **Tight on display, relaxed on data.** Display line-heights sit at 1.05–1.20; body, table, and log line-heights open up to 1.45–1.70 so dense sensor tables and log streams stay legible at long viewing sessions rather than reading as a marketing headline stack.
-- **Tracking is restrained everywhere except the Index Label.** Display type carries only a hairline -0.01em; body carries none at all. The one place tracking works hard is `{typography.label}` — an uppercase, 0.08em-tracked device used as section eyebrows, table headers, and status text throughout the system. It is SENTINEL's one consistent typographic signature and appears above nearly every structural boundary in the product.
+- **Tracking is restrained everywhere except the Index Label.** Display type carries only a hairline -0.01em; body carries none at all. The one place tracking works hard is `{typography.label}` — an uppercase, 0.08em-tracked device used as section eyebrows, table headers, and status text throughout the system. It is Prahari's one consistent typographic signature and appears above nearly every structural boundary in the product.
 - **Numerals are always tabular.** Any place a number can change at runtime — metric values, table cells, chart callouts — uses tabular figures so digits don't shift the layout as they update.
 - **Mono is a citation, not a voice.** Datum Mono appears only where the literal character sequence is the content itself: code, logs, hashes, IDs. It never appears in headlines or marketing-style callouts.
 
 ### Note on Font Substitutes
-Datum Sans and Datum Mono are the documented internal names for SENTINEL's typographic system. Until a custom cut exists, **Inter** (variable, weights 400/500/600/650-approximated-as-650-or-nearest-available) is the production substitute for Datum Sans, and **JetBrains Mono** at weight 400 is the substitute for Datum Mono.
+Datum Sans and Datum Mono are the documented internal names for Prahari's typographic system. Until a custom cut exists, **Inter** (variable, weights 400/500/600/650-approximated-as-650-or-nearest-available) is the production substitute for Datum Sans, and **JetBrains Mono** at weight 400 is the substitute for Datum Mono.
 
 ## Layout
 
@@ -670,7 +670,7 @@ Datum Sans and Datum Mono are the documented internal names for SENTINEL's typog
 - **Data-grid surfaces:** full-width, no max — wide sensor and asset tables are allowed to run edge-to-edge with horizontal scroll and a sticky identifying column.
 
 ### Whitespace Philosophy
-The dark canvas carries the whitespace the way it does throughout SENTINEL's surface ladder — separation comes from a surface stepping up, not from a gap opening in white. Within an operational dashboard, density is a feature: an operator scanning forty sensor readings benefits from tight, consistent `{spacing.lg}` rhythm between metric cards, not generous air. Within a report, investigation summary, or onboarding surface, the system relaxes to full `{spacing.section}` rhythm — SENTINEL deliberately runs two whitespace registers, dense-operational and relaxed-editorial, and a designer chooses the register based on whether the surface is being *scanned* or *read*.
+The dark canvas carries the whitespace the way it does throughout Prahari's surface ladder — separation comes from a surface stepping up, not from a gap opening in white. Within an operational dashboard, density is a feature: an operator scanning forty sensor readings benefits from tight, consistent `{spacing.lg}` rhythm between metric cards, not generous air. Within a report, investigation summary, or onboarding surface, the system relaxes to full `{spacing.section}` rhythm — Prahari deliberately runs two whitespace registers, dense-operational and relaxed-editorial, and a designer chooses the register based on whether the surface is being *scanned* or *read*.
 
 ## Elevation & Depth
 
@@ -684,7 +684,7 @@ The dark canvas carries the whitespace the way it does throughout SENTINEL's sur
 | Lift 4 | `{colors.surface-4}`, no border | Tooltips, topmost popovers |
 | Glow | 2px `{colors.signal}` outline at 30% opacity, no shadow | Focused input, focused button, active canvas selection |
 
-SENTINEL never uses a drop shadow. The surface ladder alone carries every unit of depth in the system, and where a shadow would traditionally mark focus or activity, SENTINEL substitutes an **instrument glow** — a soft cyan outline rather than a dark cast shadow. This is a deliberate, singular device: light communicates "live and selected," never darkness pooling beneath an element.
+Prahari never uses a drop shadow. The surface ladder alone carries every unit of depth in the system, and where a shadow would traditionally mark focus or activity, Prahari substitutes an **instrument glow** — a soft cyan outline rather than a dark cast shadow. This is a deliberate, singular device: light communicates "live and selected," never darkness pooling beneath an element.
 
 ### Decorative Depth
 - **Instrument glow** — the only decorative effect in the system; reserved for focus rings and live-selection state, always signal-cyan, always subtle (≤30% opacity).
@@ -709,7 +709,7 @@ The radius hierarchy is **use-coded, not aesthetic**: chrome gets small precise 
 
 ## Iconography
 
-SENTINEL's icon set is line-drawn, never filled, with one deliberate exception: severity and status glyphs, which fill solid specifically so they read at a glance and compete visually with nothing around them.
+Prahari's icon set is line-drawn, never filled, with one deliberate exception: severity and status glyphs, which fill solid specifically so they read at a glance and compete visually with nothing around them.
 
 - **Stroke weight:** 1.5px, constant across every size.
 - **Construction:** built on a 24×24px canvas with a 20×20px live area (2px of internal padding on each side), aligned to the 4px sub-grid so icons sit crisply against text baselines.
@@ -721,7 +721,7 @@ SENTINEL's icon set is line-drawn, never filled, with one deliberate exception: 
 
 ## Motion
 
-Motion in SENTINEL is short, linear-feeling, and mechanical — it should read like a well-machined control responding, not like a spring or a bounce. Nothing in the system overshoots or oscillates, with the single exception of the live status-dot breathing pulse and the pipeline flow-dash, both of which represent an actual live condition rather than decoration.
+Motion in Prahari is short, linear-feeling, and mechanical — it should read like a well-machined control responding, not like a spring or a bounce. Nothing in the system overshoots or oscillates, with the single exception of the live status-dot breathing pulse and the pipeline flow-dash, both of which represent an actual live condition rather than decoration.
 
 ### Duration Tokens
 | Token | Duration | Use |
@@ -742,7 +742,7 @@ Motion in SENTINEL is short, linear-feeling, and mechanical — it should read l
 ### Principles
 - **State changes that matter are instant, not eased.** A new critical alert appears with no fade-in and no easing — softening an alarm's arrival with a pleasant transition would work against the alert's purpose.
 - **Live numbers count, they don't jump.** When a metric-card value changes because of new live data, the numeral animates through the delta over 400–600ms (tabular figures, no layout shift) rather than snapping — this communicates "the system is alive and watching," distinct from a user-triggered UI change, which uses the standard `fast`/`base` tokens instead.
-- **No spinners.** A rotating brand-mark spinner reads as "buffering consumer app." SENTINEL uses a determinate linear progress bar wherever percentage-complete is knowable, and a low-amplitude opacity-pulse skeleton (`{component.skeleton-loader}`, 0.5↔0.7 opacity, 1.2s ease-in-out, looping) everywhere else.
+- **No spinners.** A rotating brand-mark spinner reads as "buffering consumer app." Prahari uses a determinate linear progress bar wherever percentage-complete is knowable, and a low-amplitude opacity-pulse skeleton (`{component.skeleton-loader}`, 0.5↔0.7 opacity, 1.2s ease-in-out, looping) everywhere else.
 - **The one looping decorative motion in the system** is a slow traveling dash along an active pipeline edge in an operational-flow diagram, looping at `slow` duration — and it is permitted only because it represents literal material or data flow, not because motion is being used for delight.
 
 ## Components
@@ -829,7 +829,7 @@ Motion in SENTINEL is short, linear-feeling, and mechanical — it should read l
 
 **`confidence-indicator`** — A five-segment horizontal bar (each segment 3×10px, `{rounded.xs}`), filled left-to-right in `{colors.signal}` to represent confidence level, paired with a `{typography.metadata}` percentage. Appears next to every AI-derived value in the system as a structural requirement, never an optional annotation.
 
-**`source-citation-chip`** — A small numbered chip (`[1]`), `{rounded.xs}`, 1px `{colors.evidence}` border, `{colors.evidence}` text at `{typography.metadata}`. Clicking or hovering opens the corresponding `evidence-card`. Every AI-authored claim in SENTINEL must carry at least one citation chip — enforced as a component contract, not a style suggestion.
+**`source-citation-chip`** — A small numbered chip (`[1]`), `{rounded.xs}`, 1px `{colors.evidence}` border, `{colors.evidence}` text at `{typography.metadata}`. Clicking or hovering opens the corresponding `evidence-card`. Every AI-authored claim in Prahari must carry at least one citation chip — enforced as a component contract, not a style suggestion.
 
 **`reasoning-disclosure`** — A collapsed-by-default "Show reasoning" link (`{colors.ink-muted}`, `{typography.label}` caps) that expands a step-by-step trace in `{typography.body-sm}`. Reasoning is always available and never hidden behind a paywall or a separate screen, but it never forces itself onto the primary surface.
 
@@ -857,11 +857,11 @@ Motion in SENTINEL is short, linear-feeling, and mechanical — it should read l
 
 **`tooltip`** — `{colors.surface-4}`, `{rounded.xs}`, `{typography.caption}`, 4px offset, `instant`-duration fade, no arrow tail — a clean rectangle rather than a speech-bubble shape.
 
-**`skeleton-loader`** — A `{colors.surface-2}` block pulsing between 0.5 and 0.7 opacity on a 1.2s `ease-in-out` loop, shaped to match the content it's replacing. SENTINEL never uses a shimmer-sweep gradient, which reads as a consumer/marketing loading pattern rather than an instrument state.
+**`skeleton-loader`** — A `{colors.surface-2}` block pulsing between 0.5 and 0.7 opacity on a 1.2s `ease-in-out` loop, shaped to match the content it's replacing. Prahari never uses a shimmer-sweep gradient, which reads as a consumer/marketing loading pattern rather than an instrument state.
 
 ## Data Visualization
 
-SENTINEL's charts and graphs reuse the semantic color system rather than inventing a separate "chart palette" — the same discipline that keeps the rest of the product coherent applies here: a color in a chart means the same thing it means everywhere else in the product.
+Prahari's charts and graphs reuse the semantic color system rather than inventing a separate "chart palette" — the same discipline that keeps the rest of the product coherent applies here: a color in a chart means the same thing it means everywhere else in the product.
 
 ### Charts (line, bar, area)
 - Default single-series color: `{colors.signal}`.
@@ -874,7 +874,7 @@ SENTINEL's charts and graphs reuse the semantic color system rather than inventi
 A 5×5 Likelihood × Severity grid. Each cell shades along the three-stop `risk-low` → `risk-mid` → `risk-high` gradient and displays its numeric risk score. The organization's current position on the matrix gets a 2px `{colors.signal}` ring — the one place signal-cyan is allowed inside an otherwise risk-colored surface, specifically to mark "you are here" without being mistaken for a risk reading itself.
 
 ### Heatmaps
-Single-hue intensity ramps only — `{colors.signal}` at 10–100% opacity for activity/volume heatmaps, or the three-stop risk gradient for risk heatmaps. SENTINEL never uses a multi-hue "jet" colormap: it is not reliably colorblind-safe and reads as generic BI decoration rather than an instrument reading.
+Single-hue intensity ramps only — `{colors.signal}` at 10–100% opacity for activity/volume heatmaps, or the three-stop risk gradient for risk heatmaps. Prahari never uses a multi-hue "jet" colormap: it is not reliably colorblind-safe and reads as generic BI decoration rather than an instrument reading.
 
 ### Knowledge & Network Graphs
 Force-directed or hierarchical layout. Nodes are sized by importance/degree and carry **shape redundancy alongside color** so meaning survives colorblindness and grayscale printing: assets render as neutral `{colors.ink-muted}` circles, documents as `{colors.evidence}` rounded squares, people as `{colors.decision}` circles with an initials glyph, events as `{colors.warning}` triangles. Edges default to `{colors.hairline-strong}`; an active or traced path highlights in `{colors.signal}`.
@@ -886,32 +886,32 @@ Process/flow nodes render as `{rounded.sm}` rectangles on `{colors.surface-1}`; 
 Branches already taken render as solid `{colors.signal}` lines; untaken or pruned branches render dashed in `{colors.ink-faint}` — the same solid/dashed convention used everywhere else to distinguish "actual" from "hypothetical."
 
 ### Execution Flow / Sensor Views / Timeline / Evidence Relationships
-All reuse the primitives defined above and in the Components section (`decision-canvas`, `activity-feed`, `data-grid`, `evidence-viewer`) rather than introducing new visual language — SENTINEL's data-visualization system is deliberately a small, closed set of primitives recombined by context, not an ever-growing library of one-off chart types.
+All reuse the primitives defined above and in the Components section (`decision-canvas`, `activity-feed`, `data-grid`, `evidence-viewer`) rather than introducing new visual language — Prahari's data-visualization system is deliberately a small, closed set of primitives recombined by context, not an ever-growing library of one-off chart types.
 
 ## Dashboard Philosophy
 
-SENTINEL's dashboards are built as **mission control**, not as a general-purpose BI canvas. Three principles hold that idea together:
+Prahari's dashboards are built as **mission control**, not as a general-purpose BI canvas. Three principles hold that idea together:
 
 **A single-glance status strip leads every operational view.** The top of any dashboard is a row of `metric-card`s summarizing the state of the system being watched — the "bridge readout." A user should be able to tell whether everything is nominal from across the room before they read a single word of detail beneath it.
 
-**Depth is drill-down, not clutter.** Information architecture moves from plant-level, to unit-level, to asset-level, to individual sensor — each level a deliberate navigation, never all four crammed onto one screen. Every chart and panel exists to answer a specific operational question; SENTINEL does not ship "vanity" visualizations that exist because a widget slot needed filling.
+**Depth is drill-down, not clutter.** Information architecture moves from plant-level, to unit-level, to asset-level, to individual sensor — each level a deliberate navigation, never all four crammed onto one screen. Every chart and panel exists to answer a specific operational question; Prahari does not ship "vanity" visualizations that exist because a widget slot needed filling.
 
-**Dashboards are role-based and opinionated, not infinitely customizable.** Rather than a blank canvas the user drags widgets onto, SENTINEL ships fixed, purpose-built templates — an Operator view, an Engineer view, an Executive view, an Investigator view — each with a defined information hierarchy suited to that role's decisions. Users can drill in and filter within a view, but the overall structure of "what this screen is for" is designed, not assembled ad hoc. This is what keeps forty engineers across a plant looking at the same instrument the same way.
+**Dashboards are role-based and opinionated, not infinitely customizable.** Rather than a blank canvas the user drags widgets onto, Prahari ships fixed, purpose-built templates — an Operator view, an Engineer view, an Executive view, an Investigator view — each with a defined information hierarchy suited to that role's decisions. Users can drill in and filter within a view, but the overall structure of "what this screen is for" is designed, not assembled ad hoc. This is what keeps forty engineers across a plant looking at the same instrument the same way.
 
 ## AI Design
 
-AI in SENTINEL is deliberately invisible. What's visible is the evidence, the reasoning, the confidence, the sources, and the decision itself — the model producing them stays out of the frame. Four rules carry this principle through the product:
+AI in Prahari is deliberately invisible. What's visible is the evidence, the reasoning, the confidence, the sources, and the decision itself — the model producing them stays out of the frame. Four rules carry this principle through the product:
 
 1. **No chat metaphor.** The `copilot-panel` docks beside the working surface rather than floating over it, and `copilot-message`s render in the same `evidence-card` / `decision-card` / plain-text language as everything else in the product. There is no avatar, no bubble, no assistant persona.
 2. **Confidence is never hidden.** Every AI-derived value carries a `confidence-indicator` as a structural requirement of the component, not an optional annotation a designer might skip under deadline pressure.
 3. **Every claim is sourced.** A `source-citation-chip` links each AI-authored statement back to the `evidence-card` that supports it. An unsourced AI claim is treated as a defect, not a stylistic choice.
 4. **Reasoning is available on demand, never forced.** The `reasoning-disclosure` pattern keeps step-by-step reasoning one click away and collapsed by default, so the primary surface stays calm and legible while the full trace remains fully auditable.
 
-The net effect: an engineer reading SENTINEL's output should feel like they're reading a colleague's well-documented analysis, not talking to a chatbot.
+The net effect: an engineer reading Prahari's output should feel like they're reading a colleague's well-documented analysis, not talking to a chatbot.
 
 ## Responsive Behavior
 
-SENTINEL does not attempt to force every surface onto every device. Each device class is scoped to the tasks it is actually suited for.
+Prahari does not attempt to force every surface onto every device. Each device class is scoped to the tasks it is actually suited for.
 
 | Device Class | Width / Context | Behavior |
 |---|---|---|
@@ -920,7 +920,7 @@ SENTINEL does not attempt to force every surface onto every device. Each device 
 | Tablet | 1024–1279px | Sidebar becomes an overlay drawer rather than a persistent column; canvases remain available but toolbars condense into a single overflow menu |
 | Field Tablet | 768–1023px, rugged/outdoor context | Single-pane, task-first layouts; touch targets bump to 48px minimum; a persistent offline/sync-status indicator is always visible; canvases simplify to read-only unless explicitly entering an edit task |
 | Industrial Touch Display | Fixed wall/console, 32–55" | Typically a non-interactive or lightly-interactive glanceable view. Typography scales **up**, not down — `metric-value` may render at 48–64px for viewing distance — and the status strip becomes the entire screen rather than the top of a longer scroll |
-| Mobile | < 768px | Deliberately scoped to notification and approval tasks — alerts, decision approvals, quick status checks — rendered as a single-card stack. The investigation canvas, digital twin canvas, and simulation panel are **not** available on mobile; they require the screen real estate the analysis genuinely needs, and SENTINEL does not pretend otherwise |
+| Mobile | < 768px | Deliberately scoped to notification and approval tasks — alerts, decision approvals, quick status checks — rendered as a single-card stack. The investigation canvas, digital twin canvas, and simulation panel are **not** available on mobile; they require the screen real estate the analysis genuinely needs, and Prahari does not pretend otherwise |
 
 ### Touch Targets
 - Standard desktop/tablet minimum: 40px.
@@ -935,7 +935,7 @@ SENTINEL does not attempt to force every surface onto every device. Each device 
 
 ## Accessibility
 
-SENTINEL treats accessibility as an operational requirement, not a compliance checklist — a missed alert or an unreadable gauge in a control room has real-world consequences.
+Prahari treats accessibility as an operational requirement, not a compliance checklist — a missed alert or an unreadable gauge in a control room has real-world consequences.
 
 - **Keyboard navigation:** every action reachable by mouse is reachable by keyboard; the `command-bar` functions as a keyboard-first launcher for any action in the system; data grids, tree views, and canvases all support arrow-key navigation between elements.
 - **Screen reader support:** semantic roles on every component; new critical alerts announce via an ARIA live region immediately on arrival; every chart, graph, and heatmap ships a "View as table" fallback so no data visualization is screen-reader-inaccessible.
@@ -966,7 +966,7 @@ SENTINEL treats accessibility as an operational requirement, not a compliance ch
 - Don't use a multi-hue "jet" colormap on any heatmap or risk visualization.
 - Don't give the AI copilot an avatar, a chat bubble, or a persona name.
 - Don't render simulated or predicted data with a solid fill and no label — it must always be visually distinguishable from live operational data.
-- Don't build a customizable, drag-and-drop dashboard canvas; SENTINEL ships opinionated, role-based views.
+- Don't build a customizable, drag-and-drop dashboard canvas; Prahari ships opinionated, role-based views.
 - Don't rely on a spinner for loading state; use a determinate progress bar or an opacity-pulse skeleton.
 
 ## Governance & Extension

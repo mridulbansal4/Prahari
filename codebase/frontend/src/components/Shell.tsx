@@ -45,7 +45,7 @@ export function Shell({ children, rung }: { children: React.ReactNode; rung: str
       >
         <NavLink to="/home" style={{ display: "block", padding: "0 var(--sp-sm) var(--sp-lg)", color: "var(--ink)" }}>
           <div className="t-title" style={{ letterSpacing: "0.04em" }}>
-            SENTINEL
+            Prahari
           </div>
           <div className="t-metadata">Decision Intelligence OS</div>
         </NavLink>

@@ -1,5 +1,5 @@
 // REST client for the core API. Bearer token from auth context; /v1 proxied to core in dev.
-const TOKEN_KEY = "sentinel.token";
+const TOKEN_KEY = "prahari.token";
 
 export function setToken(t: string | null): void {
   if (t) localStorage.setItem(TOKEN_KEY, t);

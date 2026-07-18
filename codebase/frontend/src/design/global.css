@@ -1,4 +1,4 @@
-/* SENTINEL global styles — reset + base + the component library from design.md.
+/* Prahari global styles — reset + base + the component library from design.md.
  * Every value references a token from tokens.css. */
 @import "./tokens.css";
 

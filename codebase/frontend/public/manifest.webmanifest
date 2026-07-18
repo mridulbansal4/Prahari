@@ -1,6 +1,6 @@
 {
-  "name": "SENTINEL — Industrial Decision Intelligence OS",
-  "short_name": "SENTINEL",
+  "name": "Prahari — Industrial Decision Intelligence OS",
+  "short_name": "Prahari",
   "description": "Installable field console (ADR-013 — PWA, not native).",
   "start_url": "/",
   "display": "standalone",

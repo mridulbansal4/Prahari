@@ -25,7 +25,7 @@ from .config import get_settings
 from .domain.errors import SentinelError
 
 app = FastAPI(
-    title="SENTINEL — Industrial Decision Intelligence Operating System",
+    title="Prahari — Industrial Decision Intelligence Operating System",
     version="1.0.0",
     description="Contract-first API (Bible §7). Every answer carries citations (CP-2); every "
     "write is gated (CP-3); abstention is a first-class state (CP-4); the degradation ladder is "
@@ -49,7 +49,7 @@ async def correlation_id(request: Request, call_next):  # type: ignore[no-untype
 
 
 @app.exception_handler(SentinelError)
-async def sentinel_error_handler(request: Request, exc: SentinelError) -> JSONResponse:
+async def prahari_error_handler(request: Request, exc: SentinelError) -> JSONResponse:
     rid = request.headers.get("X-Request-Id", "")
     return JSONResponse(
         status_code=exc.http_status,
@@ -66,7 +66,7 @@ for r in (auth_shell, investigations, documents, resolution, compliance, actions
 async def root() -> dict:
     s = get_settings()
     return {
-        "product": "SENTINEL — Industrial Decision Intelligence Operating System",
+        "product": "Prahari — Industrial Decision Intelligence Operating System",
         "profile": s.profile,
         "docs": "/docs",
         "note": "Ask an investigation, watch the traversal, then disable the graph and watch it "

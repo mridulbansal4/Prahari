@@ -27,7 +27,7 @@ def build_stores(settings: Settings | None = None) -> Stores:
 def _build_embedded(settings: Settings) -> Stores:
     from .embedded import EmbeddedStore
 
-    db = EmbeddedStore(settings.state_path / "sentinel.db")
+    db = EmbeddedStore(settings.state_path / "prahari.db")
     return Stores(graph=db, vector=db, relational=db)  # one object, three ports
 
 

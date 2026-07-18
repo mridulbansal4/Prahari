@@ -4,7 +4,7 @@
 
 ## 5.1 Ontology philosophy — alignment, not invention
 
-Vol 2 §2.2.1 finding: the industry already has an ontology; it is simply not assembled. SENTINEL **aligns** to existing standards rather than inventing a schema — faster to build, credible to a reliability engineer, auditable.
+Vol 2 §2.2.1 finding: the industry already has an ontology; it is simply not assembled. Prahari **aligns** to existing standards rather than inventing a schema — faster to build, credible to a reliability engineer, auditable.
 
 - Failure/asset taxonomy anchor: **ISO 14224** `[V]`.
 - Drawing target schema: **DEXPI** `[V]`.
@@ -57,7 +57,7 @@ Vol 2 §2.2.1 finding: the industry already has an ontology; it is simply not as
 
 Two time axes:
 - **Valid time** — when the fact was true in the plant (`effective_from/to`).
-- **Transaction time** — when SENTINEL recorded it (`recorded_at`).
+- **Transaction time** — when Prahari recorded it (`recorded_at`).
 
 Implementation: edges carry both; superseded facts are not deleted but bounded (`effective_to` set, or a new edge with a later `recorded_at`). Any answer can be reconstructed *as-of* a date by filtering both axes. This is what makes "stale graph" (FM-5) survivable and audits reproducible.
 
@@ -77,7 +77,7 @@ Every significant event can be modelled as a chain:
 ```
 Observation → Hypothesis → Evidence → Decision → {Alternative(rejected)} → RiskAccepted → Outcome → LessonLearned
 ```
-This lets SENTINEL replay *reasoning*, not just a timeline (v2 brief): "why was shutdown rejected then, and would that reasoning still hold today?" Implemented as ordered nodes with `LED_TO` edges, each `EVIDENCED_BY` a span. It is additive and demo-optional; the core investigation works without it.
+This lets Prahari replay *reasoning*, not just a timeline (v2 brief): "why was shutdown rejected then, and would that reasoning still hold today?" Implemented as ordered nodes with `LED_TO` edges, each `EVIDENCED_BY` a span. It is additive and demo-optional; the core investigation works without it.
 
 ## 5.8 Traversal & Cypher examples
 

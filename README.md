@@ -1,12 +1,12 @@
-# SENTINEL
+# Prahari
 
 **Industrial Decision Intelligence Operating System** — ET Hackathon Problem Statement 8.
 
-> SENTINEL unifies fragmented industrial knowledge into one continuously-learning
+> Prahari unifies fragmented industrial knowledge into one continuously-learning
 > decision-intelligence layer that reasons across documents **and shows its work** —
 > every answer carries its evidence, its confidence, and the path it traversed to get there.
 
-SENTINEL is **not** a chatbot, a GraphRAG demo, or a document search engine. It is an
+Prahari is **not** a chatbot, a GraphRAG demo, or a document search engine. It is an
 operating system for industrial decision-making: it preserves the *reasoning* behind
 decisions so that no failure repeats because the plant forgot why a decision was made.
 
@@ -14,7 +14,7 @@ decisions so that no failure repeats because the plant forgot why a decision was
 
 ## What this repository is
 
-A faithful implementation of the **SENTINEL Product Requirements Bible (PRB)**, styled by
+A faithful implementation of the **Prahari Product Requirements Bible (PRB)**, styled by
 **`design.md`**, and engineered per the supporting reference volumes.
 
 ```
@@ -50,14 +50,14 @@ ingestion  →  entity resolution  →  investigation  →  correction
 
 end-to-end, before any Should/Could module.
 
-## The three things that make it SENTINEL (not "another RAG demo")
+## The three things that make it Prahari (not "another RAG demo")
 
 1. **The Living Asset Map (M2)** — four identifiers (`P-101B`, "Boiler Feed Pump B", an OEM
    part number, "the noisy one") collapse into one canonical asset, human-adjudicated and
    **reversible**. This human-validated resolution corpus is the moat.
 2. **Decision Investigation (M1)** — a causal chain traversed across documents nobody linked,
    **each hop citing a page**, streamed as it is retrieved.
-3. **The Refusal (M1 abstention)** — asked a question it cannot ground, SENTINEL **does not
+3. **The Refusal (M1 abstention)** — asked a question it cannot ground, Prahari **does not
    guess**. It says what it can't ground and *who to ask*. Abstention is a first-class success.
 
 ## Architecture at a glance
@@ -84,7 +84,7 @@ Modular monolith (Bible ADR-006) with ports/adapters seams:
 
 The **embedded** family is the default so the demo runs on one box with **zero external
 services and no API key** — which *is* the Bible's air-gap / degradation-ladder design
-(ADR-007, §8.6), not a mock. Set `SENTINEL_PROFILE=production` to use the store topology in
+(ADR-007, §8.6), not a mock. Set `PRAHARI_PROFILE=production` to use the store topology in
 `codebase/docker-compose.yml`. See `codebase/backend/README.md` and
 `docs/ADR/architecture_decisions.md` (ADR-P01).
 
@@ -113,7 +113,7 @@ the system refuse honestly.
 This codebase obeys `CLAUDE_IMPLEMENTATION_RULES.md`. Authority order:
 
 1. Engineering invariants **CP-1…CP-10**
-2. **SENTINEL Product Requirements Bible** — *what* to build
+2. **Prahari Product Requirements Bible** — *what* to build
 3. **`design.md`** — *how* it looks
 4. Supporting engineering volumes — *how* it is engineered
 

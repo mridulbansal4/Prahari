@@ -1,14 +1,14 @@
-# SENTINEL — Product Requirements Bible (PRB)
+# Prahari — Product Requirements Bible (PRB)
 
 **Version 1.0 — 18 July 2026**
 **Status:** Locked draft, pending Red Devil + Hackathon Winning + Black Swan + Green council sign-off
-**Document type:** Product Requirements Bible — the single source of truth for *what SENTINEL is and does*. Not an architecture document. Not a PRD in the generic sense — the definitive product contract from which the PRD, the design system, the engineering plan, the test plan, and the demo script are all derived.
+**Document type:** Product Requirements Bible — the single source of truth for *what Prahari is and does*. Not an architecture document. Not a PRD in the generic sense — the definitive product contract from which the PRD, the design system, the engineering plan, the test plan, and the demo script are all derived.
 
 ---
 
 ## How to read this document (authority order)
 
-Three documents govern SENTINEL. They do not compete — each is supreme in its own domain, and this section is the tie-breaker if anyone ever thinks they conflict.
+Three documents govern Prahari. They do not compete — each is supreme in its own domain, and this section is the tie-breaker if anyone ever thinks they conflict.
 
 | Document | Is the supreme authority for… | Is NOT the authority for… |
 |---|---|---|
@@ -28,39 +28,39 @@ This part is not an introduction. It is the lens every requirement in this docum
 
 ## 0.1 Locked Product Identity
 
-> **SENTINEL is an Industrial Decision Intelligence Operating System.**
+> **Prahari is an Industrial Decision Intelligence Operating System.**
 
 This identity is **locked**. It is not a tagline to place at the top of a slide — it is the categorical description that must be true of every screen, every workflow, every module, and every sentence of copy in the product.
 
-**SENTINEL is NOT:**
+**Prahari is NOT:**
 
 | ❌ Not this | Why it undersells the product |
 |---|---|
-| An AI chatbot | A chatbot answers questions and forgets. SENTINEL accumulates organizational reasoning across every question ever asked. |
-| A GraphRAG platform | GraphRAG is a retrieval technique. It is *how* SENTINEL fetches evidence, not *what* SENTINEL is for. |
-| A knowledge graph product | A graph is a data structure. SENTINEL is a decision-making capability built on top of one. |
-| An enterprise search engine | Search returns documents. SENTINEL returns a defensible, cited, actionable decision. |
+| An AI chatbot | A chatbot answers questions and forgets. Prahari accumulates organizational reasoning across every question ever asked. |
+| A GraphRAG platform | GraphRAG is a retrieval technique. It is *how* Prahari fetches evidence, not *what* Prahari is for. |
+| A knowledge graph product | A graph is a data structure. Prahari is a decision-making capability built on top of one. |
+| An enterprise search engine | Search returns documents. Prahari returns a defensible, cited, actionable decision. |
 | A document intelligence tool | Documents are raw material. The product is the reasoning connecting them. |
 | A compliance chatbot | Compliance is one pillar among several, never the whole story, and never a legal opinion (BR-3). |
 
-GraphRAG, knowledge graphs, LLMs, OCR, vector databases, and multi-agent orchestration are **implementation details** described fully in the Engineering Bible. They are how SENTINEL is built. They are never how SENTINEL is described to a user, a buyer, or a judge. Every product surface must make a person feel like they are operating an **operating system for industrial decision-making** — not chatting with an assistant.
+GraphRAG, knowledge graphs, LLMs, OCR, vector databases, and multi-agent orchestration are **implementation details** described fully in the Engineering Bible. They are how Prahari is built. They are never how Prahari is described to a user, a buyer, or a judge. Every product surface must make a person feel like they are operating an **operating system for industrial decision-making** — not chatting with an assistant.
 
-## 0.2 First Principles — why SENTINEL must exist
+## 0.2 First Principles — why Prahari must exist
 
 Industrial failures repeat not because the facts were unavailable, but because the **reasoning behind past decisions was never preserved**.
 
 - Documents survive. The engineer who read them does not stay forever.
-- People retire — Anil, SENTINEL's canonical retiring-expert persona, is 34 years into a career the organization is about to lose (Bible §1.3).
+- People retire — Anil, Prahari's canonical retiring-expert persona, is 34 years into a career the organization is about to lose (Bible §1.3).
 - Knowledge decays quietly: a procedure written for one vendor's valve is silently wrong after a vendor change, and nothing flags it (Bible §5.10).
 - Context disappears faster than content: a P&ID survives; the reason a shutdown was *rejected* in 2019 does not.
 - Relationships between systems — which tag means which pump, which inspection note explains which alarm — live only in retiring people's heads (Bible §0.6 "the moat").
 - Reasoning gets lost the moment it isn't written down as reasoning, only as an outcome.
 
-**SENTINEL exists to preserve, reconstruct, evolve, and operationalize industrial decision intelligence** — so that no failure repeats *because the plant forgot*.
+**Prahari exists to preserve, reconstruct, evolve, and operationalize industrial decision intelligence** — so that no failure repeats *because the plant forgot*.
 
 ## 0.3 Core Philosophy — the shift in every interaction
 
-| Generic pattern (what SENTINEL must never feel like) | SENTINEL's pattern (what every surface must feel like) |
+| Generic pattern (what Prahari must never feel like) | Prahari's pattern (what every surface must feel like) |
 |---|---|
 | Find information | Navigate organizational memory |
 | Search documents | Reconstruct the reasoning behind a decision |
@@ -76,20 +76,20 @@ These are product principles, not engineering principles — though each is back
 
 | # | Principle | Enforced by (Engineering Bible) |
 |---|---|---|
-| P1 | **Knowledge must evolve — it never remains static.** A fact recorded once is a snapshot, not a truth; SENTINEL continuously re-tests what it believes. | CP-7 (bitemporal graph), Bible §5.10 |
+| P1 | **Knowledge must evolve — it never remains static.** A fact recorded once is a snapshot, not a truth; Prahari continuously re-tests what it believes. | CP-7 (bitemporal graph), Bible §5.10 |
 | P2 | **Every decision has context, and context is worth more than the document it came from.** A citation without the reasoning chain around it is trivia, not intelligence. | CP-1 (provenance), CP-2 (citation) |
 | P3 | **Reasoning is a company asset, not an employee's private property.** When Anil corrects an answer, the correction belongs to the organization forever. | CP-10 (correction as a feature) |
 | P4 | **Knowledge decays, and the platform is responsible for noticing.** Silence about decay is itself a failure mode. | Bible §5.10 KnowledgeRisk flags |
-| P5 | **Every investigation should make the next investigation better.** Nothing SENTINEL does is disposable. | CP-10, Bible §4.5 self-correction loop |
-| P6 | **Humans remain in control. AI recommends; humans decide and execute.** SENTINEL never writes to a system of record unattended. | CP-3 (gated writes) |
+| P5 | **Every investigation should make the next investigation better.** Nothing Prahari does is disposable. | CP-10, Bible §4.5 self-correction loop |
+| P6 | **Humans remain in control. AI recommends; humans decide and execute.** Prahari never writes to a system of record unattended. | CP-3 (gated writes) |
 | P7 | **Industrial memory compounds. Every correction increases platform intelligence — for everyone, not just the person who made it.** | CP-10, Bible §16.3 moat |
 | P8 | **Abstention is a legitimate, first-class answer.** Telling the truth about the limits of what is known is a success condition, not a failure state. | CP-4 (abstention) |
 | P9 | **Everything is explainable, traceable, and auditable — nothing is a black box, including to the person who asked the question.** | CP-1, CP-2, CP-7, Bible §8.5 |
-| P10 | **The model is a commodity; the corpus is not.** SENTINEL's value must not depend on which LLM happens to be inside it today. | CP-5 (swappable model) |
+| P10 | **The model is a commodity; the corpus is not.** Prahari's value must not depend on which LLM happens to be inside it today. | CP-5 (swappable model) |
 
 ## 0.5 The Decision Intelligence Lifecycle
 
-Every meaningful event inside SENTINEL — an investigation, a compliance check, a correction, an approved action — is an instance of one lifecycle. This lifecycle is the organizing structure of the entire product; almost every screen in Part 2 is a view onto one stage of it.
+Every meaningful event inside Prahari — an investigation, a compliance check, a correction, an approved action — is an instance of one lifecycle. This lifecycle is the organizing structure of the entire product; almost every screen in Part 2 is a view onto one stage of it.
 
 ```
 Observation  →  Evidence  →  Hypothesis  →  Decision  →  Execution
@@ -102,7 +102,7 @@ This is not a marketing diagram — it is implemented, additively, as the Engine
 | Lifecycle stage | What the user experiences | Bible primitive | Primary module (Part 2) |
 |---|---|---|---|
 | Observation | A symptom, alarm, or audit trigger appears | `Observation` node | M1 Decision Investigation |
-| Evidence | SENTINEL assembles cited, provenance-tagged facts | `Span`, `EVIDENCED_BY` | M1, M9 |
+| Evidence | Prahari assembles cited, provenance-tagged facts | `Span`, `EVIDENCED_BY` | M1, M9 |
 | Hypothesis | A ranked, causal explanation is proposed | `Hypothesis` node | M1 |
 | Decision | A human reviews, and either accepts, rejects, or requests more evidence | `Decision`, `Alternative`, `RiskAccepted` | M1, M3, M7 |
 | Execution | An approved action is written to a system of record | `WorkOrder` | M7 Execution Center |
@@ -113,7 +113,7 @@ This is not a marketing diagram — it is implemented, additively, as the Engine
 
 ## 0.6 The Industrial Decision Intelligence Operating System model
 
-SENTINEL should be described — to users, buyers, and judges — as an **operating system**, with layers, not as a single application with menu items. Each layer below is a genuine architectural component from the Engineering Bible, renamed to its decision-intelligence role.
+Prahari should be described — to users, buyers, and judges — as an **operating system**, with layers, not as a single application with menu items. Each layer below is a genuine architectural component from the Engineering Bible, renamed to its decision-intelligence role.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -147,7 +147,7 @@ Every feature in Part 2 must be traceable to at least one of these four moats. A
 | **3 — Knowledge Evolution** | The graph does not just grow — it re-tests itself. Stale, superseded, or contradicted knowledge is flagged, not silently trusted. | `KnowledgeRisk`, §5.10 |
 | **4 — Entity Resolution Corpus** | The plant-specific, human-adjudicated map of "which identifier means which physical thing" — the one asset competitors cannot copy because it is produced by *this* customer's own labour inside *this* system. | `RESOLVED_AS`, §5.6, §16.3 |
 
-**The flywheel:** every correction → improves future investigations → improves future compliance evidence → improves future execution confidence → improves future organizational memory → improves future decisions → attracts more use → produces more corrections. This is why SENTINEL gets *harder to displace*, not easier to commoditize, as it is used (Bible §16.3, §16.7) — the opposite of a thin LLM wrapper.
+**The flywheel:** every correction → improves future investigations → improves future compliance evidence → improves future execution confidence → improves future organizational memory → improves future decisions → attracts more use → produces more corrections. This is why Prahari gets *harder to displace*, not easier to commoditize, as it is used (Bible §16.3, §16.7) — the opposite of a thin LLM wrapper.
 
 ## 0.8 Non-negotiables for anyone building from this PRB
 
@@ -171,7 +171,7 @@ Every feature in Part 2 must be traceable to at least one of these four moats. A
 
 ## 1.2 Personas — dual frame
 
-SENTINEL's four canonical personas (Bible §1.3, inherited from Vol 3, **do not re-decide without an ADR**) are preserved exactly. Alongside each, this PRB assigns a **decision-mindset name** — not a replacement, a second lens that must show up in how the product frames their experience. Screen copy should read naturally to the operational persona; internal feature naming and product strategy should reason in the decision-mindset frame.
+Prahari's four canonical personas (Bible §1.3, inherited from Vol 3, **do not re-decide without an ADR**) are preserved exactly. Alongside each, this PRB assigns a **decision-mindset name** — not a replacement, a second lens that must show up in how the product frames their experience. Screen copy should read naturally to the operational persona; internal feature naming and product strategy should reason in the decision-mindset frame.
 
 ### Ravi — the primary user
 - **Operational description:** night-shift maintenance technician. One hand, gloves, glare, weak signal, 02:40.
@@ -701,7 +701,7 @@ Never delete a superseded fact — bound it (CP-7 bitemporal model); this makes 
 | **Flag retirement risk** | Toggle on a person's record | Updates `retirement_risk` property | `reliability`, `admin` | N/A | Person surfaced with priority in capture-outreach lists | N/A | None | `org_memory.risk_flagged` |
 
 ### Edge cases
-This module holds `Person` data — PII minimization applies (Bible §8.8: "SENTINEL stores expertise relationships, not HR records"). No screen in this module may display data beyond role/expertise/tenure/retirement-risk; it is not an HR system and must never become one. Offline: read-only from cache. No permission: view-only, edit buttons hidden.
+This module holds `Person` data — PII minimization applies (Bible §8.8: "Prahari stores expertise relationships, not HR records"). No screen in this module may display data beyond role/expertise/tenure/retirement-risk; it is not an HR system and must never become one. Offline: read-only from cache. No permission: view-only, edit buttons hidden.
 
 ## 2.10 M9 — Audit & Provenance Center
 
@@ -729,7 +729,7 @@ This log is append-only by design (Bible §8.1: tampering control — "revoked U
 
 ### Screen: Decision Analytics Dashboard
 
-**Layout (functional):** KPI cards and trend charts for: time-to-answer at point of symptom (target ≤ 90s), recurrence rate of previously-documented failures (target: measurably falling), % of work orders originating from a SENTINEL hypothesis, audit prep time (target: hours, not days), and resolution-corpus size (target: monotonically increasing — the flywheel, §0.7, made visible as a number).
+**Layout (functional):** KPI cards and trend charts for: time-to-answer at point of symptom (target ≤ 90s), recurrence rate of previously-documented failures (target: measurably falling), % of work orders originating from a Prahari hypothesis, audit prep time (target: hours, not days), and resolution-corpus size (target: monotonically increasing — the flywheel, §0.7, made visible as a number).
 
 ### Actions & buttons
 
@@ -957,7 +957,7 @@ Reused from Bible §1.9, mapped to their owning module for dashboard constructio
 |---|---|---|---|
 | Time-to-answer at 02:40 | ~30–60 min (call + guess) | ≤ 90s | M1, M10 |
 | Recurrence rate of previously-documented failures | Unmeasured | Measurably ↓ over pilot | M3, M10 |
-| % work orders originating from a SENTINEL hypothesis | 0 | Measurable, growing fraction | M7, M10 |
+| % work orders originating from a Prahari hypothesis | 0 | Measurable, growing fraction | M7, M10 |
 | Audit prep time | Days | Hours | M6, M10 |
 | Resolution corpus size (adjudications) | 0 | Monotonically ↑ with use | M2, M10 |
 
@@ -1018,7 +1018,7 @@ This matrix is the bridge from this PRB into implementation. Before any architec
 | M4 Knowledge Evolution | Flag stale/decayed knowledge before it misleads someone | Meera | Underlies JTBD-4 | Knowledge Health | Nightly decay job (non-agent) | Internal query over `KnowledgeRisk` | reliability/admin | §2.8 (narrative) | Not in core demo | Fraction of flags resolved |
 | M5 Organizational Memory | Capture expert judgement before it retires | Anil → org, Meera | JTBD-3 | Expertise Map | (feeds M1 AbstainCard) | Graph query/update on `Person`/`KNOWS` | reliability/admin (edit), any (view) | §2.9 (narrative) | Referenced in "who to ask" beat | Expertise records captured pre-retirement |
 | M6 Compliance Intelligence | Audit-ready evidence, never a legal claim | Meera, compliance officer | UC-2 / JTBD-2 | Compliance Matrix | Compliance agent | `GET /v1/compliance/assets/{id}`, `GET /v1/compliance/coverage` | compliance/reliability/admin (full), any (view) | §2.4 Gherkin | "Compliance" beat | Audit prep time ↓ |
-| M7 Execution Center | No unattended writes to a system of record | Ravi (draft), Meera (approve) | UC-4 / completes JTBD-1 | Action Draft & Approval | Executor (drafting content only) | `POST /v1/actions/work-order/draft`, `POST /v1/actions/work-order/submit` | technician/reliability (draft), reliability/admin (approve) | §2.5 Gherkin | "Execute" beat | % work orders from SENTINEL hypotheses |
+| M7 Execution Center | No unattended writes to a system of record | Ravi (draft), Meera (approve) | UC-4 / completes JTBD-1 | Action Draft & Approval | Executor (drafting content only) | `POST /v1/actions/work-order/draft`, `POST /v1/actions/work-order/submit` | technician/reliability (draft), reliability/admin (approve) | §2.5 Gherkin | "Execute" beat | % work orders from Prahari hypotheses |
 | M8 Correction & Learning Loop | Reasoning outlives the person who produced it | All | UC-3 / JTBD-3 | Correction Composer (cross-cutting) | Learning, Memory | `POST /v1/corrections` | Any signed-in role | §2.6 Gherkin | Implicit throughout; explicit at "the refusal" | Correction-to-improvement latency |
 | M9 Audit & Provenance Center | Deepak can sign off on the pilot | Deepak | JTBD-5 | Audit Log | Audit sink (non-agent) | `GET /v1/audit` | admin/auditor (full), site-scoped for reliability/compliance | (security checklist, Bible §14.7) | Answers "how do you handle our data" | 100% of writes traceable to an approver |
 | M10 Decision Analytics | Make the flywheel visible as a number | Meera | Cross-cutting | Analytics Dashboard | (aggregation, non-agent) | Internal aggregation queries | reliability/compliance/admin | (KPI table, §5.1) | "Close: the moat line" | All five Bible §1.9 KPIs |
@@ -1121,4 +1121,4 @@ Per the Engineering Bible's own evidence-tier discipline (§0.2), every judgemen
 
 ---
 
-*End of SENTINEL Product Requirements Bible v1.0. This document, `design.md`, and `SENTINEL_Master_Engineering_Bible_MERGED.md` together are the complete, sufficient specification for building SENTINEL. Nothing outside these three documents should be needed to build any feature described here — if it is, the gap belongs in `architecture_decisions.md`, not in an assumption made silently during implementation.*
+*End of Prahari Product Requirements Bible v1.0. This document, `design.md`, and `SENTINEL_Master_Engineering_Bible_MERGED.md` together are the complete, sufficient specification for building Prahari. Nothing outside these three documents should be needed to build any feature described here — if it is, the gap belongs in `architecture_decisions.md`, not in an assumption made silently during implementation.*

@@ -1,4 +1,4 @@
-"""SENTINEL evaluation harness (Bible §15) — turns CP-2/CP-4 from claims into measurements.
+"""Prahari evaluation harness (Bible §15) — turns CP-2/CP-4 from claims into measurements.
 
 Metrics (RAGAS/DeepEval-style, reimplemented in-repo to stay offline/dependency-light — KB-4):
   - faithfulness:        fraction of answer claims entailed by a cited span (CP-2) — target >= 0.90
@@ -88,7 +88,7 @@ async def main() -> int:
     abstention_ok = sum(1 for r in results if r["abstention_correct"]) / len(results)
 
     print("=" * 68)
-    print("SENTINEL evaluation report (measured on the demo corpus — Bible §15.6)")
+    print("Prahari evaluation report (measured on the demo corpus — Bible §15.6)")
     print("=" * 68)
     for r in results:
         verdict = "ABSTAIN" if r["abstained"] else "answer "

@@ -26,7 +26,7 @@ Thumbs.db
 .vscode/
 
 # SENTINEL runtime state (embedded profile scratch)
-**/.sentinel_state/
+**/.prahari_state/
 
 # Local tooling / CI (excluded per project preference)
 .claude/

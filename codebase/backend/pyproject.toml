@@ -1,7 +1,7 @@
 [project]
-name = "sentinel-core"
+name = "prahari-core"
 version = "1.0.0"
-description = "SENTINEL — Industrial Decision Intelligence Operating System (core monolith)"
+description = "Prahari — Industrial Decision Intelligence Operating System (core monolith)"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.111",

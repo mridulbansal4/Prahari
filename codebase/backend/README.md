@@ -1,4 +1,4 @@
-# SENTINEL core
+# Prahari core
 
 The modular monolith (Bible ADR-006). Ports/adapters seams; two adapter families behind one set
 of ports (ADR-P01): **embedded** (default — SQLite/local-vector/template-synth, no external

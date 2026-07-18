@@ -1,4 +1,4 @@
-/* SENTINEL design tokens — a faithful transcription of design.md.
+/* Prahari design tokens — a faithful transcription of design.md.
  * This file is the ONLY place raw values live (ui_rules.md #1). Components reference var(--*).
  * A hex code or px literal in a .tsx/.css component is a defect. */
 :root {

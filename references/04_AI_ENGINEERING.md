@@ -4,7 +4,7 @@
 
 ## 4.1 Agent architecture — why multi-agent (and why not more)
 
-The judges expect multi-agent AI (judges' note §5). But agents are a liability if they multiply without discipline. SENTINEL uses a **bounded set of role-specialised agents inside one orchestrated state machine**, not an open-ended swarm. `[D]`
+The judges expect multi-agent AI (judges' note §5). But agents are a liability if they multiply without discipline. Prahari uses a **bounded set of role-specialised agents inside one orchestrated state machine**, not an open-ended swarm. `[D]`
 
 ```mermaid
 stateDiagram-v2
@@ -108,7 +108,7 @@ RAGAS (faithfulness, answer relevance, context precision/recall), DeepEval, gold
 
 ## 4.10 Safety
 
-- No autonomous physical-world writes (CP-3); SENTINEL never touches an SIS/control loop (Vol 2 §2.2.1).
+- No autonomous physical-world writes (CP-3); Prahari never touches an SIS/control loop (Vol 2 §2.2.1).
 - Compliance output is evidence+gaps, never legal opinion (BR-3).
 - Abstention preferred over confident error (Vol 1 Principle 5).
 - Prompt-injection and data-exfiltration treated as first-class threats (`08`).

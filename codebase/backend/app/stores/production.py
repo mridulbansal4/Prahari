@@ -1,7 +1,7 @@
 """Production store family (ADR-P01) — Neo4j / Qdrant / Postgres.
 
 These implement the identical port contract as the embedded family (Bible §2.4 extraction
-seam). They are imported lazily only when ``SENTINEL_PROFILE=production`` so the embedded profile
+seam). They are imported lazily only when ``PRAHARI_PROFILE=production`` so the embedded profile
 never needs the drivers installed. Exercised under docker-compose; see KB-2.
 """
 from __future__ import annotations
@@ -220,7 +220,7 @@ class Neo4jGraphStore:
 
 
 class QdrantVectorStore:
-    COLLECTION = "sentinel_spans"
+    COLLECTION = "prahari_spans"
 
     def __init__(self, settings: Settings) -> None:
         from qdrant_client import QdrantClient

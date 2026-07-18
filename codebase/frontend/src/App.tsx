@@ -20,7 +20,7 @@ export default function App() {
   if (loading)
     return (
       <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
-        <span className="t-label">SENTINEL — loading…</span>
+        <span className="t-label">Prahari — loading…</span>
       </div>
     );
 

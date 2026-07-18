@@ -1,6 +1,6 @@
 # UI Rules — "never redesign, always defer to design.md"
 
-`design.md` is the *only* authority for how SENTINEL looks. This file is the enforcement doc.
+`design.md` is the *only* authority for how Prahari looks. This file is the enforcement doc.
 
 ## Absolute rules
 1. **No raw values in components.** Every colour, type ramp, radius, spacing, and motion value

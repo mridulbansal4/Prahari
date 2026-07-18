@@ -66,7 +66,7 @@ export function FieldMode({ onRung, rung }: { onRung: (r: string) => void; rung:
             <button className="btn btn-tertiary" style={{ minHeight: 44 }} onClick={() => toggleGraph(false)}>Restore</button>
           </div>
           <div className="t-metadata" style={{ marginTop: "var(--sp-sm)" }}>
-            Disable, then ask again — SENTINEL refuses honestly and names who to ask. A wrong answer is worse than none.
+            Disable, then ask again — Prahari refuses honestly and names who to ask. A wrong answer is worse than none.
           </div>
         </div>
       )}

@@ -61,7 +61,7 @@ export function CorrectionAffordance({
   return (
     <div className="card card-dense" style={{ marginTop: "var(--sp-sm)" }}>
       <div className="t-label" style={{ marginBottom: "var(--sp-sm)" }}>
-        Teach SENTINEL
+        Teach Prahari
       </div>
       <textarea
         className="textarea"

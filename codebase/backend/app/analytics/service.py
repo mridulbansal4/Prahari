@@ -29,7 +29,7 @@ class AnalyticsService:
                  "note": "Measured live per investigation; target is [D] pending eval (Bible §15)."},
                 {"key": "recurrence_rate", "label": "Recurrence of documented failures",
                  "actual": None, "target": "measurably ↓", "note": "Requires pilot history."},
-                {"key": "wo_from_sentinel", "label": "% work orders from a SENTINEL hypothesis",
+                {"key": "wo_from_prahari", "label": "% work orders from a Prahari hypothesis",
                  "actual": len([d for d in committed if d.get("investigation_id")]),
                  "denominator": len(committed) or None, "target": "growing fraction"},
                 {"key": "audit_prep", "label": "Audit prep time", "actual": None,

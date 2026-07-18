@@ -1,9 +1,9 @@
 {
-  "name": "sentinel-web",
+  "name": "prahari-web",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "SENTINEL console — Industrial Decision Intelligence OS (React + TS PWA, styled by design.md)",
+  "description": "Prahari console — Industrial Decision Intelligence OS (React + TS PWA, styled by design.md)",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

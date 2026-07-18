@@ -25,7 +25,7 @@ Format: Problem · Alternatives · Chosen · Trade-off · Consequence. Governanc
 - **Problem:** the Compliance screen pinned `asset-p101b`; the stub auth signing key was a code
   literal.
 - **Chosen:** add `GET /v1/assets` (tenant asset lookup) and drive the Compliance asset picker
-  from it (default = first asset). Move the dev signing key to `SENTINEL_AUTH_DEV_SECRET`
+  from it (default = first asset). Move the dev signing key to `PRAHARI_AUTH_DEV_SECRET`
   (config, default retained for dev; production uses the IdP's JWKS, §8.3).
 - **Note (legitimately data-as-code, not violations):** the provenance-clean seed corpus
   (`seed.py`, ADR-012), the demo personas in the stub identity provider (ADR-P04, replaced by
@@ -41,8 +41,8 @@ Format: Problem · Alternatives · Chosen · Trade-off · Consequence. Governanc
 - **Alternatives:** (a) hard-require the full store topology; (b) mock the stores.
 - **Chosen:** Implement every store **port** (Bible §2.4) with two adapters — an *embedded*
   family (NetworkX / local cosine index / SQLite / in-process cache / offline template
-  synthesizer) selected by `SENTINEL_PROFILE=embedded` (default), and a *production* family
-  (Neo4j/Qdrant/Postgres/Redis/LLM) selected by `SENTINEL_PROFILE=production`.
+  synthesizer) selected by `PRAHARI_PROFILE=embedded` (default), and a *production* family
+  (Neo4j/Qdrant/Postgres/Redis/LLM) selected by `PRAHARI_PROFILE=production`.
 - **Why this is not a mock (governance-critical):** The embedded family *is* the Bible's
   mandated local fallback that "doubles as the air-gap mode" (ADR-007, §8.6) and the lower
   rungs of the CP-9 degradation ladder (§2.8). It is a first-class product state, styled and
@@ -55,7 +55,7 @@ Format: Problem · Alternatives · Chosen · Trade-off · Consequence. Governanc
 - **Problem:** Investigations must be deterministic on the seeded corpus for the demo (Bible
   §11.7) and must work with no API key, yet CP-5 requires a real provider abstraction.
 - **Chosen:** `IModelProvider` has three concrete providers: `AnthropicProvider` (CP-5
-  default when `SENTINEL_MODEL_API_KEY` is set), `LocalOpenWeightsProvider` (air-gap), and
+  default when `PRAHARI_MODEL_API_KEY` is set), `LocalOpenWeightsProvider` (air-gap), and
   `TemplateSynthProvider` (the CP-9 `-model` rung — structured, grounded, no prose). Selection
   and fallback are driven by the circuit breaker (Bible §2.7). The template synthesizer only
   ever emits claims that map to a provided context span, so grounding/citation invariants hold

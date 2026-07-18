@@ -8,7 +8,7 @@ Profiles (ADR-P01):
                      docker-compose.
 
 No secret, statute, or tenant value is hardcoded (CP-5/CP-6): everything comes from env with a
-``SENTINEL_`` prefix (Bible §12.2 naming law).
+``PRAHARI_`` prefix (Bible §12.2 naming law).
 """
 from __future__ import annotations
 
@@ -23,13 +23,13 @@ _CORE_DIR = Path(__file__).resolve().parent.parent  # .../core
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="SENTINEL_", env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_prefix="PRAHARI_", env_file=".env", extra="ignore")
 
     profile: Profile = "embedded"
     tenant_default: str = "demo"
 
     # Embedded profile state (durable across `seed` and `uvicorn` processes).
-    state_dir: Path = _CORE_DIR / ".sentinel_state"
+    state_dir: Path = _CORE_DIR / ".prahari_state"
 
     # --- Production store coordinates (unused in embedded profile) -----------------
     graph_uri: str = "bolt://localhost:7687"
@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     # --- Auth (stub dev provider, ADR-P04) -----------------------------------------
     # Configurable so no signing secret is a code literal (CP-5 / §8.3). Production uses the
     # customer IdP's JWKS instead of this symmetric dev key.
-    auth_dev_secret: str = "sentinel-dev-signing-key"
+    auth_dev_secret: str = "prahari-dev-signing-key"
 
     # --- Model provider (CP-5) -----------------------------------------------------
     # If a key is present we may use the cloud reasoning provider; otherwise the local /

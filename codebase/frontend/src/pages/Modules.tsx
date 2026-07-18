@@ -93,7 +93,7 @@ export function Knowledge() {
   return (
     <div className="col">
       <div className="row between center">
-        <div><div className="t-label">Knowledge Evolution</div><div className="t-display-md">Knowledge decays — SENTINEL notices</div></div>
+        <div><div className="t-label">Knowledge Evolution</div><div className="t-display-md">Knowledge decays — Prahari notices</div></div>
         <button className="btn btn-secondary" onClick={async () => { await api.runDecay(); load(); }}>Run decay job</button>
       </div>
       {lastRun && <div className="t-metadata">Last computed {lastRun.date} · {lastRun.count} flags</div>}

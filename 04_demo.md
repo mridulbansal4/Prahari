@@ -13,7 +13,7 @@ Open with the **02:40 phone call**, not architecture (Harvey Specter rule, Vol 1
 | Min | Beat | On screen |
 |---|---|---|
 | 0–1.5 | **The 02:40 story** | narration only; one image of a pump + three disconnected systems |
-| 1.5–3 | **Problem, shown** | the same workflow diagram twice — once broken, once with SENTINEL, one node changed |
+| 1.5–3 | **Problem, shown** | the same workflow diagram twice — once broken, once with Prahari, one node changed |
 | 3–5.5 | **Primary wow: resolution** | 4 identifiers → 1 asset; human corrects one; graph updates; answer recomputes |
 | 5.5–8 | **Secondary wow: investigation** | "why is P-101B running hot?" → causal chain across 5 docs, each hop cited |
 | 8–9.5 | **Compliance** | ComplianceMatrix; overdue OISD obligation with evidence; the honest coverage footer |
@@ -37,7 +37,7 @@ Open with the **02:40 phone call**, not architecture (Harvey Specter rule, Vol 1
 
 > "At 2:40 a.m., a pump trips. The night technician has three systems that each know part of the story and none that connect them. The one person who could connect them retired in 2023. **This** is the real incumbent — a phone call. Watch what happens when the connections are a living graph instead of a memory…"
 >
-> *(resolution)* "P-101B, Boiler Feed Pump B, this OEM number, and 'the noisy one' — four names, one pump. SENTINEL proposes the merge, our engineer confirms it, and the graph learns. That confirmation is the thing a competitor can never copy."
+> *(resolution)* "P-101B, Boiler Feed Pump B, this OEM number, and 'the noisy one' — four names, one pump. Prahari proposes the merge, our engineer confirms it, and the graph learns. That confirmation is the thing a competitor can never copy."
 >
 > *(investigation)* "Now the question: why is it running hot? Watch the traversal — vibration alarm, upstream strainer, a 2019 inspection note nobody had read, a feedstock change at 21:00. Five documents, never linked by a human, each hop citing a page."
 >

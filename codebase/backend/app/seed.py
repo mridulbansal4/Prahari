@@ -209,9 +209,9 @@ def _seed_decision_graph(g, sink, s_strainer, s_oem) -> None:
 
 if __name__ == "__main__":
     result = seed()
-    print("SENTINEL demo corpus seeded (provenance-clean, ADR-012).")
+    print("Prahari demo corpus seeded (provenance-clean, ADR-012).")
     print(f"  Profile:   {get_container().settings.profile}")
     print(f"  Graph:     {result['graph']}")
     print(f"  Proposals: {result['resolution_proposals']} (the 4->1 resolution awaits adjudication)")
-    print("  Try:       ask 'why is P-101B running hot?' -- then set SENTINEL_FORCE_RUNG=-graph")
+    print("  Try:       ask 'why is P-101B running hot?' -- then set PRAHARI_FORCE_RUNG=-graph")
     print("             and ask again to see the honest refusal (CP-4).")

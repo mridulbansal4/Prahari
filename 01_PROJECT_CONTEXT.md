@@ -1,6 +1,6 @@
 # Project Context
 
-SENTINEL is being built as the solution for ET Hackathon Problem Statement 8.
+Prahari is being built as the solution for ET Hackathon Problem Statement 8.
 
 ## Problem Statement
 
@@ -14,9 +14,9 @@ The challenge is not simply document search—it is transforming fragmented indu
 
 ## Vision
 
-SENTINEL is an Industrial Decision Intelligence Operating System.
+Prahari is an Industrial Decision Intelligence Operating System.
 
-Rather than functioning as a chatbot or document search engine, SENTINEL continuously learns from organizational knowledge, connects information across domains, preserves engineering decision history, and assists teams in making faster, more informed operational decisions.
+Rather than functioning as a chatbot or document search engine, Prahari continuously learns from organizational knowledge, connects information across domains, preserves engineering decision history, and assists teams in making faster, more informed operational decisions.
 
 ## Objectives
 
@@ -55,6 +55,6 @@ The platform should demonstrate measurable improvements in:
 
 ## Guiding Principle
 
-Every feature implemented in SENTINEL should contribute to transforming fragmented industrial knowledge into actionable organizational intelligence.
+Every feature implemented in Prahari should contribute to transforming fragmented industrial knowledge into actionable organizational intelligence.
 
 Features that do not support this objective should not be added unless explicitly approved.
