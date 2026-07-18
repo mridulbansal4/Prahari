@@ -1,0 +1,113 @@
+/* SENTINEL design tokens — a faithful transcription of design.md.
+ * This file is the ONLY place raw values live (ui_rules.md #1). Components reference var(--*).
+ * A hex code or px literal in a .tsx/.css component is a defect. */
+:root {
+  /* -- Canvas & surface ladder (depth = surface-lift, never shadow) -- */
+  --canvas: #0b0d0f;
+  --surface-inset: #08090a;
+  --surface-1: #131619;
+  --surface-2: #1a1e22;
+  --surface-3: #22262b;
+  --surface-4: #2a2f35;
+
+  /* -- Borders -- */
+  --hairline-soft: #1d2024;
+  --hairline: #2b3036;
+  --hairline-strong: #3a4048;
+
+  /* -- Ink (off-white, never pure white — control-room glare) -- */
+  --ink: #f2f4f6;
+  --ink-muted: #adb5bd;
+  --ink-subtle: #767e87;
+  --ink-faint: #4a5058;
+  --on-signal: #06181b;
+  --on-critical: #ffffff;
+  --on-decision: #ffffff;
+
+  /* -- Signal: the single chromatic accent (navigation/action/focus only) -- */
+  --signal: #3faab8;
+  --signal-bright: #5cc4d1;
+  --signal-dim: #2c7885;
+  --signal-wash: rgba(63, 170, 184, 0.12);
+
+  /* -- Operational state -- */
+  --success: #3fa66b;
+  --success-dim: #2c7a4c;
+  --warning: #c98a3f;
+  --warning-dim: #9c6b2e;
+  --critical: #c4453a;
+  --critical-dim: #96332a;
+  --critical-bright: #e85a4d;
+  --offline: #565c64;
+
+  /* -- Domain semantics (each = one meaning, never decoration) -- */
+  --investigation: #7b7fc4;
+  --evidence: #b9a46c;
+  --knowledge: #4e9b94;
+  --decision: #5c8fc7;
+  --decision-dim: #43699b;
+  --prediction: #9a8fd6;
+  --simulation: #a66b9e;
+  --twin: #2fb6c4;
+
+  /* -- Risk gradient (green -> amber -> red only) -- */
+  --risk-low: #3fa66b;
+  --risk-mid: #c98a3f;
+  --risk-high: #c4453a;
+
+  --overlay-scrim: rgba(8, 9, 10, 0.72);
+
+  /* -- Type: one family, weight 400-650 only -- */
+  --font-sans: "Datum Sans", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: "Datum Mono", "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+
+  /* -- Radius (use-coded: 2-8px chrome, 0 on data canvas, full = live/identity) -- */
+  --r-none: 0px;
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-full: 9999px;
+
+  /* -- Spacing (8px base, 4px sub-grid) -- */
+  --sp-hair: 1px;
+  --sp-2xs: 2px;
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 12px;
+  --sp-lg: 16px;
+  --sp-xl: 24px;
+  --sp-2xl: 32px;
+  --sp-3xl: 48px;
+  --sp-4xl: 64px;
+  --sp-section: 96px;
+
+  /* -- Motion (short, linear, mechanical — never bounce/overshoot) -- */
+  --dur-instant: 80ms;
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-moderate: 240ms;
+  --dur-slow: 320ms;
+  --ease-engineered: cubic-bezier(0.2, 0, 0, 1);
+  --ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-glide: cubic-bezier(0.3, 0, 0.1, 1);
+
+  /* -- The one decorative effect: instrument glow (no shadows anywhere) -- */
+  --glow-signal: 0 0 0 2px rgba(63, 170, 184, 0.3);
+
+  /* -- Confidence state colours (labelled, never colour-only — NFR-10) -- */
+  --grounded: var(--success);
+  --inferred: var(--signal);
+  --unsupported: var(--warning);
+  --abstain: var(--investigation);
+}
+
+/* High-contrast token overrides (design.md Accessibility) — opt-in via data-contrast. */
+:root[data-contrast="high"] {
+  --canvas: #000000;
+  --ink: #ffffff;
+  --hairline: #4a5058;
+  --signal: #5cc4d1;
+}

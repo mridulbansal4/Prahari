@@ -1,0 +1,179 @@
+/* SENTINEL global styles — reset + base + the component library from design.md.
+ * Every value references a token from tokens.css. */
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--signal-wash);
+}
+
+a {
+  color: var(--signal);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--signal-bright);
+}
+
+/* -- Type ramp (design.md typography) -- */
+.t-display-lg { font-size: 40px; font-weight: 650; line-height: 1.12; letter-spacing: -0.01em; }
+.t-display-md { font-size: 32px; font-weight: 600; line-height: 1.15; }
+.t-headline { font-size: 24px; font-weight: 600; line-height: 1.2; }
+.t-title { font-size: 20px; font-weight: 600; line-height: 1.25; }
+.t-subtitle { font-size: 17px; font-weight: 500; line-height: 1.35; }
+.t-body { font-size: 15px; font-weight: 400; line-height: 1.6; }
+.t-body-sm { font-size: 13px; font-weight: 400; line-height: 1.55; }
+.t-caption { font-size: 12px; font-weight: 400; line-height: 1.45; color: var(--ink-subtle); }
+.t-metadata { font-size: 11px; font-weight: 500; line-height: 1.4; letter-spacing: 0.02em; color: var(--ink-subtle); }
+.t-label {
+  font-size: 11px; font-weight: 600; line-height: 1.3; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.t-metric { font-size: 36px; font-weight: 650; line-height: 1.05; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.t-mono { font-family: var(--font-mono); font-size: 13px; }
+.t-log { font-family: var(--font-mono); font-size: 12px; line-height: 1.7; }
+
+.ink-muted { color: var(--ink-muted); }
+.ink-subtle { color: var(--ink-subtle); }
+.ink-faint { color: var(--ink-faint); }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* -- Buttons -- */
+.btn {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+  padding: 10px 16px; border-radius: var(--r-sm); border: none; cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-snap), color var(--dur-fast) var(--ease-snap);
+  display: inline-flex; align-items: center; gap: var(--sp-sm); line-height: 1.2;
+}
+.btn:disabled { cursor: not-allowed; }
+.btn-primary { background: var(--signal); color: var(--on-signal); }
+.btn-primary:hover:not(:disabled) { background: var(--signal-bright); }
+.btn-primary:active { background: var(--signal-dim); }
+.btn-primary:disabled { background: var(--surface-3); color: var(--ink-faint); }
+.btn-secondary { background: var(--surface-2); color: var(--ink); border: 1px solid var(--hairline-strong); }
+.btn-secondary:hover:not(:disabled) { background: var(--surface-3); }
+.btn-tertiary { background: transparent; color: var(--ink-muted); padding: 8px 10px; }
+.btn-tertiary:hover:not(:disabled) { color: var(--ink); }
+/* Decision-blue: reserved for consequential approve/reject — never signal (ui_rules #2) */
+.btn-decision { background: var(--decision); color: var(--on-decision); }
+.btn-decision:hover:not(:disabled) { background: var(--decision-dim); }
+.btn-destructive { background: var(--critical); color: var(--on-critical); }
+.btn-icon { background: transparent; color: var(--ink-muted); padding: 8px; border-radius: var(--r-sm); }
+.btn-icon:hover { background: var(--surface-2); color: var(--ink); }
+
+/* -- Inputs -- */
+.input, .textarea {
+  background: var(--surface-1); color: var(--ink); font-family: var(--font-sans); font-size: 15px;
+  border: 1px solid var(--hairline); border-radius: var(--r-sm); padding: 8px 12px; width: 100%;
+  transition: border-color var(--dur-instant) var(--ease-engineered);
+}
+.textarea { min-height: 80px; resize: vertical; }
+.input:focus, .textarea:focus {
+  outline: none; border: 1.5px solid var(--signal); box-shadow: var(--glow-signal);
+}
+
+/* -- Cards (lift 1 + hairline, no shadow) -- */
+.card {
+  background: var(--surface-1); border: 1px solid var(--hairline); border-radius: var(--r-md);
+  padding: var(--sp-xl);
+}
+.card-dense { padding: var(--sp-lg); border-radius: var(--r-sm); }
+.card-decision { border-left: 3px solid var(--decision); }
+.card-evidence { border-left: 3px solid var(--evidence); }
+.card-critical { border-left: 3px solid var(--critical); }
+.card-investigation { border-left: 3px solid var(--investigation); }
+
+/* -- Status badge (colour + dot redundancy, colourblind-legible) -- */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--sp-xs); border-radius: var(--r-full);
+  padding: 2px 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; background: var(--surface-2); color: var(--ink-muted);
+}
+.badge .dot { width: 6px; height: 6px; border-radius: var(--r-full); background: currentColor; }
+.badge-success { color: var(--success); }
+.badge-warning { color: var(--warning); }
+.badge-critical { color: var(--critical-bright); }
+.badge-offline { color: var(--offline); }
+
+/* -- Data grid (no zebra striping — noisy at industrial density) -- */
+.grid-table { width: 100%; border-collapse: collapse; }
+.grid-table th {
+  text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-muted); padding: 10px 12px; border-bottom: 1px solid var(--hairline-strong);
+  background: var(--surface-1); position: sticky; top: 0;
+}
+.grid-table td {
+  font-size: 13px; padding: 10px 12px; border-bottom: 1px solid var(--hairline-soft);
+  font-variant-numeric: tabular-nums;
+}
+.grid-table tr:hover td { background: var(--surface-2); }
+
+/* -- Skeleton (opacity pulse, never a shimmer sweep or spinner) -- */
+.skeleton { background: var(--surface-2); border-radius: var(--r-sm); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.7; } }
+
+/* -- Determinate progress bar (no spinners, ui_rules #10) -- */
+.progress { height: 3px; background: var(--surface-2); border-radius: var(--r-xs); overflow: hidden; }
+.progress > span { display: block; height: 100%; background: var(--signal); transition: width var(--dur-base) var(--ease-engineered); }
+
+/* -- Citation chip (evidence gold, bordered, numbered) -- */
+.citation-chip {
+  display: inline-flex; align-items: center; border: 1px solid var(--evidence); color: var(--evidence);
+  border-radius: var(--r-xs); padding: 0 6px; font-size: 11px; font-weight: 500; letter-spacing: 0.02em;
+  cursor: pointer; background: transparent; margin: 0 2px; font-family: var(--font-mono);
+}
+.citation-chip:hover { background: rgba(185, 164, 108, 0.12); }
+
+/* -- Confidence indicator (5-segment bar + label) -- */
+.confidence { display: inline-flex; align-items: center; gap: var(--sp-xs); }
+.confidence .segs { display: inline-flex; gap: 2px; }
+.confidence .seg { width: 10px; height: 3px; border-radius: var(--r-xs); background: var(--surface-3); }
+.confidence .seg.on { background: var(--signal); }
+
+/* -- Terminal / log panel (recessed) -- */
+.terminal {
+  background: var(--surface-inset); color: var(--ink-muted); font-family: var(--font-mono);
+  font-size: 12px; line-height: 1.7; border-radius: var(--r-md); padding: var(--sp-lg);
+}
+
+/* -- Data canvas: full-bleed, radius 0 (design.md) -- */
+.canvas { background: var(--surface-inset); border-radius: var(--r-none); }
+
+/* -- Layout helpers -- */
+.row { display: flex; gap: var(--sp-lg); }
+.col { display: flex; flex-direction: column; gap: var(--sp-lg); }
+.between { justify-content: space-between; }
+.center { align-items: center; }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-lg); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-lg); }
+@media (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } .grid-2 { grid-template-columns: 1fr; } }
+
+/* -- Reduced motion: honour the OS setting (accessibility) -- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

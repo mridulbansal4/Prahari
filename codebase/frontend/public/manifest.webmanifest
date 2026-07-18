@@ -1,0 +1,12 @@
+{
+  "name": "SENTINEL — Industrial Decision Intelligence OS",
+  "short_name": "SENTINEL",
+  "description": "Installable field console (ADR-013 — PWA, not native).",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0D0F",
+  "theme_color": "#0B0D0F",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
