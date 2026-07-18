@@ -8,7 +8,12 @@ from __future__ import annotations
 from ..config import Settings
 from ..resilience.circuit_breaker import CircuitBreaker
 from ..resilience.degradation import Rung
-from .providers import AnthropicProvider, LocalOpenWeightsProvider, TemplateSynthProvider
+from .providers import (
+    AnthropicProvider,
+    GeminiProvider,
+    LocalOpenWeightsProvider,
+    TemplateSynthProvider,
+)
 
 
 class ModelRouter:
@@ -16,6 +21,7 @@ class ModelRouter:
         self._s = settings
         self._breaker = CircuitBreaker()
         self._template = TemplateSynthProvider()
+        self._gemini = GeminiProvider(settings) if settings.gemini_api_key else None
         self._cloud = AnthropicProvider(settings) if settings.model_api_key else None
         self._local = LocalOpenWeightsProvider()
 
@@ -25,6 +31,8 @@ class ModelRouter:
             return self._template, Rung(forced)
         if self._breaker.is_open:
             return self._template, Rung.NO_MODEL
+        if self._gemini and self._gemini.available():
+            return self._gemini, Rung.FULL
         if self._cloud and self._cloud.available():
             return self._cloud, Rung.FULL
         if self._local.available():

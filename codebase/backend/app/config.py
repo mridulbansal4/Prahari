@@ -58,6 +58,15 @@ class Settings(BaseSettings):
     model_api_key: str | None = None
     model_id: str = "claude-fable-5"
     model_base_url: str = "https://api.anthropic.com"
+
+    # Gemini provider (CP-5) — a low-cost Flash model keeps token usage down. When a key is set
+    # this is the preferred Full-rung reasoning model. Model id is configurable.
+    gemini_api_key: str | None = None
+    gemini_model: str = "gemini-flash-lite-latest"  # lowest-cost tier (fewest tokens)
+    gemini_base_url: str = "https://generativelanguage.googleapis.com"
+    # Token budget for the model response — deliberately small (cheap, fast).
+    model_max_output_tokens: int = 768
+
     # Force the degradation rung for demos of the CP-9 ladder / air-gap mode.
     # One of: full | -model | -vector | -graph | -everything
     force_rung: str | None = None
