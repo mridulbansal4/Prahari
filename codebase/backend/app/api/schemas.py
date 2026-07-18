@@ -46,6 +46,7 @@ class AdjudicateRequest(BaseModel):
     note: str | None = None
     corrected: bool = False
     corrected_target_asset_id: str | None = None
+    version: int | None = None  # optimistic concurrency (Bible §7.6)
 
 
 # ---- actions (§7.3) ----

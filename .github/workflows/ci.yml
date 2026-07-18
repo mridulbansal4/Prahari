@@ -1,0 +1,39 @@
+# CI (Bible §12.5) — lint + type + unit + eval-smoke + web build. Eval is a gate (ADR-014):
+# a change that drops faithfulness/citation/abstention below threshold cannot merge (§15.4).
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: codebase/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check app tests
+      - run: pytest -q
+      - name: eval gate (CP-2/CP-4 measured, not hoped)
+        working-directory: codebase
+        run: python eval/run_eval.py
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: codebase/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install --no-fund --no-audit
+      - run: npm run typecheck
+      - run: npm run build

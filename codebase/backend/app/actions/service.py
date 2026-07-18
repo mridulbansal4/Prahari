@@ -67,9 +67,20 @@ class ActionService:
     def list_all(self, tenant: str) -> list[ActionDraft]:
         return [ActionDraft(**d) for d in self._rel.list(_DRAFT, tenant)]
 
-    def submit(self, draft_id: str, approver: Principal, cmms_ok: bool = True) -> ActionDraft:
+    def submit(
+        self, draft_id: str, approver: Principal, cmms_ok: bool = True,
+        idempotency_key: str | None = None,
+    ) -> ActionDraft:
         """The CP-3 gate. Requires a distinct-authority approver; commits to the CMMS only after
-        the ABAC check passes. Never marks committed unless the write actually succeeded."""
+        the ABAC check passes. Never marks committed unless the write actually succeeded.
+        An Idempotency-Key (Bible §7.6) makes a retried submit return the same result, not a
+        duplicate CMMS write."""
+        if idempotency_key:
+            prior = self._rel.get("idempotency", idempotency_key, approver.tenant)
+            if prior:
+                existing = self.get(prior["draft_id"], approver.tenant)
+                if existing:
+                    return existing
         draft = self.get(draft_id, approver.tenant)
         if not draft:
             raise Conflict("Draft not found or expired.", {"draft_id": draft_id})
@@ -87,6 +98,8 @@ class ActionService:
         draft.approver = approver.subject
         draft.cmms_work_order_id = self._sink.new_id("CMMS-WO")
         self._save(draft, approver.tenant)
+        if idempotency_key:
+            self._rel.put("idempotency", idempotency_key, {"draft_id": draft.draft_id}, approver.tenant)
         self._audit.log(approver.subject, "action.submitted", approver.tenant,
                         target=draft.cmms_work_order_id,
                         detail={"draft_id": draft_id, "drafter": draft.drafter,

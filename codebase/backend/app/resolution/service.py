@@ -122,6 +122,14 @@ class ResolutionService:
         prop = self.get_proposal(proposal_id, tenant)
         if not prop:
             raise Conflict("Already resolved or not found.", {"proposal_id": proposal_id})
+        # Optimistic concurrency (Bible §7.6): reject a stale write from a client that hasn't
+        # seen the current proposal version.
+        if adj.version is not None and adj.version != prop.version:
+            raise Conflict(
+                "This proposal was already actioned — refresh to see the current state.",
+                {"proposal_id": proposal_id, "expected_version": prop.version,
+                 "your_version": adj.version},
+            )
         target_asset = adj.corrected_target_asset_id or prop.canonical_asset_id
         if adj.decision == "merge":
             merge_id = self._commit_merge(prop, adj.approver, auto=False,

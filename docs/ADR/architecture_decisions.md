@@ -21,6 +21,35 @@ Format: Problem · Alternatives · Chosen · Trade-off · Consequence. Governanc
   not a new feature (PRB §8.1 authority: design.md governs *how* within PRB-specified behavior).
 - **Consequence:** each login sees a surface suited to its decisions; no generic dashboard.
 
+## ADR-P07 — Pilot-tier hardening (production stack, OIDC, rate-limit, concurrency, tests)
+- **Production profile verified live:** the Neo4j/Qdrant/Postgres adapters were exercised
+  end-to-end (`PRAHARI_PROFILE=production`) — seeded + a 6-hop grounded cited investigation.
+  Fixes found while doing so: Neo4j 5 requires `RETURN count(n) AS c` (aliasing); the qdrant
+  client is pinned `>=1.9,<1.12` to match the server image; **Postgres is published on host 5433**
+  in compose to avoid colliding with a locally-installed Postgres on 5432.
+- **Real OIDC (Bible §7.2/§8.2):** `OidcIdentityProvider` validates RS256 IdP tokens via JWKS
+  (signature + audience + issuer + expiry), config-driven (`PRAHARI_OIDC_*`); selected
+  automatically when a JWKS URI is set, else the dev stub. Deny-by-default ABAC unchanged.
+- **Rate limiting (Bible §2.7/§7.7):** token-bucket per (tenant,user) at the gateway middleware,
+  separate read vs ingestion buckets; `429 rate_limited` + `Retry-After`/`X-RateLimit-Remaining`.
+- **Optimistic concurrency + idempotency (Bible §7.6):** proposals carry a `version` → stale
+  adjudication returns `409`; work-order submit honours an `Idempotency-Key` (no duplicate CMMS
+  write on retry).
+- **Tests added:** OIDC (valid/forged), token-bucket, optimistic concurrency, idempotency,
+  cross-tenant vector isolation, rule-engine effective-date boundaries, injection abstention.
+- **CI re-enabled:** `.github/` is tracked again (reversing the earlier ignore) so the
+  lint+tests+eval-gate workflow runs on push/PR.
+
+## ADR-P08 — MVP polish
+- Live document ingestion in the Admin console (upload → pipeline → investigable facts).
+- Richer provenance-clean corpus (second instrument PESO + asset V-201) — scripted demo paths
+  kept deterministic; eval re-verified green after catching a real over-answer regression (the
+  entity gate now requires evidence to mention the asked tag, not just a generic word).
+- PWA service worker for genuine offline Field Mode (M12/NFR-12).
+- `MetricValue` renders numeric readings as the 36px numeral but long strings (e.g. "immediate
+  (same session)") in a contained title style — fixes the metric-tile overflow.
+- Fixed a React "setState during render" warning (banner update moved out of the stream reducer).
+
 ## ADR-P06 — No hardcoded asset ids / signing secret in surfaces
 - **Problem:** the Compliance screen pinned `asset-p101b`; the stub auth signing key was a code
   literal.

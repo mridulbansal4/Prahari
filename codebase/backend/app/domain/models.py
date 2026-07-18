@@ -145,6 +145,7 @@ class ResolutionProposal(BaseModel):
     method: str
     features: dict[str, float] = Field(default_factory=dict)
     tenant: str = "demo"
+    version: int = 0  # optimistic concurrency (Bible §7.6): stale adjudication → 409
     created_at: datetime = Field(default_factory=now_utc)
 
 
@@ -154,6 +155,7 @@ class Adjudication(BaseModel):
     note: str | None = None
     corrected: bool = False
     corrected_target_asset_id: str | None = None
+    version: int | None = None  # if provided and stale vs the proposal → 409 (optimistic lock)
 
 
 # ---------------------------------------------------------------------------- compliance (M6)

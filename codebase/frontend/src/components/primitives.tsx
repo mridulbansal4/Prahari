@@ -1,5 +1,22 @@
 // Small design-system primitives. Every visual value comes from a token (ui_rules #1).
+import type { ReactNode } from "react";
 import type { ConfidenceState } from "../lib/types";
+
+/** A metric reading. design.md's 36px metric-value numeral is for NUMBERS; a long string value
+ * (e.g. "immediate (same session)") must not render at that size or it overflows. Numbers →
+ * large tabular numeral; short/long text → contained title style that wraps cleanly. */
+export function MetricValue({ value, accent }: { value: ReactNode; accent?: string }) {
+  const s = value === null || value === undefined ? "—" : String(value);
+  const isNumeric = /^[\d.,%+\-/x ]{1,8}$/.test(s.trim());
+  return (
+    <div
+      className={isNumeric ? "t-metric" : "t-title"}
+      style={{ color: accent ?? "var(--ink)", overflowWrap: "anywhere", lineHeight: isNumeric ? 1.05 : 1.25 }}
+    >
+      {s}
+    </div>
+  );
+}
 
 const CONF_LABEL: Record<ConfidenceState, string> = {
   grounded: "Grounded",

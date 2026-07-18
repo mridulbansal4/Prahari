@@ -55,6 +55,14 @@ class TemplateSynthProvider:
         claims = []
         for sp in ranked[:5]:
             span_terms = set(_terms(sp.get("text", "")))
+            # Entity gate (FM-7 / answer-relevance): if the question names a specific tag (P-101B,
+            # VIB-101B, R-900…), the evidence must actually be about THAT entity — otherwise a
+            # generic word like "vessel" would let a span about a different asset answer a
+            # question about R-900. If no retrieved span mentions the asked tag, we abstain.
+            if anchor_terms:
+                span_norm = {_norm(t) for t in span_terms}
+                if not (anchor_terms & span_norm):
+                    continue
             # Require overlap with a CONTENT term (falls back to any term only when the question
             # has no content terms beyond the anchor). Substring-aware so "oisd" covers
             # "oisd-std-129" and "inspection" covers "inspections" without a stemmer.

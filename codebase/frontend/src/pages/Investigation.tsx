@@ -26,18 +26,26 @@ export function Investigation({ onRung }: { onRung: (r: string) => void }) {
   const [recent, setRecent] = useState<{ investigation_id: string; question: string; abstained: boolean }[]>([]);
 
   useEffect(() => {
-    api.recentInvestigations().then((r) => setRecent(r.items)).catch(() => {});
+    api
+      .recentInvestigations()
+      // Don't surface injection/eval probe strings as clickable suggestions.
+      .then((r) => setRecent(r.items.filter((i) => !/ignore previous|password|fatigue life/i.test(i.question))))
+      .catch(() => {});
   }, [run.result]);
 
   async function ask(q: string) {
     if (!q.trim()) return;
     setRun({ ...EMPTY, running: true });
     const { investigation_id } = await api.askInvestigation(q, asOf || undefined);
-    const stop = streamInvestigation(investigation_id, (ev: StreamEvent) => {
-      setRun((prev) => reduce(prev, ev, onRung));
+    streamInvestigation(investigation_id, (ev: StreamEvent) => {
+      // Banner updates App state — do it OUTSIDE the setRun updater (never setState another
+      // component during this one's render).
+      if (ev.type === "banner") {
+        onRung(String(ev.rung ?? "full"));
+        return;
+      }
+      setRun((prev) => reduce(prev, ev));
     });
-    // safety: also fetch the final result when the socket closes
-    void stop;
   }
 
   return (
@@ -141,11 +149,8 @@ function DraftAction({ assetId, investigationId, question }: { assetId?: string 
   );
 }
 
-function reduce(prev: RunState, ev: StreamEvent, onRung: (r: string) => void): RunState {
+function reduce(prev: RunState, ev: StreamEvent): RunState {
   switch (ev.type) {
-    case "banner":
-      onRung(String(ev.rung ?? "full"));
-      return prev;
     case "stage":
       return { ...prev, stage: { stage: String(ev.stage), detail: ev.detail as string } };
     case "graph_hop":

@@ -129,6 +129,26 @@ export const api = {
   decisions: () => req<{ decisions: any[] }>("GET", "/v1/decisions"),
   replay: (id: string) => req<any>("GET", `/v1/decisions/${id}/replay`),
 
+  uploadDocument: async (file: File) => {
+    const form = new FormData();
+    form.append("file", file);
+    const token = getToken();
+    const res = await fetch("/v1/documents", {
+      method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: form,
+    });
+    if (!res.ok) {
+      let m = res.statusText;
+      try {
+        m = (await res.json())?.error?.message || m;
+      } catch {
+        /* non-JSON */
+      }
+      throw new ApiError(res.status, m);
+    }
+    return (await res.json()) as { doc_id: string; job_id: string; status: string };
+  },
   ingestionJobs: () => req<{ jobs: any[]; quarantined: any[] }>("GET", "/v1/ingestion"),
   setDegradation: (rung: string) =>
     req<{ rung: string }>("POST", `/v1/admin/degrade?rung=${encodeURIComponent(rung)}`),

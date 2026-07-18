@@ -1,7 +1,7 @@
 // The remaining modules — read-mostly surfaces. Each honours its PRB spec: honest empty states,
 // no target-as-achieved (BR-8), append-only audit (no edit/delete affordance), PII-minimal.
 import { useEffect, useState } from "react";
-import { Badge } from "../components/primitives";
+import { Badge, MetricValue } from "../components/primitives";
 import { api } from "../lib/api";
 
 // -------------------------------------------------------------------- M9 Audit & Provenance
@@ -46,9 +46,7 @@ export function Analytics() {
         {data.kpis.map((k: any) => (
           <div key={k.key} className={`card ${k.is_flywheel ? "card-investigation" : ""}`}>
             <div className="t-label">{k.label}</div>
-            <div className="t-metric" style={{ color: k.is_flywheel ? "var(--signal)" : "var(--ink)" }}>
-              {k.actual ?? "—"}
-            </div>
+            <MetricValue value={k.actual} accent={k.is_flywheel ? "var(--signal)" : "var(--ink)"} />
             <div className="t-metadata">target: {k.target}</div>
             {k.note && <div className="t-caption" style={{ marginTop: 4 }}>{k.note}</div>}
           </div>
@@ -149,10 +147,56 @@ export function Replay() {
 export function Admin() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [quarantined, setQuarantined] = useState<any[]>([]);
-  useEffect(() => { api.ingestionJobs().then((d) => { setJobs(d.jobs); setQuarantined(d.quarantined); }); }, []);
+  const [uploading, setUploading] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+
+  async function load() {
+    const d = await api.ingestionJobs();
+    setJobs(d.jobs);
+    setQuarantined(d.quarantined);
+  }
+  useEffect(() => { load(); }, []);
+
+  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setMsg(null);
+    try {
+      const r = await api.uploadDocument(file);
+      setMsg(
+        r.status === "duplicate"
+          ? `Already ingested as ${r.doc_id} (idempotent by content hash).`
+          : `Ingested ${file.name} → ${r.doc_id}. Facts are now investigable.`,
+      );
+      await load();
+    } catch (err: any) {
+      setMsg(err?.message ?? "Upload failed.");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  }
+
   return (
     <div className="col">
       <div><div className="t-label">Admin &amp; Ingestion Console</div><div className="t-display-md">Documents in, provenance out</div></div>
+
+      {/* Live upload — parse → extract → provenance → confidence gate → resolution handoff */}
+      <div className="card card-investigation">
+        <div className="row between center wrap" style={{ gap: "var(--sp-md)" }}>
+          <div>
+            <div className="t-title">Ingest a document</div>
+            <div className="t-body-sm ink-muted">CSV / text / PDF. Every extracted fact is stamped with provenance (CP-1) before it enters the graph.</div>
+          </div>
+          <label className="btn btn-primary" style={{ cursor: uploading ? "default" : "pointer" }}>
+            {uploading ? "Ingesting…" : "Upload document"}
+            <input type="file" accept=".csv,.txt,.md,.pdf,.json" onChange={onFile} disabled={uploading} style={{ display: "none" }} />
+          </label>
+        </div>
+        {msg && <div className="t-body-sm" style={{ marginTop: "var(--sp-md)", color: "var(--knowledge)" }}>{msg}</div>}
+      </div>
+
       <div className="card" style={{ padding: 0 }}>
         <table className="grid-table">
           <thead><tr><th>Document</th><th>Status</th><th>Nodes</th><th>Edges</th><th>Spans</th></tr></thead>

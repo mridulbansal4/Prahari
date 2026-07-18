@@ -1,7 +1,7 @@
 """M7 Execution Center — draft + gated submit (Bible §7.3, CP-3)."""
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 
 from ..auth.abac import Principal
 from ..auth.rbac import Access
@@ -28,11 +28,13 @@ async def draft(
 @router.post("/v1/actions/work-order/submit", status_code=201)
 async def submit(
     body: WorkOrderSubmitRequest,
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
     principal: Principal = Depends(require_module("M7", Access.ACT)),
     c: Container = Depends(container),
 ) -> dict:
     # The approver identity in the body must resolve to a real principal (CP-3, distinct authority).
-    d = c.actions.submit(body.draft_id, principal, cmms_ok=body.cmms_ok)
+    d = c.actions.submit(body.draft_id, principal, cmms_ok=body.cmms_ok,
+                         idempotency_key=idempotency_key)
     return {"cmms_work_order_id": d.cmms_work_order_id, "status": d.status,
             "approver": d.approver, "drafter": d.drafter}
 

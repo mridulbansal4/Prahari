@@ -44,6 +44,14 @@ class Settings(BaseSettings):
     # customer IdP's JWKS instead of this symmetric dev key.
     auth_dev_secret: str = "prahari-dev-signing-key"
 
+    # --- OIDC (production identity, Bible §7.2/§8.2) --------------------------------
+    # When ``oidc_jwks_uri`` is set, the gateway validates real IdP tokens (RS256, signature +
+    # audience + issuer + expiry) instead of the dev stub. Deny-by-default ABAC still runs.
+    oidc_jwks_uri: str | None = None
+    oidc_issuer: str | None = None
+    oidc_audience: str | None = None
+    oidc_role_claim: str = "role"
+
     # --- Model provider (CP-5) -----------------------------------------------------
     # If a key is present we may use the cloud reasoning provider; otherwise the local /
     # template-synth rungs of the CP-9 ladder serve grounded, structured answers offline.

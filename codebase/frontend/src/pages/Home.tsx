@@ -3,7 +3,7 @@
 // composed from the endpoints that role is permitted to call — no shared, generic dashboard.
 import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "../components/primitives";
+import { Badge, MetricValue } from "../components/primitives";
 import { api } from "../lib/api";
 import { useAuth } from "../lib/auth";
 
@@ -28,9 +28,7 @@ function StatTile({
       style={{ cursor: onClick ? "pointer" : "default" }}
     >
       <div className="t-label">{label}</div>
-      <div className="t-metric" style={{ color: accent ?? "var(--ink)" }}>
-        {value}
-      </div>
+      <MetricValue value={value} accent={accent} />
       {hint && <div className="t-caption">{hint}</div>}
     </div>
   );

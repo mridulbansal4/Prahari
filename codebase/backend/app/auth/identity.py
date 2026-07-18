@@ -6,11 +6,13 @@ embedded/hackathon profile. OidcIdentityProvider — validates a customer IdP to
 """
 from __future__ import annotations
 
+import json
 import time
+from typing import Any
 
 import jwt
 
-from ..config import get_settings
+from ..config import Settings, get_settings
 from ..domain.errors import Unauthenticated
 from .abac import Principal
 from .rbac import Role
@@ -61,12 +63,54 @@ class StubIdentityProvider:
         )
 
 
-class OidcIdentityProvider:  # pragma: no cover - exercised in production profile
-    """Validates a customer IdP token. JWKS fetch omitted here; wired in production deploy."""
+class OidcIdentityProvider:
+    """Validates a real customer-IdP token (Bible §7.2/§8.2): RS256 signature via the IdP's JWKS,
+    plus audience/issuer/expiry. Maps IdP claims → Principal; role comes from a configurable claim.
+    ``jwks`` may be injected (offline/tests); otherwise keys are fetched from ``oidc_jwks_uri``."""
+
+    def __init__(self, settings: Settings | None = None, jwks: list[dict[str, Any]] | None = None) -> None:
+        self._s = settings or get_settings()
+        self._jwks = jwks
+
+    def _signing_key(self, token: str) -> Any:
+        header = jwt.get_unverified_header(token)
+        kid = header.get("kid")
+        if self._jwks is not None:
+            jwk = next((k for k in self._jwks if k.get("kid") == kid), self._jwks[0])
+            return jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
+        if not self._s.oidc_jwks_uri:
+            raise Unauthenticated("OIDC is not configured (set PRAHARI_OIDC_JWKS_URI).")
+        client = jwt.PyJWKClient(self._s.oidc_jwks_uri)
+        return client.get_signing_key_from_jwt(token).key
 
     def verify(self, token: str) -> Principal:
-        raise Unauthenticated("OIDC provider not configured in this build (see ADR-P04).")
+        try:
+            key = self._signing_key(token)
+            claims = jwt.decode(
+                token, key, algorithms=["RS256"],
+                audience=self._s.oidc_audience, issuer=self._s.oidc_issuer,
+                options={"verify_aud": bool(self._s.oidc_audience),
+                         "verify_iss": bool(self._s.oidc_issuer)},
+            )
+        except jwt.PyJWTError as e:
+            raise Unauthenticated("Invalid IdP token.", {"reason": str(e)})
+        role_raw = claims.get(self._s.oidc_role_claim, Role.TECHNICIAN.value)
+        try:
+            role = Role(role_raw)
+        except ValueError:
+            raise Unauthenticated(f"Unknown role claim '{role_raw}'.")
+        return Principal(
+            subject=claims["sub"],
+            name=claims.get("name", claims["sub"]),
+            role=role,
+            tenant=claims.get("tenant", self._s.tenant_default),
+            site=claims.get("site", "site-a"),
+        )
 
 
-def get_identity_provider() -> StubIdentityProvider:
+def get_identity_provider() -> StubIdentityProvider | OidcIdentityProvider:
+    """Pick the identity provider by config: real OIDC when a JWKS URI is set, else the dev stub."""
+    settings = get_settings()
+    if settings.oidc_jwks_uri:
+        return OidcIdentityProvider(settings)
     return StubIdentityProvider()

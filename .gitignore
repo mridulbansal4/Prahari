@@ -28,6 +28,6 @@ Thumbs.db
 # SENTINEL runtime state (embedded profile scratch)
 **/.prahari_state/
 
-# Local tooling / CI (excluded per project preference)
+# Local tooling (excluded per project preference)
 .claude/
-.github/
+# .github/ is tracked again — CI (lint + tests + eval gate) is re-enabled.

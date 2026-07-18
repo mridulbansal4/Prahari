@@ -35,7 +35,8 @@ async def adjudicate(
     if not can_adjudicate(principal.role):
         raise Forbidden("Adjudication requires reliability or admin.", {"role": principal.role.value})
     adj = Adjudication(decision=body.decision, approver=principal.subject, note=body.note,
-                       corrected=body.corrected, corrected_target_asset_id=body.corrected_target_asset_id)
+                       corrected=body.corrected, corrected_target_asset_id=body.corrected_target_asset_id,
+                       version=body.version)
     return c.resolution.adjudicate(proposal_id, adj, principal.tenant)
 
 

@@ -153,6 +153,38 @@ def seed() -> dict:
             {"clause": "OISD-STD-129 cl.7.3", "instrument": "OISD",
              "total_clauses_in_instrument": 42, "periodicity_months": 12}, TENANT)
 
+    # ---- second instrument (PESO) — a SATISFIED obligation, for contrast ----
+    s_peso = _span(g, v, sink, "DOC-OISD-129:s2", "DOC-OISD-129", 9,
+                   "PESO SMPV rules require a pressure-vessel external inspection of knockout "
+                   "drums at 24-month periodicity.")
+    g.upsert_node(Node(id="inst-peso", label=NodeLabel.INSTRUMENT, tenant=TENANT,
+                       props={"name": "PESO", "authority": "PESO (Petroleum & Explosives Safety Org.)"}))
+    ob_peso = Node(id="ob-peso-smpv", label=NodeLabel.OBLIGATION, tenant=TENANT,
+                   props={"clause": "PESO SMPV r.12", "periodicity_months": 24,
+                          "effective_from": "2018-01-01"})
+    sink.write_node(ob_peso, spans=[s_peso])
+
+    # ---- second asset: V-201 knockout drum (single-fact target + PESO obligation) ----
+    s_v201 = _span(g, v, sink, "DOC-PID-04:s2", "DOC-PID-04", 5,
+                   "Knockout Drum V-201 has a design pressure of 24.5 barg per the vessel datasheet.")
+    v201 = Node(id="asset-v201", label=NodeLabel.ASSET, tenant=TENANT,
+                props={"tag": "V-201", "name": "Knockout Drum V-201", "iso14224_class": "VE",
+                       "design_pressure_barg": 24.5}, effective_from=date(2015, 1, 1))
+    sink.write_node(v201, spans=[s_v201])
+    sink.write_edge(Edge(id="gov-peso-v201", type=EdgeType.GOVERNS, src="ob-peso-smpv",
+                         dst="asset-v201", tenant=TENANT), spans=[s_peso])
+    g.upsert_edge(Edge(id="def-peso", type=EdgeType.DEFINED_IN, src="ob-peso-smpv",
+                       dst="inst-peso", tenant=TENANT))
+    # a recent inspection satisfies the PESO obligation (contrast with the overdue OISD one)
+    insp_v201 = Node(id="insp-2026-v201", label=NodeLabel.INSPECTION, tenant=TENANT,
+                     props={"date": "2026-05-02", "result": "pass", "method": "external-visual"})
+    sink.write_node(insp_v201, spans=[s_v201])
+    sink.write_edge(Edge(id="hasinsp-v201", type=EdgeType.HAS_INSPECTION, src="asset-v201",
+                         dst="insp-2026-v201", tenant=TENANT), spans=[s_v201])
+    rel.put("compliance_rule", "ob-peso-smpv",
+            {"clause": "PESO SMPV r.12", "instrument": "PESO",
+             "total_clauses_in_instrument": 30, "periodicity_months": 24}, TENANT)
+
     # ---- organizational memory: Anil (the retiring expert) ----
     anil = Node(id="person-anil", label=NodeLabel.PERSON, tenant=TENANT,
                 props={"name": "Anil", "role": "reliability", "tenure_years": 34,

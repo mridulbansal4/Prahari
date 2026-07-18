@@ -40,9 +40,48 @@ app.add_middleware(
 )
 
 
+_RL_EXEMPT = {"/", "/v1/health", "/docs", "/openapi.json", "/v1/openapi.json", "/redoc"}
+
+
+def _rl_key(request: Request) -> str:
+    """Key the bucket by token subject (per-user), falling back to client host."""
+    auth = request.headers.get("authorization", "")
+    if auth.lower().startswith("bearer "):
+        try:
+            import jwt
+
+            claims = jwt.decode(auth.split(" ", 1)[1], options={"verify_signature": False})
+            return f"{claims.get('tenant', '?')}:{claims.get('sub', '?')}"
+        except Exception:
+            pass
+    return f"ip:{request.client.host if request.client else 'unknown'}"
+
+
 @app.middleware("http")
 async def correlation_id(request: Request, call_next):  # type: ignore[no-untyped-def]
     rid = request.headers.get("X-Request-Id", f"req-{uuid.uuid4().hex[:12]}")
+
+    # Token-bucket rate limiting at the edge (Bible §7.7); ingestion has its own tighter bucket.
+    if request.url.path not in _RL_EXEMPT and not request.url.path.startswith("/docs"):
+        from .resilience.rate_limit import get_limiter, now_monotonic
+
+        is_ingest = request.url.path == "/v1/documents" and request.method == "POST"
+        allowed, remaining, retry = get_limiter().check(
+            _rl_key(request), ingestion=is_ingest, monotonic=now_monotonic()
+        )
+        if not allowed:
+            return JSONResponse(
+                status_code=429,
+                content={"error": {"code": "rate_limited", "message": "Rate limit exceeded.",
+                                   "request_id": rid, "details": {}}},
+                headers={"Retry-After": str(retry), "X-RateLimit-Remaining": "0",
+                         "X-Request-Id": rid},
+            )
+        response = await call_next(request)
+        response.headers["X-RateLimit-Remaining"] = str(remaining)
+        response.headers["X-Request-Id"] = rid
+        return response
+
     response = await call_next(request)
     response.headers["X-Request-Id"] = rid
     return response

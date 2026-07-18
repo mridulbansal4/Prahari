@@ -214,8 +214,8 @@ class Neo4jGraphStore:
 
     def snapshot(self):
         with self._driver.session() as s:
-            n = s.run("MATCH (n) RETURN count(n) c").single()["c"]
-            e = s.run("MATCH ()-[r]->() RETURN count(r) c").single()["c"]
+            n = s.run("MATCH (n) RETURN count(n) AS c").single()["c"]
+            e = s.run("MATCH ()-[r]->() RETURN count(r) AS c").single()["c"]
         return {"nodes": n, "edges": e}
 
 
