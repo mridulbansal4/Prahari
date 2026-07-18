@@ -6,6 +6,7 @@ import { AssetMap } from "./pages/AssetMap";
 import { Compliance } from "./pages/Compliance";
 import { Execution } from "./pages/Execution";
 import { FieldMode } from "./pages/FieldMode";
+import { Home } from "./pages/Home";
 import { Investigation } from "./pages/Investigation";
 import { Login } from "./pages/Login";
 import { Admin, Analytics, Audit, Knowledge, OrgMemory, Replay } from "./pages/Modules";
@@ -34,6 +35,7 @@ export default function App() {
   return (
     <Shell rung={rung}>
       <Routes>
+        <Route path="/home" element={<Home />} />
         <Route path="/investigate" element={<Investigation onRung={setRung} />} />
         <Route path="/assets" element={<AssetMap />} />
         <Route path="/compliance" element={<Compliance />} />
@@ -45,8 +47,8 @@ export default function App() {
         <Route path="/audit" element={<Audit />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/field" element={<FieldMode onRung={setRung} rung={rung} />} />
-        <Route path="/login" element={<Navigate to="/investigate" replace />} />
-        <Route path="*" element={<Navigate to="/investigate" replace />} />
+        <Route path="/login" element={<Navigate to="/home" replace />} />
+        <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </Shell>
   );

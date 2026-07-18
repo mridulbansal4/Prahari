@@ -43,12 +43,24 @@ export function Shell({ children, rung }: { children: React.ReactNode; rung: str
           overflowY: "auto",
         }}
       >
-        <div style={{ padding: "0 var(--sp-sm) var(--sp-lg)" }}>
+        <NavLink to="/home" style={{ display: "block", padding: "0 var(--sp-sm) var(--sp-lg)", color: "var(--ink)" }}>
           <div className="t-title" style={{ letterSpacing: "0.04em" }}>
             SENTINEL
           </div>
           <div className="t-metadata">Decision Intelligence OS</div>
-        </div>
+        </NavLink>
+        <NavLink
+          to="/home"
+          style={({ isActive }) => ({
+            display: "block", padding: "8px 12px", borderRadius: "var(--r-sm)", fontSize: 13,
+            marginBottom: "var(--sp-md)",
+            color: isActive ? "var(--ink)" : "var(--ink-muted)",
+            background: isActive ? "var(--signal-wash)" : "transparent",
+            borderLeft: isActive ? "2px solid var(--signal)" : "2px solid transparent",
+          })}
+        >
+          ◈ Home
+        </NavLink>
         {GROUPS.map((g) => {
           const items = NAV.filter((n) => n.group === g && allowed.has(n.module));
           if (!items.length) return null;

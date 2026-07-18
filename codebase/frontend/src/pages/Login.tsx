@@ -24,7 +24,7 @@ export function Login() {
     setErr(null);
     try {
       await login(id);
-      nav("/investigate");
+      nav("/home");
     } catch {
       setErr("Can't reach your organization's sign-in. Try again, or contact your admin.");
       setBusy(null);

@@ -15,7 +15,10 @@ from ..domain.errors import Unauthenticated
 from .abac import Principal
 from .rbac import Role
 
-_DEV_SECRET = "sentinel-dev-signing-key"  # dev only; production uses IdP JWKS (never a secret in code)
+def _dev_secret() -> str:
+    # Read from config, not a code literal; production uses IdP JWKS (§8.3).
+    return get_settings().auth_dev_secret
+
 
 # Canonical demo personas (PRB §1.2) available in the stub login.
 DEMO_USERS = {
@@ -42,11 +45,11 @@ class StubIdentityProvider:
             "iat": int(time.time()),
             "exp": int(time.time()) + 3600 * 8,
         }
-        return jwt.encode(payload, _DEV_SECRET, algorithm="HS256")
+        return jwt.encode(payload, _dev_secret(), algorithm="HS256")
 
     def verify(self, token: str) -> Principal:
         try:
-            payload = jwt.decode(token, _DEV_SECRET, algorithms=["HS256"])
+            payload = jwt.decode(token, _dev_secret(), algorithms=["HS256"])
         except jwt.PyJWTError as e:
             raise Unauthenticated("Invalid or expired token.", {"reason": str(e)})
         return Principal(

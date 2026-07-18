@@ -12,6 +12,23 @@ from .schemas import ExpertiseUpsert, KnowsUpsert
 router = APIRouter()
 
 
+# ------------------------------------------------------------------- assets (shared lookup)
+@router.get("/v1/assets", tags=["assets"])
+async def list_assets(
+    principal: Principal = Depends(current_principal),
+    c: Container = Depends(container),
+) -> dict:
+    """Assets in the tenant graph — used by asset pickers and role dashboards (no hardcoding)."""
+    nodes = c.stores.graph.nodes_by_label("Asset", principal.tenant)
+    return {
+        "assets": [
+            {"id": n.id, "tag": n.props.get("tag"), "name": n.props.get("name"),
+             "iso_class": n.props.get("iso14224_class")}
+            for n in nodes
+        ]
+    }
+
+
 # ---------------------------------------------------------------- M9 Audit & Provenance
 @router.get("/v1/audit", tags=["audit"])
 async def audit_log(

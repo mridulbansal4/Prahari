@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     pg_dsn: str = "postgresql://sentinel:sentinel-dev@localhost:5432/sentinel"
     redis_url: str = "redis://localhost:6379/0"
 
+    # --- Auth (stub dev provider, ADR-P04) -----------------------------------------
+    # Configurable so no signing secret is a code literal (CP-5 / §8.3). Production uses the
+    # customer IdP's JWKS instead of this symmetric dev key.
+    auth_dev_secret: str = "sentinel-dev-signing-key"
+
     # --- Model provider (CP-5) -----------------------------------------------------
     # If a key is present we may use the cloud reasoning provider; otherwise the local /
     # template-synth rungs of the CP-9 ladder serve grounded, structured answers offline.

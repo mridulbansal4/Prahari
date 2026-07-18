@@ -8,9 +8,19 @@ import type { ComplianceRow, Coverage } from "../lib/types";
 export function Compliance() {
   const [rows, setRows] = useState<ComplianceRow[]>([]);
   const [coverage, setCoverage] = useState<Coverage | null>(null);
-  const [assetId] = useState("asset-p101b");
+  const [assets, setAssets] = useState<{ id: string; tag: string; name: string }[]>([]);
+  const [assetId, setAssetId] = useState<string>("");
+
+  // Load the tenant's assets and default to the first — no hardcoded asset id.
+  useEffect(() => {
+    api.assets().then((d) => {
+      setAssets(d.assets);
+      if (d.assets.length && !assetId) setAssetId(d.assets[0].id);
+    });
+  }, []);
 
   useEffect(() => {
+    if (!assetId) return;
     api.compliance(assetId).then((d) => {
       setRows(d.rows);
       setCoverage(d.coverage);
@@ -19,9 +29,21 @@ export function Compliance() {
 
   return (
     <div className="col">
-      <div>
-        <div className="t-label">Compliance Intelligence</div>
-        <div className="t-display-md">Evidence and gaps — never a legal opinion</div>
+      <div className="row between center wrap">
+        <div>
+          <div className="t-label">Compliance Intelligence</div>
+          <div className="t-display-md">Evidence and gaps — never a legal opinion</div>
+        </div>
+        <div className="col" style={{ gap: "var(--sp-xs)" }}>
+          <label className="t-label">Asset</label>
+          <select className="input" value={assetId} onChange={(e) => setAssetId(e.target.value)} style={{ minWidth: 220 }}>
+            {assets.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.tag} — {a.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="card" style={{ padding: 0 }}>
         <table className="grid-table">

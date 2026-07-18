@@ -76,6 +76,12 @@ export const api = {
   unmerge: (mergeId: string) =>
     req<{ restored: boolean }>("POST", `/v1/resolution/unmerge/${mergeId}`),
 
+  assets: () =>
+    req<{ assets: { id: string; tag: string; name: string; iso_class: string }[] }>(
+      "GET",
+      "/v1/assets",
+    ),
+
   compliance: (assetId: string) =>
     req<{ rows: import("./types").ComplianceRow[]; coverage: import("./types").Coverage }>(
       "GET",

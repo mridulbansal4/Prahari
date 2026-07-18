@@ -6,6 +6,34 @@ Format: Problem · Alternatives · Chosen · Trade-off · Consequence. Governanc
 
 ---
 
+## ADR-P05 — Role-based landing dashboards (not one shared dashboard)
+- **Problem:** every persona landed on the same Investigation Console. This contradicts
+  `design.md` (Dashboard Philosophy: "role-based and opinionated… Operator / Engineer /
+  Executive / Investigator views, each with a defined information hierarchy") and the PRB, which
+  assigns each persona distinct **Primary modules** (§1.2) and a role→module access matrix (§1.4).
+- **Chosen:** a `/home` route that renders a role-specific dashboard — **Operator** (technician
+  Ravi: investigate CTA, recent investigations, own drafts), **Reliability** (Meera: resolution
+  queue, approvals, corpus, analytics, knowledge risk), **Compliance** (coverage + overdue
+  obligations), **Guardian/Admin** (Deepak: system/CP-9 state, audit trail, ingestion, controls),
+  and **Auditor** (read-only audit). Each composes only from endpoints the role may call; the
+  sidebar was already role-filtered (nav items hidden when access is `none`).
+- **Governance:** this is a faithful implementation of an existing `design.md` + PRB requirement,
+  not a new feature (PRB §8.1 authority: design.md governs *how* within PRB-specified behavior).
+- **Consequence:** each login sees a surface suited to its decisions; no generic dashboard.
+
+## ADR-P06 — No hardcoded asset ids / signing secret in surfaces
+- **Problem:** the Compliance screen pinned `asset-p101b`; the stub auth signing key was a code
+  literal.
+- **Chosen:** add `GET /v1/assets` (tenant asset lookup) and drive the Compliance asset picker
+  from it (default = first asset). Move the dev signing key to `SENTINEL_AUTH_DEV_SECRET`
+  (config, default retained for dev; production uses the IdP's JWKS, §8.3).
+- **Note (legitimately data-as-code, not violations):** the provenance-clean seed corpus
+  (`seed.py`, ADR-012), the demo personas in the stub identity provider (ADR-P04, replaced by
+  OIDC in production), and the design-token values in `tokens.css` (the token *source*) are
+  intentionally in code and are not "hardcoding" in the CP-5/CP-6 sense.
+
+---
+
 ## ADR-P01 — Embedded adapter family as the default runnable profile
 - **Problem:** The Bible names Neo4j/Qdrant/Postgres/Redis + a cloud LLM. Requiring all five
   services + an API key + GPU OCR models just to *run* the demo contradicts the hackathon MVP
