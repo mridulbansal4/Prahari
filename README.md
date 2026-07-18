@@ -18,7 +18,7 @@ A faithful implementation of the **SENTINEL Product Requirements Bible (PRB)**, 
 **`design.md`**, and engineered per the supporting reference volumes.
 
 ```
-SENTINEL/
+PRAHARI/
 ├─ 00_CLAUDE_IMPLEMENTATION_RULES.md          # governance (authority order)
 ├─ 01_PROJECT_CONTEXT.md                      # problem statement & vision
 ├─ 02_SENTINEL_Product_Requirements_Bible.md  # master implementation — the source of truth
