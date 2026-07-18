@@ -27,3 +27,7 @@ Thumbs.db
 
 # SENTINEL runtime state (embedded profile scratch)
 **/.sentinel_state/
+
+# Local tooling / CI (excluded per project preference)
+.claude/
+.github/
