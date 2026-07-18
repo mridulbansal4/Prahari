@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any
 
 from ..domain.graph_types import EdgeType
-from ..domain.models import AuditEntry, Edge, Node, Span, now_utc
+from ..domain.models import AuditEntry, Edge, Node, Span
 from ..embeddings import local_embedder
 
 _LOCK = threading.RLock()
@@ -360,14 +360,19 @@ class EmbeddedStore:
         q = "SELECT * FROM audit WHERE tenant=?"
         args: list[Any] = [tenant]
         if actor:
-            q += " AND actor=?"; args.append(actor)
+            q += " AND actor=?"
+            args.append(actor)
         if action:
-            q += " AND action LIKE ?"; args.append(f"{action}%")
+            q += " AND action LIKE ?"
+            args.append(f"{action}%")
         if frm:
-            q += " AND ts>=?"; args.append(frm)
+            q += " AND ts>=?"
+            args.append(frm)
         if to:
-            q += " AND ts<=?"; args.append(to)
-        q += " ORDER BY ts DESC LIMIT ?"; args.append(limit)
+            q += " AND ts<=?"
+            args.append(to)
+        q += " ORDER BY ts DESC LIMIT ?"
+        args.append(limit)
         rows = self._conn.execute(q, args).fetchall()
         return [
             AuditEntry(

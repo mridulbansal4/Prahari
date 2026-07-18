@@ -7,7 +7,6 @@ ABAC check. A drafted action and a committed action are never confusable (NFR-13
 """
 from __future__ import annotations
 
-from typing import Any
 
 from ..audit.sink import AuditSink
 from ..auth.abac import Principal, authorize_work_order_submit

@@ -68,7 +68,7 @@ class Neo4jGraphStore:
             )
 
     def _node_from(self, rec: dict[str, Any]) -> Node:
-        labels = [l for l in rec.get("labels", []) if l != "Node"]
+        labels = [lbl for lbl in rec.get("labels", []) if lbl != "Node"]
         props = {k: v for k, v in rec.items() if k not in ("labels",)}
         return Node(
             id=props.pop("id"), label=labels[0] if labels else "Asset",
@@ -87,7 +87,8 @@ class Neo4jGraphStore:
             ).single()
             if not r:
                 return None
-            d = dict(r["n"]); d["labels"] = r["labels"]
+            d = dict(r["n"])
+            d["labels"] = r["labels"]
             return self._node_from(d)
 
     def upsert_span(self, span: Span) -> None:
@@ -114,7 +115,8 @@ class Neo4jGraphStore:
             )
             out = []
             for r in rows:
-                d = dict(r["n"]); d["labels"] = r["labels"]
+                d = dict(r["n"])
+                d["labels"] = r["labels"]
                 out.append(self._node_from(d))
             return out
 
@@ -126,7 +128,8 @@ class Neo4jGraphStore:
             ).single()
             if not r:
                 return None
-            d = dict(r["n"]); d["labels"] = r["labels"]
+            d = dict(r["n"])
+            d["labels"] = r["labels"]
             return self._node_from(d)
 
     def _edge_from(self, r: dict[str, Any], typ: str, src: str, dst: str) -> Edge:
@@ -155,7 +158,8 @@ class Neo4jGraphStore:
                 e = self._edge_from(dict(row["r"]), typ, row["src"], row["dst"])
                 if as_of is None and e.effective_to is not None:
                     continue
-                d = dict(row["b"]); d["labels"] = row["labels"]
+                d = dict(row["b"])
+                d["labels"] = row["labels"]
                 out.append((e, self._node_from(d)))
             return out
 
@@ -309,10 +313,13 @@ class PostgresRelationalStore:
         q = "SELECT entry_id,tenant,actor,action,target,detail,ts FROM audit WHERE tenant=%s"
         args: list[Any] = [tenant]
         if actor:
-            q += " AND actor=%s"; args.append(actor)
+            q += " AND actor=%s"
+            args.append(actor)
         if action:
-            q += " AND action LIKE %s"; args.append(f"{action}%")
-        q += " ORDER BY ts DESC LIMIT %s"; args.append(limit)
+            q += " AND action LIKE %s"
+            args.append(f"{action}%")
+        q += " ORDER BY ts DESC LIMIT %s"
+        args.append(limit)
         with self._conn.cursor() as c:
             c.execute(q, args)
             return [

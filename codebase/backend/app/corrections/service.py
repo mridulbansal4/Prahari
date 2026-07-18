@@ -8,7 +8,6 @@ Memory agent's job) and, where the correction targets a fact, the graph edit is 
 from __future__ import annotations
 
 from datetime import date
-from typing import Any
 
 from ..audit.sink import AuditSink
 from ..domain.graph_types import EdgeType, NodeLabel

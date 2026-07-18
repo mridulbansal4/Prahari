@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
 
 from ..config import Settings, get_settings
 from ..ports import IGraphStore, IRelationalStore, IVectorStore

@@ -10,7 +10,7 @@ from ..auth.abac import Principal
 from ..auth.identity import get_identity_provider
 from ..container import Container
 from ..domain.errors import InvalidRequest, SentinelError
-from .deps import container, current_principal, require_module
+from .deps import container, require_module
 from .schemas import InvestigationAccepted, InvestigationRequest
 
 router = APIRouter(tags=["investigations"])

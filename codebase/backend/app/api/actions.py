@@ -4,11 +4,9 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends
 
 from ..auth.abac import Principal
-from ..auth.identity import get_identity_provider
 from ..auth.rbac import Access
 from ..container import Container
-from ..domain.errors import InvalidRequest
-from .deps import container, current_principal, require_module
+from .deps import container, require_module
 from .schemas import WorkOrderDraftRequest, WorkOrderRejectRequest, WorkOrderSubmitRequest
 
 router = APIRouter(tags=["actions"])

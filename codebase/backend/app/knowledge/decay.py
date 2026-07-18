@@ -11,7 +11,7 @@ from typing import Any
 
 from ..audit.sink import AuditSink
 from ..domain.graph_types import EdgeType, NodeLabel
-from ..domain.models import Edge, KnowledgeRiskFlag, Node
+from ..domain.models import KnowledgeRiskFlag
 from ..ports import IGraphStore, IRelationalStore
 
 _FLAG = "knowledge_risk"

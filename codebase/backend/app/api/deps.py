@@ -5,11 +5,11 @@ dependencies. Fine-grained ABAC runs in the services (deny-by-default), never on
 """
 from __future__ import annotations
 
-from fastapi import Depends, Header, Request
+from fastapi import Depends, Header
 
 from ..auth.abac import Principal
 from ..auth.identity import get_identity_provider
-from ..auth.rbac import Access, Role, access_for, can_view
+from ..auth.rbac import Access, access_for, can_view
 from ..container import Container, get_container
 from ..domain.errors import Forbidden, Unauthenticated
 

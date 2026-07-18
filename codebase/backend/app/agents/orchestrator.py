@@ -19,7 +19,6 @@ from ..domain.models import (
     Citation,
     Claim,
     ConfidenceState,
-    GraphHop,
     InvestigationResult,
     Span,
     WhoToAsk,
@@ -192,15 +191,14 @@ class Orchestrator:
     ) -> InvestigationResult:
         anchor_ids = [a.id for a in ctx.anchors]
         who = self._who_to_ask(anchor_ids, ctx.question) if anchor_ids else self._who_to_ask([], question)
-        known = [
-            f"{card.title} ({card.label})" for card in ctx.entity_cards[:5]
-        ]
+        known = [f"{card.title} ({card.label})" for card in ctx.entity_cards[:5]]
         return InvestigationResult(
             investigation_id=investigation_id,
             question=question,
             as_of=as_of,
             abstained=True,
-            answer="",
+            # Carry "what I do know" as context (CP-4 contract: known / missing / who-to-ask).
+            answer=("Known context: " + "; ".join(known)) if known else "",
             claims=[],
             graph_path=ctx.graph_path,
             unresolved=(unresolved or []) + [reason],
