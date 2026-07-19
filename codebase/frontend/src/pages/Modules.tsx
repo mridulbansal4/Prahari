@@ -58,29 +58,9 @@ export function Analytics() {
 }
 
 // ---------------------------------------------------------------------- M5 Organizational Memory
-export function OrgMemory() {
-  const [people, setPeople] = useState<any[]>([]);
-  useEffect(() => { api.orgMemory().then((d) => setPeople(d.people)); }, []);
-  return (
-    <div className="col">
-      <div><div className="t-label">Organizational Memory</div><div className="t-display-md">Capture judgement before it retires</div></div>
-      {people.map((p) => (
-        <div key={p.person_id} className="card">
-          <div className="row between center">
-            <div><span className="t-title">{p.name}</span> <span className="t-metadata">{p.role} · {p.tenure_years}y</span></div>
-            {p.retirement_risk && <Badge kind="warning">Retirement risk</Badge>}
-          </div>
-          <div className="row wrap" style={{ gap: "var(--sp-sm)", marginTop: "var(--sp-sm)" }}>
-            {p.knows.map((k: any, i: number) => (
-              <span key={i} className="badge">{k.label || k.target_ref}</span>
-            ))}
-          </div>
-        </div>
-      ))}
-      <div className="t-metadata">PII-minimal: role, expertise, tenure, retirement-risk only — never an HR record (BR-9).</div>
-    </div>
-  );
-}
+// Full Expert Knowledge Capture Workspace lives in OrgMemory.tsx
+export { OrgMemory } from "./OrgMemory";
+
 
 // ------------------------------------------------------------------------- M4 Knowledge Evolution
 export function Knowledge() {
