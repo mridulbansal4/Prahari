@@ -4,7 +4,8 @@
     "planner": "planner/plan@v1.md",
     "executor": "executor/draft@v1.md",
     "critic": "critic/critique@v1.md",
-    "verifier": "verifier/verify@v1.md"
+    "verifier": "verifier/verify@v1.md",
+    "drawings": "drawings/extract@v1.md"
   },
   "note": "No statute, rule, or tenant value is hardcoded in a prompt (CP-5/CP-6). The manifest hash is logged with every answer for reproducibility (CP-7)."
 }

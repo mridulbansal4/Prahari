@@ -8,6 +8,7 @@ quarantined, never promoted to a fact (BR-1, Bible §1.8).
 from __future__ import annotations
 
 import hashlib
+import re
 from datetime import date
 from typing import Any
 
@@ -22,8 +23,10 @@ from ..domain.models import (
     Span,
 )
 from ..graph.provenance_sink import ProvenanceSink
-from ..ports import IGraphStore, IRelationalStore, IVectorStore
+from ..ports import IDrawingReader, IGraphStore, IOcrProvider, IRelationalStore, IVectorStore
 from . import extractors
+from .drawing_schema import DrawingExtraction
+from .ocr import looks_like_image, looks_like_pdf, render_pdf_pages
 
 _JOB = "ingestion_job"
 _DOC = "document"
@@ -39,6 +42,9 @@ class IngestionPipeline:
         sink: ProvenanceSink,
         audit: AuditSink,
         settings: Settings,
+        ocr: IOcrProvider | None = None,
+        drawings: IDrawingReader | None = None,
+        contradictions: Any | None = None,
     ) -> None:
         self._g = graph
         self._v = vector
@@ -46,6 +52,9 @@ class IngestionPipeline:
         self._sink = sink
         self._audit = audit
         self._s = settings
+        self._ocr = ocr
+        self._drawings = drawings
+        self._contradictions = contradictions
 
     # ------------------------------------------------------------------------- ingest
     def ingest(
@@ -76,7 +85,7 @@ class IngestionPipeline:
         self._save(job)
 
         # --- detect ---
-        dtype = doc_type or self._detect(filename, structured)
+        dtype = doc_type or self._detect(filename, structured, content)
         self._stage(job, IngestionStatus.PARSING, {"stage": "detect", "doc_type": dtype})
 
         # --- Document node + supersession chain (CP-7) ---
@@ -90,15 +99,29 @@ class IngestionPipeline:
                                      src=doc_id, dst=prior, tenant=tenant))
 
         # --- parse / extract ---
-        try:
-            text = content.decode("utf-8", errors="replace")
-        except Exception:
-            text = ""
+        text = ""
         if structured:
             ex = extractors.extract_structured(doc_id, structured)
         elif dtype == "csv":
+            text = content.decode("utf-8", errors="replace")
             ex = extractors.extract_csv(doc_id, text)
+        elif dtype == "drawing":
+            # An engineering drawing is not a text problem. Ask the VLM what the diagram
+            # MEANS; if no reader is configured, quarantine rather than invent topology.
+            drawn = self._read_drawing(job, content, doc_id, filename, actor, tenant)
+            if drawn is None:
+                return job
+            ex = drawn
+        elif dtype in ("pdf", "image"):
+            # Scanned pages: transcribe with OCR. Without a provider we cannot read the file,
+            # and decoding the bytes as UTF-8 would write mojibake into the graph as citable
+            # evidence — so this quarantines instead.
+            parsed = self._read_scanned(job, content, doc_id, dtype, actor, tenant)
+            if parsed is None:
+                return job
+            ex = parsed
         else:
+            text = content.decode("utf-8", errors="replace")
             self._stage(job, IngestionStatus.EXTRACTING, {"stage": "parse"})
             ex = extractors.extract_text(doc_id, text)
 
@@ -147,8 +170,11 @@ class IngestionPipeline:
             dst = key_to_node.get(rel.dst_key) or self._resolve_key(rel.dst_key, tenant)
             if not src or not dst:
                 continue
+            # rel.props carries what the extractor learned about the relationship itself —
+            # a drawing's line number, which sheet it came from. It was being discarded.
             edge = Edge(id=f"{rel.type}-{src}-{dst}", type=EdgeType(rel.type), src=src, dst=dst,
-                        tenant=tenant, confidence=rel.confidence, effective_from=date.today())
+                        tenant=tenant, confidence=rel.confidence, effective_from=date.today(),
+                        props=dict(rel.props))
             self._sink.write_edge(edge, spans=[span_by_id[rel.span_id]])
             job.edge_count += 1
 
@@ -164,15 +190,156 @@ class IngestionPipeline:
         return job
 
     # ------------------------------------------------------------------------ helpers
-    def _detect(self, filename: str, structured: dict[str, Any] | None) -> str:
+    # Filenames that announce an engineering drawing. Content sniffing cannot tell a scanned
+    # report from a P&ID — both are just a raster — so the routing hint has to come from the
+    # name or an explicit doc_type from the caller.
+    _DRAWING_NAME = re.compile(
+        r"(?:^|[^a-z])(?:p&?id|pid|drawing|schematic|isometric|ga[-_]?dwg|layout)(?:[^a-z]|$)",
+        re.I,
+    )
+
+    def _detect(self, filename: str, structured: dict[str, Any] | None,
+                content: bytes = b"") -> str:
+        """Classify by content first, then filename.
+
+        Extension alone used to decide this, which meant a PNG called `notes.txt` was parsed
+        as text and a real PDF was decoded as UTF-8 mojibake. Magic bytes settle what the file
+        *is*; the name only decides whether a raster is a drawing or a scanned page.
+        """
         if structured:
             return structured.get("type", "structured")
         low = filename.lower()
-        if low.endswith(".csv"):
-            return "csv"
-        if low.endswith(".pdf"):
+        is_raster = looks_like_image(content)
+        is_pdf = looks_like_pdf(content) or (low.endswith(".pdf") and not is_raster)
+
+        if (is_pdf or is_raster) and self._DRAWING_NAME.search(low):
+            return "drawing"
+        if is_pdf:
             return "pdf"
+        if is_raster:
+            return "image"
+        if low.endswith((".csv", ".tsv")):
+            return "csv"
         return "text"
+
+    def _quarantine(self, job: IngestionJob, reason: str, doc_id: str, actor: str,
+                    tenant: str) -> IngestionJob:
+        job.status = IngestionStatus.QUARANTINED
+        job.quarantine_reason = reason
+        self._save(job)
+        self._audit.log(actor, "ingestion.quarantined", tenant, target=doc_id,
+                        detail={"reason": reason})
+        return job
+
+    def _read_scanned(self, job: IngestionJob, content: bytes, doc_id: str, dtype: str,
+                      actor: str, tenant: str) -> extractors.Extraction | None:
+        """OCR a PDF/image into text spans. Returns None when the job was quarantined."""
+        self._stage(job, IngestionStatus.OCR, {"stage": "ocr", "provider": getattr(
+            self._ocr, "id", "none")})
+        if self._ocr is None or not self._ocr.available():
+            self._quarantine(
+                job,
+                "Scanned document needs OCR, and no OCR provider is configured "
+                "(PRAHARI_OCR_PROVIDER=none). Nothing was guessed at.",
+                doc_id, actor, tenant)
+            return None
+
+        pages = render_pdf_pages(content, self._s.ocr_dpi) if dtype == "pdf" else [content]
+        if not pages:
+            self._quarantine(job, "Could not render any page from this document.",
+                             doc_id, actor, tenant)
+            return None
+        try:
+            texts = self._ocr.read_pages(pages)
+        except Exception as e:  # provider down / bad response — never fabricate a parse
+            self._quarantine(job, f"OCR failed: {e}", doc_id, actor, tenant)
+            return None
+
+        ex = extractors.Extraction()
+        for page_no, page_text in enumerate(texts, start=1):
+            page_ex = extractors.extract_text(f"{doc_id}:p{page_no}", page_text or "")
+            for sp in page_ex.spans:
+                sp.page = page_no
+                sp.method = "ocr"
+            ex.spans.extend(page_ex.spans)
+            ex.entities.extend(page_ex.entities)
+            ex.relations.extend(page_ex.relations)
+        return ex
+
+    def _read_drawing(self, job: IngestionJob, content: bytes, doc_id: str, filename: str,
+                      actor: str, tenant: str) -> extractors.Extraction | None:
+        """Ask the VLM what the drawing means, and turn that into graph facts."""
+        self._stage(job, IngestionStatus.GRAPHICS, {"stage": "graphics", "provider": getattr(
+            self._drawings, "id", "none")})
+        if self._drawings is None or not self._drawings.available():
+            self._quarantine(
+                job,
+                "Engineering drawing needs a vision model, and no VLM is configured "
+                "(PRAHARI_VLM_PROVIDER=none). Topology was not invented.",
+                doc_id, actor, tenant)
+            return None
+
+        page = content
+        if looks_like_pdf(content):
+            rendered = render_pdf_pages(content, self._s.drawing_dpi, max_pages=1)
+            if not rendered:
+                self._quarantine(job, "Could not render the drawing page.", doc_id, actor,
+                                 tenant)
+                return None
+            page = rendered[0]
+        try:
+            result: DrawingExtraction = self._drawings.read_drawing(page, hint=filename)
+        except Exception as e:
+            self._quarantine(job, f"Drawing reader failed: {e}", doc_id, actor, tenant)
+            return None
+        if result.is_empty():
+            self._quarantine(job, "The drawing reader found no components it could assert.",
+                             doc_id, actor, tenant)
+            return None
+        return self._drawing_to_extraction(doc_id, result)
+
+    @staticmethod
+    def _drawing_to_extraction(doc_id: str, d: DrawingExtraction) -> extractors.Extraction:
+        """Fold a validated DrawingExtraction into the ordinary extractor contract.
+
+        Every component and connection carries the reader's own `source_note` as its span, so
+        a drawing-derived edge is cited exactly like a sentence from a PDF and passes the same
+        CP-1 provenance gate. Nothing here is synthesised: a connection the model did not
+        report simply does not exist.
+        """
+        ex = extractors.Extraction()
+        conf = max(0.0, min(1.0, d.confidence))
+
+        for i, comp in enumerate(d.components):
+            span_id = f"{doc_id}:cmp{i}"
+            note = comp.source_note or f"{comp.tag} shown on {d.drawing_number or 'the drawing'}"
+            ex.spans.append(extractors.ExtractedSpan(
+                span_id=span_id, page=1, text=note, method="vlm", confidence=conf))
+            ex.entities.append(extractors.ExtractedEntity(
+                kind="Identifier", key=f"ident:{comp.tag}",
+                props={"value": comp.tag, "source_system": "pid", "vocabulary": "drawing",
+                       "context": note, "kind": comp.kind, "label": comp.label},
+                span_id=span_id, confidence=conf))
+
+        for j, conn in enumerate(d.connections):
+            span_id = f"{doc_id}:con{j}"
+            note = conn.source_note or (
+                f"{conn.from_tag} connected to {conn.to_tag}"
+                + (f" via line {conn.line_number}" if conn.line_number else ""))
+            ex.spans.append(extractors.ExtractedSpan(
+                span_id=span_id, page=1, text=note, method="vlm", confidence=conf))
+            rel = conn.relation if conn.relation in ("CONNECTED_TO", "PART_OF") else "CONNECTED_TO"
+            ex.relations.append(extractors.ExtractedRelation(
+                type=rel, src_key=f"asset:{conn.from_tag}", dst_key=f"asset:{conn.to_tag}",
+                span_id=span_id, confidence=conf,
+                props={"line_number": conn.line_number, "from_drawing": d.drawing_number}))
+
+        for k, ann in enumerate(d.annotations):
+            span_id = f"{doc_id}:ann{k}"
+            text = f"{ann.subject_tag + ': ' if ann.subject_tag else ''}{ann.text}"
+            ex.spans.append(extractors.ExtractedSpan(
+                span_id=span_id, page=1, text=text, method="vlm", confidence=conf))
+        return ex
 
     def _node_id_for(self, ent: extractors.ExtractedEntity) -> str:
         if ent.kind == "Identifier":

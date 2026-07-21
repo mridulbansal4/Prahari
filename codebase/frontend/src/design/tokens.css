@@ -1,113 +1,134 @@
-/* Prahari design tokens — a faithful transcription of design.md.
- * This file is the ONLY place raw values live (ui_rules.md #1). Components reference var(--*).
+/* Prahari design tokens — ElevenLabs editorial spec (DESIGN-elevenlabs.md).
+ * This file is the ONLY place raw values live. Components reference var(--*).
  * A hex code or px literal in a .tsx/.css component is a defect. */
 :root {
-  /* -- Canvas & surface ladder (depth = surface-lift, never shadow) -- */
-  --canvas: #0b0d0f;
-  --surface-inset: #08090a;
-  --surface-1: #131619;
-  --surface-2: #1a1e22;
-  --surface-3: #22262b;
-  --surface-4: #2a2f35;
+  /* -- Canvas & surface -- */
+  --canvas: #f5f5f5;
+  --canvas-soft: #fafafa;
+  --canvas-deep: #0c0a09;
+  --surface-card: #ffffff;
+  --surface-strong: #f0efed;
+  --surface-dark: #0c0a09;
+  --surface-dark-elevated: #1c1917;
 
-  /* -- Borders -- */
-  --hairline-soft: #1d2024;
-  --hairline: #2b3036;
-  --hairline-strong: #3a4048;
+  /* -- Ink & action. The near-black pill is the ONLY CTA colour. -- */
+  --primary: #292524;
+  --primary-active: #0c0a09;
+  --ink: #0c0a09;
+  --body: #4e4e4e;
+  --body-strong: #292524;
+  --muted: #777169;
+  --muted-soft: #a8a29e;
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+  --on-dark-soft: #a8a29e;
 
-  /* -- Ink (off-white, never pure white — control-room glare) -- */
-  --ink: #f2f4f6;
-  --ink-muted: #adb5bd;
-  --ink-subtle: #767e87;
-  --ink-faint: #4a5058;
-  --on-signal: #06181b;
-  --on-critical: #ffffff;
-  --on-decision: #ffffff;
+  /* -- Hairlines: the depth device, alongside one soft shadow tier -- */
+  --hairline: #e7e5e4;
+  --hairline-soft: #f0efed;
+  --hairline-strong: #d6d3d1;
 
-  /* -- Signal: the single chromatic accent (navigation/action/focus only) -- */
-  --signal: #3faab8;
-  --signal-bright: #5cc4d1;
-  --signal-dim: #2c7885;
-  --signal-wash: rgba(63, 170, 184, 0.12);
+  /* -- Semantic. Used sparingly, never decoratively. -- */
+  --success: #16a34a;
+  --error: #dc2626;
 
-  /* -- Operational state -- */
-  --success: #3fa66b;
-  --success-dim: #2c7a4c;
-  --warning: #c98a3f;
-  --warning-dim: #9c6b2e;
-  --critical: #c4453a;
-  --critical-dim: #96332a;
-  --critical-bright: #e85a4d;
-  --offline: #565c64;
+  /* -- Atmospheric gradient stops. Radial background blooms ONLY —
+        never button fills, never text colours, never card backgrounds. -- */
+  --gradient-mint: #a7e5d3;
+  --gradient-peach: #f4c5a8;
+  --gradient-lavender: #c8b8e0;
+  --gradient-sky: #a8c8e8;
+  --gradient-rose: #e8b8c4;
 
-  /* -- Domain semantics (each = one meaning, never decoration) -- */
-  --investigation: #7b7fc4;
-  --evidence: #b9a46c;
-  --knowledge: #4e9b94;
-  --decision: #5c8fc7;
-  --decision-dim: #43699b;
-  --prediction: #9a8fd6;
-  --simulation: #a66b9e;
-  --twin: #2fb6c4;
+  /* -- Type families. Display is a light editorial serif; Inter carries everything else.
+        Cormorant Garamond is used over EB Garamond because it genuinely ships a 300 weight —
+        EB Garamond's lightest hosted cut is 400, which quietly broke the "never bold the
+        display serif" rule. -- */
+  --font-display: "Cormorant Garamond", "EB Garamond", "Times New Roman", serif;
+  --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
 
-  /* -- Risk gradient (green -> amber -> red only) -- */
-  --risk-low: #3fa66b;
-  --risk-mid: #c98a3f;
-  --risk-high: #c4453a;
+  /* -- Display scale. Weight stays at 300 — never bold. -- */
+  --t-display-mega: 300 64px/1.05 var(--font-display);
+  --t-display-xl: 300 48px/1.08 var(--font-display);
+  --t-display-lg: 300 36px/1.17 var(--font-display);
+  --t-display-md: 300 32px/1.13 var(--font-display);
+  --t-display-sm: 300 24px/1.2 var(--font-display);
+  --ls-display-mega: -1.92px;
+  --ls-display-xl: -0.96px;
+  --ls-display-lg: -0.36px;
+  --ls-display-md: -0.32px;
 
-  --overlay-scrim: rgba(8, 9, 10, 0.72);
+  /* -- Inter scale. Body carries slightly loose tracking — the editorial dialect. -- */
+  --t-title-md: 500 20px/1.35 var(--font-body);
+  --t-title-sm: 500 18px/1.44 var(--font-body);
+  --t-body: 400 16px/1.5 var(--font-body);
+  --t-body-strong: 500 16px/1.5 var(--font-body);
+  --t-body-sm: 400 15px/1.47 var(--font-body);
+  --t-caption: 400 14px/1.5 var(--font-body);
+  --t-label: 600 12px/1.4 var(--font-body);
+  --t-button: 500 15px/1 var(--font-body);
+  --t-nav: 500 15px/1.4 var(--font-body);
+  --ls-body: 0.16px;
+  --ls-body-sm: 0.15px;
+  --ls-title-sm: 0.18px;
+  --ls-label: 0.96px;
 
-  /* -- Type: one family, weight 400-650 only -- */
-  --font-sans: "Datum Sans", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
-  --font-mono: "Datum Mono", "JetBrains Mono", ui-monospace, "SF Mono", monospace;
-
-  /* -- Radius (use-coded: 2-8px chrome, 0 on data canvas, full = live/identity) -- */
-  --r-none: 0px;
-  --r-xs: 2px;
-  --r-sm: 4px;
-  --r-md: 6px;
-  --r-lg: 8px;
-  --r-xl: 12px;
+  /* -- Radii. Pill for every CTA and badge; 16px for cards. -- */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-xxl: 24px;
+  --r-pill: 9999px;
   --r-full: 9999px;
 
-  /* -- Spacing (8px base, 4px sub-grid) -- */
-  --sp-hair: 1px;
-  --sp-2xs: 2px;
-  --sp-xs: 4px;
-  --sp-sm: 8px;
-  --sp-md: 12px;
-  --sp-lg: 16px;
-  --sp-xl: 24px;
-  --sp-2xl: 32px;
-  --sp-3xl: 48px;
-  --sp-4xl: 64px;
+  /* -- Spacing, 4px base. 96px section rhythm. -- */
+  --sp-xxs: 4px;
+  --sp-xs: 8px;
+  --sp-sm: 12px;
+  --sp-base: 16px;
+  --sp-md: 20px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+  --sp-xxl: 48px;
   --sp-section: 96px;
 
-  /* -- Motion (short, linear, mechanical — never bounce/overshoot) -- */
-  --dur-instant: 80ms;
+  /* -- Elevation: flat by default, one soft tier on hover. No heavy shadows. -- */
+  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.04);
+
+  /* -- Layout -- */
+  --container: 1200px;
+  --nav-h: 64px;
+  --sidebar-w: 264px;
+  --sidebar-rail-w: 68px;
+
+  /* -- Motion -- */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --dur-fast: 120ms;
-  --dur-base: 180ms;
-  --dur-moderate: 240ms;
+  --dur: 200ms;
   --dur-slow: 320ms;
-  --ease-engineered: cubic-bezier(0.2, 0, 0, 1);
-  --ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-glide: cubic-bezier(0.3, 0, 0.1, 1);
-
-  /* -- The one decorative effect: instrument glow (no shadows anywhere) -- */
-  --glow-signal: 0 0 0 2px rgba(63, 170, 184, 0.3);
-
-  /* -- Confidence state colours (labelled, never colour-only — NFR-10) -- */
-  --grounded: var(--success);
-  --inferred: var(--signal);
-  --unsupported: var(--warning);
-  --abstain: var(--investigation);
 }
 
-/* High-contrast token overrides (design.md Accessibility) — opt-in via data-contrast. */
-:root[data-contrast="high"] {
-  --canvas: #000000;
-  --ink: #ffffff;
-  --hairline: #4a5058;
-  --signal: #5cc4d1;
+/* Mobile (< 640px): hero 64 -> 32px per the responsive spec. */
+@media (max-width: 639px) {
+  :root {
+    --t-display-mega: 300 32px/1.12 var(--font-display);
+    --t-display-xl: 300 30px/1.14 var(--font-display);
+    --t-display-lg: 300 28px/1.2 var(--font-display);
+    --t-display-md: 300 24px/1.2 var(--font-display);
+    --ls-display-mega: -0.6px;
+    --ls-display-xl: -0.5px;
+    --ls-display-lg: -0.3px;
+    --sp-section: 64px;
+  }
+}
+
+/* Tablet (640-1023px): hero eases to 48px. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root {
+    --t-display-mega: 300 48px/1.08 var(--font-display);
+    --ls-display-mega: -0.96px;
+    --sp-section: 80px;
+  }
 }

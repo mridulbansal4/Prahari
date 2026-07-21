@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.2",
+  "generated": "2026-07-21T06:00:00+05:30",
+  "source": "Plant entity resolution feed - Utilities / Boiler House",
+  "identifiers": [
+    {
+      "canonical_asset": "P-101B",
+      "identifier_value": "P-101B",
+      "source_system": "P&ID PID-BFW-004 Rev G",
+      "vocabulary": "ISA-5.1 P&ID tag",
+      "confidence": 1.0,
+      "notes": "Primary engineering tag as drawn on the boiler feed water P&ID; this is the canonical form used in all engineering documentation."
+    },
+    {
+      "canonical_asset": "P-101B",
+      "identifier_value": "BFP-B",
+      "source_system": "DCS (Honeywell Experion)",
+      "vocabulary": "DCS point prefix",
+      "confidence": 0.97,
+      "notes": "Short DCS point prefix used on operator graphics and in historian trend tags such as BFP-B.TE101B.PV."
+    },
+    {
+      "canonical_asset": "P-101B",
+      "identifier_value": "Boiler Feed Pump B",
+      "source_system": "Maintenance records / work order descriptions",
+      "vocabulary": "Free-text equipment name",
+      "confidence": 0.95,
+      "notes": "Long-form name typed by technicians in work order descriptions and inspection reports."
+    },
+    {
+      "canonical_asset": "P-101B",
+      "identifier_value": "101-P-B",
+      "source_system": "Legacy drawing set (pre-2011 EPC package)",
+      "vocabulary": "Legacy contractor numbering",
+      "confidence": 0.88,
+      "notes": "Older EPC numbering convention still present on as-built isometrics and foundation drawings."
+    },
+    {
+      "canonical_asset": "P-101B",
+      "identifier_value": "CMMS-004417",
+      "source_system": "SAP PM / CMMS",
+      "vocabulary": "CMMS equipment number",
+      "confidence": 0.99,
+      "notes": "CMMS functional location key against which all P-101B work orders and spares reservations are booked."
+    },
+    {
+      "canonical_asset": "P-101B",
+      "identifier_value": "KSB HGM-4/6 240-500 S/N 8842117",
+      "source_system": "OEM nameplate / warranty register",
+      "vocabulary": "Manufacturer model and serial",
+      "confidence": 0.93,
+      "notes": "OEM model and serial reference from the pump nameplate; used when ordering seal and bearing spares from KSB."
+    },
+    {
+      "canonical_asset": "P-101B",
+      "identifier_value": "the noisy one",
+      "source_system": "Operator shift log free text",
+      "vocabulary": "Colloquial nickname",
+      "confidence": 0.62,
+      "notes": "Informal nickname used by boiler house operators in shift handover notes; refers to P-101B and not the parallel pump."
+    },
+    {
+      "canonical_asset": "S-14",
+      "identifier_value": "S-14",
+      "source_system": "P&ID PID-BFW-004 Rev G",
+      "vocabulary": "ISA-5.1 P&ID tag",
+      "confidence": 1.0,
+      "notes": "Canonical tag for the suction strainer on the P-101B suction line."
+    },
+    {
+      "canonical_asset": "S-14",
+      "identifier_value": "Suction Strainer 14",
+      "source_system": "Maintenance records / work order descriptions",
+      "vocabulary": "Free-text equipment name",
+      "confidence": 0.94,
+      "notes": "Long-form name used in strainer cleaning work orders."
+    },
+    {
+      "canonical_asset": "S-14",
+      "identifier_value": "STR-14",
+      "source_system": "DCS (Honeywell Experion)",
+      "vocabulary": "DCS point prefix",
+      "confidence": 0.9,
+      "notes": "DCS prefix carrying the differential pressure point STR-14.PDI.PV mapped to instrument PDI-S14."
+    },
+    {
+      "canonical_asset": "S-14",
+      "identifier_value": "CMMS-004419",
+      "source_system": "SAP PM / CMMS",
+      "vocabulary": "CMMS equipment number",
+      "confidence": 0.98,
+      "notes": "CMMS functional location for the strainer, held as a child of the P-101B feed water package."
+    },
+    {
+      "canonical_asset": "S-14",
+      "identifier_value": "BFW suction basket B",
+      "source_system": "Operator shift log free text",
+      "vocabulary": "Colloquial description",
+      "confidence": 0.6,
+      "notes": "Descriptive phrase operators use in shift logs when requesting a basket clean."
+    },
+    {
+      "canonical_asset": "V-201",
+      "identifier_value": "V-201",
+      "source_system": "P&ID PID-FLR-011 Rev D",
+      "vocabulary": "ISA-5.1 P&ID tag",
+      "confidence": 1.0,
+      "notes": "Canonical vessel tag on the flare relief P&ID."
+    },
+    {
+      "canonical_asset": "V-201",
+      "identifier_value": "Knockout Drum",
+      "source_system": "Maintenance records / inspection reports",
+      "vocabulary": "Free-text equipment name",
+      "confidence": 0.91,
+      "notes": "Common equipment name used in statutory vessel inspection reports; qualify with the area since other KO drums exist."
+    },
+    {
+      "canonical_asset": "V-201",
+      "identifier_value": "KOD-201",
+      "source_system": "DCS (Honeywell Experion)",
+      "vocabulary": "DCS point prefix",
+      "confidence": 0.92,
+      "notes": "DCS prefix for the drum level and pressure points on the flare area graphic."
+    },
+    {
+      "canonical_asset": "V-201",
+      "identifier_value": "201-V",
+      "source_system": "Legacy drawing set (pre-2012 EPC package)",
+      "vocabulary": "Legacy contractor numbering",
+      "confidence": 0.85,
+      "notes": "Reversed legacy numbering appearing on original vessel fabrication and U-1A data reports."
+    },
+    {
+      "canonical_asset": "V-201",
+      "identifier_value": "CMMS-006102",
+      "source_system": "SAP PM / CMMS",
+      "vocabulary": "CMMS equipment number",
+      "confidence": 0.99,
+      "notes": "CMMS functional location used for pressure vessel inspection scheduling."
+    }
+  ]
+}

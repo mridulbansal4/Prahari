@@ -1,6 +1,6 @@
-# CLAUDE_IMPLEMENTATION_RULES.md
+# IMPLEMENTATION_RULES.md
 
-# CLAUDE IMPLEMENTATION GOVERNANCE
+# IMPLEMENTATION GOVERNANCE
 
 **Project:** Prahari — Industrial Intelligence Operating System
 
@@ -15,7 +15,7 @@ This document has higher priority than every supporting document in this reposit
 The implementation hierarchy is absolute.
 
 ```
-CLAUDE_IMPLEMENTATION_RULES.md
+IMPLEMENTATION_RULES.md
             │
             ▼
 SENTINEL_Product_Requirements_Bible.md
@@ -161,7 +161,7 @@ Only the Product Requirements Bible may define these.
 
 If two documents disagree, always follow this priority:
 
-1. CLAUDE_IMPLEMENTATION_RULES.md
+1. IMPLEMENTATION_RULES.md
 2. SENTINEL_Product_Requirements_Bible.md
 3. design.md
 4. Supporting Documents

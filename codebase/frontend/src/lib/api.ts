@@ -75,6 +75,11 @@ export const api = {
     ),
   unmerge: (mergeId: string) =>
     req<{ restored: boolean }>("POST", `/v1/resolution/unmerge/${mergeId}`),
+  resolutionHistory: (assetId: string) =>
+    req<{ history?: any[]; entries?: any[] }>(
+      "GET",
+      `/v1/resolution/assets/${assetId}/history`,
+    ),
 
   assets: () =>
     req<{ assets: { id: string; tag: string; name: string; iso_class: string }[] }>(
@@ -123,7 +128,20 @@ export const api = {
     return req<{ entries: any[] }>("GET", `/v1/audit${p ? `?${p}` : ""}`);
   },
   analytics: () => req<any>("GET", "/v1/analytics"),
-  orgMemory: () => req<{ people: any[] }>("GET", "/v1/org-memory"),
+  orgMemory: () => req<{ people: import("./types").ExpertiseRecord[] }>("GET", "/v1/org-memory"),
+  captureKnowledge: (payload: {
+    person_id: string;
+    target_ref: string;
+    expertise: string;
+    text: string;
+    kind: string;
+    tags: string[];
+  }) =>
+    req<{ ok: boolean; item: import("./types").KnowledgeItem }>(
+      "POST",
+      "/v1/org-memory/knows",
+      payload,
+    ),
   knowledgeHealth: () => req<{ flags: any[]; last_run: any }>("GET", "/v1/knowledge/health"),
   runDecay: () => req<{ flags: any[] }>("POST", "/v1/knowledge/run-decay"),
   decisions: () => req<{ decisions: any[] }>("GET", "/v1/decisions"),

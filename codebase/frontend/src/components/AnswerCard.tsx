@@ -1,110 +1,233 @@
-// AnswerCard + AbstainCard — AI output in the SAME card language as human analysis (design.md
-// AI rules): no chat bubble, no avatar. Every claim carries a confidence reading + a citation.
+// The answer surface. Rendered as a documented analysis — plain answer, then each claim with
+// its sources and confidence. No chat bubble, no avatar, no assistant persona.
 import { useState } from "react";
 import type { Citation, Claim, InvestigationResult } from "../lib/types";
-import { CitationChip, ConfidenceIndicator } from "./primitives";
-import { CorrectionAffordance } from "./CorrectionComposer";
+import { Badge, Confidence } from "./ui";
 
-function CitationPeek({ c }: { c: Citation }) {
+function CitationPeek({ citation }: { citation: Citation }) {
   return (
-    <div className="card card-dense card-evidence" style={{ marginTop: "var(--sp-xs)" }}>
-      <div className="t-label" style={{ color: "var(--evidence)" }}>
-        {c.doc_id} {c.page ? `· p.${c.page}` : ""}
+    <div
+      style={{
+        marginTop: "var(--sp-sm)",
+        padding: "var(--sp-base)",
+        background: "var(--canvas-soft)",
+        border: "1px solid var(--hairline)",
+        borderRadius: "var(--r-md)",
+      }}
+    >
+      <div className="t-label" style={{ marginBottom: "var(--sp-xxs)" }}>
+        {citation.doc_id}
+        {citation.page != null ? ` · page ${citation.page}` : ""}
       </div>
-      <div className="t-body-sm" style={{ marginTop: 4 }}>
-        {c.excerpt ?? c.span_id}
-      </div>
-      <div className="t-metadata t-mono" style={{ marginTop: 4 }}>
-        span: {c.span_id}
-      </div>
+      <p className="t-body-sm" style={{ color: "var(--body)" }}>
+        {citation.excerpt ?? `Source passage ${citation.span_id}`}
+      </p>
     </div>
   );
 }
 
-function ClaimRow({ claim, index }: { claim: Claim; index: number }) {
-  const [openCite, setOpenCite] = useState<number | null>(null);
+/**
+ * Numbered citation chips with an inline peek. Exported so any surface that cites evidence —
+ * the answer, a replayed decision — shows sources identically. `excerpt` may be null when the
+ * source endpoint returns only a reference; the peek then names the passage instead of
+ * quoting it, rather than showing an empty box.
+ */
+export function CitationChips({ citations }: { citations: Citation[] }) {
+  const [open, setOpen] = useState<number | null>(null);
+  if (!citations.length) return null;
   return (
-    <div style={{ padding: "var(--sp-md) 0", borderBottom: "1px solid var(--hairline-soft)" }}>
-      <div className="row between" style={{ alignItems: "flex-start", gap: "var(--sp-md)" }}>
-        <div className="grow">
-          <span className="t-body">{claim.text}</span>{" "}
-          {claim.citations.map((_, i) => (
-            <CitationChip key={i} n={i + 1} onClick={() => setOpenCite(openCite === i ? null : i)} />
+    <>
+      {citations.map((c, i) => (
+        <button
+          key={`${c.span_id}-${i}`}
+          type="button"
+          onClick={() => setOpen(open === i ? null : i)}
+          aria-label={`Show the source for this statement: ${c.doc_id}`}
+          aria-expanded={open === i}
+          style={{
+            font: "var(--t-caption)",
+            color: open === i ? "var(--on-primary)" : "var(--ink)",
+            background: open === i ? "var(--ink)" : "var(--surface-strong)",
+            border: "none",
+            borderRadius: "var(--r-pill)",
+            padding: "1px 8px",
+            marginLeft: 2,
+            cursor: "pointer",
+            verticalAlign: "baseline",
+          }}
+        >
+          {i + 1}
+        </button>
+      ))}
+      {open !== null && citations[open] && <CitationPeek citation={citations[open]} />}
+    </>
+  );
+}
+
+function ClaimRow({ claim, index }: { claim: Claim; index: number }) {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <li
+      style={{
+        listStyle: "none",
+        padding: "var(--sp-base) 0",
+        borderTop: index === 0 ? "none" : "1px solid var(--hairline)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          gap: "var(--sp-base)",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+        }}
+      >
+        <p className="t-body" style={{ color: "var(--ink)", flex: "1 1 320px", margin: 0 }}>
+          {claim.text}{" "}
+          {claim.citations.map((c, i) => (
+            <button
+              key={`${c.span_id}-${i}`}
+              type="button"
+              onClick={() => setOpen(open === i ? null : i)}
+              aria-label={`Show the source for this statement: ${c.doc_id}`}
+              aria-expanded={open === i}
+              style={{
+                font: "var(--t-caption)",
+                color: open === i ? "var(--on-primary)" : "var(--ink)",
+                background: open === i ? "var(--ink)" : "var(--surface-strong)",
+                border: "none",
+                borderRadius: "var(--r-pill)",
+                padding: "1px 8px",
+                marginLeft: 2,
+                cursor: "pointer",
+                verticalAlign: "baseline",
+              }}
+            >
+              {i + 1}
+            </button>
           ))}
-        </div>
-        <ConfidenceIndicator state={claim.confidence} />
+        </p>
+        <Confidence state={claim.confidence} />
       </div>
-      {openCite !== null && claim.citations[openCite] && (
-        <CitationPeek c={claim.citations[openCite]} />
-      )}
-      <div style={{ marginTop: "var(--sp-xs)" }}>
-        <CorrectionAffordance targetKind="claim" targetRef={`claim:${index}`} priorValue={claim.text} />
-      </div>
-    </div>
+      {open !== null && claim.citations[open] && <CitationPeek citation={claim.citations[open]} />}
+    </li>
   );
 }
 
 export function AnswerCard({ result }: { result: InvestigationResult }) {
   return (
-    <div className="card card-investigation">
-      <div className="row between center" style={{ marginBottom: "var(--sp-md)" }}>
-        <span className="t-label">Hypothesis</span>
-        <span className="t-metadata t-mono" title="prompt manifest hash · model (reproducibility, CP-7)">
-          {result.model_id} · {result.prompt_manifest_hash}
+    <article className="card card--pad-lg">
+      <div
+        className="row"
+        style={{ justifyContent: "space-between", gap: "var(--sp-base)", flexWrap: "wrap" }}
+      >
+        <Badge>Answer</Badge>
+        <span className="t-caption muted-soft">
+          Every statement below links to the document it came from
         </span>
       </div>
-      <p className="t-subtitle" style={{ marginBottom: "var(--sp-md)" }}>
+
+      <p
+        className="t-body"
+        style={{ color: "var(--ink)", marginTop: "var(--sp-base)", fontSize: 17, lineHeight: 1.6 }}
+      >
         {result.answer}
       </p>
-      {result.claims.map((c, i) => (
-        <ClaimRow key={i} claim={c} index={i} />
-      ))}
-    </div>
+
+      {result.claims.length > 0 && (
+        <>
+          <div
+            className="t-label"
+            style={{ marginTop: "var(--sp-xl)", marginBottom: "var(--sp-xxs)" }}
+          >
+            What this is based on
+          </div>
+          <ul style={{ margin: 0, padding: 0 }}>
+            {result.claims.map((c, i) => (
+              <ClaimRow key={i} claim={c} index={i} />
+            ))}
+          </ul>
+        </>
+      )}
+    </article>
   );
 }
 
-/** A designed, positive success state — never error-red (BR-6, ui_rules abstention rule). */
+/* The refusal. Deliberately a calm, confident outcome — never styled as an error. */
 export function AbstainCard({ result }: { result: InvestigationResult }) {
   return (
-    <div className="card" style={{ borderLeft: "3px solid var(--investigation)" }}>
-      <div className="row center" style={{ gap: "var(--sp-sm)", marginBottom: "var(--sp-md)" }}>
-        <span className="t-label" style={{ color: "var(--investigation)" }}>
-          Abstained — I won't guess
-        </span>
-      </div>
-      <p className="t-body ink-muted">
-        In a plant, a wrong answer is worse than no answer. Here is what I can and cannot ground:
+    <article className="card card--pad-lg">
+      <Badge>No answer given</Badge>
+      <h3 className="t-display-md" style={{ marginTop: "var(--sp-base)" }}>
+        I won&rsquo;t guess on this one.
+      </h3>
+      <p className="t-body" style={{ marginTop: "var(--sp-sm)", maxWidth: 560 }}>
+        Nothing in your documents supports a confident answer. In a plant, a wrong answer is worse
+        than no answer — so here is exactly what is missing, and who can fill the gap.
       </p>
 
-      <div className="t-label" style={{ marginTop: "var(--sp-lg)" }}>
-        What I could not ground
-      </div>
-      <ul style={{ marginLeft: "var(--sp-lg)", marginTop: "var(--sp-xs)" }}>
-        {result.unresolved.map((u, i) => (
-          <li key={i} className="t-body-sm">
-            {u}
-          </li>
-        ))}
-      </ul>
+      {result.unresolved.length > 0 && (
+        <div style={{ marginTop: "var(--sp-xl)" }}>
+          <div className="t-label" style={{ marginBottom: "var(--sp-xs)" }}>
+            What I couldn&rsquo;t find
+          </div>
+          <ul style={{ paddingLeft: "var(--sp-md)" }}>
+            {result.unresolved.map((u, i) => (
+              <li key={i} className="t-body" style={{ marginBottom: "var(--sp-xxs)" }}>
+                {u}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {result.who_to_ask.length > 0 && (
-        <>
-          <div className="t-label" style={{ marginTop: "var(--sp-lg)" }}>
-            Who to ask
+        <div style={{ marginTop: "var(--sp-xl)" }}>
+          <div className="t-label" style={{ marginBottom: "var(--sp-xs)" }}>
+            Who to ask instead
           </div>
-          <div className="col" style={{ gap: "var(--sp-sm)", marginTop: "var(--sp-xs)" }}>
-            {result.who_to_ask.map((w, i) => (
-              <div key={i} className="card card-dense">
-                <span className="t-body">{w.person}</span>{" "}
-                <span className="t-caption">
-                  — {w.expertise}
-                  {w.tenure_years ? ` · ${w.tenure_years}y tenure` : ""}
+          <div style={{ display: "grid", gap: "var(--sp-sm)" }}>
+            {result.who_to_ask.map((p, i) => (
+              <div
+                key={i}
+                className="row"
+                style={{
+                  gap: "var(--sp-sm)",
+                  padding: "var(--sp-sm) var(--sp-base)",
+                  background: "var(--canvas-soft)",
+                  border: "1px solid var(--hairline)",
+                  borderRadius: "var(--r-md)",
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="row"
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: "var(--r-full)",
+                    background: "var(--surface-strong)",
+                    justifyContent: "center",
+                    font: "var(--t-body-strong)",
+                    color: "var(--ink)",
+                    flexShrink: 0,
+                  }}
+                >
+                  {p.person.charAt(0)}
+                </span>
+                <span>
+                  <span className="t-body-strong">{p.person}</span>{" "}
+                  <span className="t-body-sm muted">
+                    — {p.expertise}
+                    {p.tenure_years ? ` · ${p.tenure_years} years here` : ""}
+                  </span>
                 </span>
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </article>
   );
 }

@@ -1,0 +1,15 @@
+asset_tag,asset_name,asset_class,iso_14224_class,service,area,manufacturer,model,commissioned_date,criticality,parent_system
+P-101A,Boiler Feed Pump A,Centrifugal Pump,PU-CE,Boiler feed water supply to HRSG steam drum,Utilities - Boiler House,KSB,HGM-4/6 240-500,2011-03-14,A - Critical,Boiler Feed Water System
+P-101B,Boiler Feed Pump B,Centrifugal Pump,PU-CE,Boiler feed water supply to HRSG steam drum (multistage centrifugal boiler feed water pump),Utilities - Boiler House,KSB,HGM-4/6 240-500,2011-03-14,A - Critical,Boiler Feed Water System
+S-14,Suction Strainer 14,Strainer,PI-ST,Basket strainer on the P-101B suction line,Utilities - Boiler House,Eaton,Model 72 DN200 Class 300,2011-03-14,B - Important,Boiler Feed Water System
+V-201,Knockout Drum,Pressure Vessel,VE-PV,Condensate and liquid knockout upstream of flare header,Process - Flare Area,Bharat Heavy Plate,KOD-2400x6000-CS,2012-08-02,A - Critical,Flare Relief System
+P-102,Condensate Transfer Pump,Centrifugal Pump,PU-CE,Condensate transfer from hotwell to deaerator,Utilities - Boiler House,Grundfos,NK 150-315/321,2013-06-19,C - Standard,Condensate Return System
+E-301,Feedwater Economiser,Heat Exchanger,HE-SH,Flue gas to boiler feed water heat recovery,Utilities - Boiler House,Alfa Laval,DHX-1200-SS316,2012-01-25,B - Important,Boiler Feed Water System
+E-302,Deaerator Preheater,Heat Exchanger,HE-PH,LP steam to condensate preheat before deaerator,Utilities - Boiler House,Alfa Laval,M15-BFG,2013-06-19,C - Standard,Condensate Return System
+MOV-118,Minimum Flow Recirculation Valve,Control Valve,VA-CV,Minimum-flow recirculation from P-101B discharge to deaerator,Utilities - Boiler House,Fisher,ET 4in Class 600 with 657 actuator,2011-03-14,A - Critical,Boiler Feed Water System
+XV-104,Discharge Isolation Valve,Isolation Valve,VA-IV,Motor operated isolation on P-101B discharge header,Utilities - Boiler House,Velan,B12-3074B-13MS 6in Class 900,2011-03-14,B - Important,Boiler Feed Water System
+M-101B,Boiler Feed Pump B Drive Motor,Electric Motor,EM-IN,1250 kW 6.6 kV drive motor for P-101B,Utilities - Boiler House,ABB,M3BP 400 LB 4,2011-03-14,A - Critical,Boiler Feed Water System
+M-102,Condensate Pump Drive Motor,Electric Motor,EM-IN,90 kW 415 V drive motor for P-102,Utilities - Boiler House,Crompton Greaves,NGF 280M,2013-06-19,C - Standard,Condensate Return System
+D-105,Deaerator Storage Tank,Pressure Vessel,VE-PV,Deaerated feed water storage and NPSH head for P-101A/B,Utilities - Boiler House,Thermax,DA-45m3-CS,2011-02-28,A - Critical,Boiler Feed Water System
+C-401,Instrument Air Compressor,Reciprocating Compressor,CO-RE,Plant and instrument air supply,Utilities - Compressor House,Atlas Copco,GA 90 VSD+,2014-11-07,B - Important,Instrument Air System
+S-15,Suction Strainer 15,Strainer,PI-ST,Basket strainer on the P-101A suction line,Utilities - Boiler House,Eaton,Model 72 DN200 Class 300,2011-03-14,B - Important,Boiler Feed Water System

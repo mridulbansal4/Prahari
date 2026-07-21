@@ -1,11 +1,15 @@
 """Runtime configuration and profile selection.
 
 Profiles (ADR-P01):
-  - ``embedded``   — default; NetworkX/SQLite/local-vector/in-process cache/template-synth
-                     model. Runs on one box with no external services and no API key. This IS
+  - ``embedded``   — default; SQLite/local-vector/in-process/template-synth model. Runs on one
+                     box with **no external services, no containers and no API key**. This IS
                      the Bible's air-gap / CP-9 fallback (§8.6), not a mock.
-  - ``production`` — Neo4j/Qdrant/Postgres/Redis + provider-abstracted LLM (CP-5). Wired via
-                     docker-compose.
+  - ``production`` — Neo4j/Qdrant/Postgres + provider-abstracted LLM (CP-5). Run those three as
+                     local installs; nothing here requires Docker.
+
+Document-understanding providers (OCR for scanned text, VLM for drawings) both default to
+``none`` so the app boots with zero cost and zero GPU. When a provider is absent the affected
+document is quarantined with a stated reason — never silently dropped, never faked.
 
 No secret, statute, or tenant value is hardcoded (CP-5/CP-6): everything comes from env with a
 ``PRAHARI_`` prefix (Bible §12.2 naming law).
@@ -82,6 +86,32 @@ class Settings(BaseSettings):
     max_hops: int = 3
     retrieval_k: int = 8
     context_span_budget: int = 24
+
+    # --- OCR: text out of scanned pages (NOT drawings) -----------------------------
+    # "auto" picks Unlimited-OCR when an endpoint is configured, else Paddle when installed,
+    # else nothing. Default "none" keeps a fresh checkout free and GPU-less: scanned documents
+    # are quarantined with a reason rather than guessed at.
+    ocr_provider: Literal["none", "auto", "unlimited", "paddle"] = "none"
+    unlimited_ocr_base_url: str | None = None  # local vLLM/SGLang OpenAI-compatible endpoint
+    unlimited_ocr_model: str = "Unlimited-OCR"
+    unlimited_ocr_mode: Literal["gundam", "base"] = "gundam"  # gundam=single page, base=multi
+    unlimited_ocr_local: bool = False  # True = in-process transformers (requires CUDA)
+    paddle_ocr_lang: str = "en"
+    ocr_dpi: int = 300  # PDF page raster resolution handed to the OCR model
+
+    # --- VLM: structured reasoning over engineering DRAWINGS ------------------------
+    # This is not OCR. It is asked what the diagram *means* — components, connectivity,
+    # ratings — and returns JSON that becomes graph nodes and edges. Default "none":
+    # drawings are quarantined rather than have their topology invented.
+    vlm_provider: Literal["none", "cosmos", "openai_vision", "local"] = "none"
+    nvidia_api_key: str | None = None
+    cosmos_base_url: str = "https://integrate.api.nvidia.com/v1"
+    cosmos_model: str = "nvidia/cosmos3-nano-reasoner"
+    vlm_base_url: str | None = None  # any OpenAI-compatible vision endpoint
+    vlm_model: str | None = None
+    vlm_api_key: str | None = None
+    vlm_timeout_s: float = 90.0
+    drawing_dpi: int = 200  # raster resolution handed to the VLM
 
     @property
     def state_path(self) -> Path:

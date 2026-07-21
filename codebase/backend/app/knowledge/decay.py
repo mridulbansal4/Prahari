@@ -13,19 +13,31 @@ from ..audit.sink import AuditSink
 from ..domain.graph_types import EdgeType, NodeLabel
 from ..domain.models import KnowledgeRiskFlag
 from ..ports import IGraphStore, IRelationalStore
+from .contradictions import ContradictionDetector
 
 _FLAG = "knowledge_risk"
 _META = "knowledge_meta"
 
 
 class DecayJob:
-    def __init__(self, graph: IGraphStore, relational: IRelationalStore, audit: AuditSink) -> None:
+    def __init__(
+        self,
+        graph: IGraphStore,
+        relational: IRelationalStore,
+        audit: AuditSink,
+        contradictions: ContradictionDetector | None = None,
+    ) -> None:
         self._g = graph
         self._rel = relational
         self._audit = audit
+        self._contradictions = contradictions
 
     def run(self, tenant: str) -> list[KnowledgeRiskFlag]:
         """The nightly decay pass. Deterministic triggers over graph state."""
+        # Detect disagreements first, so Trigger 2 below has something to read. Before this,
+        # nothing in the system ever wrote a CONTRADICTS edge and that trigger was dead.
+        if self._contradictions is not None:
+            self._contradictions.scan(tenant)
         flags: list[KnowledgeRiskFlag] = []
         # Trigger 1: expert departure — a Person flagged retirement_risk who KNOWS a fact.
         for p in self._g.nodes_by_label(NodeLabel.PERSON.value, tenant):
@@ -34,11 +46,26 @@ class DecayJob:
                     flags.append(self._flag("expert_departure", e.dst,
                                  f"Expertise held by {p.props.get('name')} (retirement risk) about "
                                  f"{e.dst} is at risk of being lost.", tenant))
-        # Trigger 2: contradictions surfaced between spans.
+        # Trigger 2: contradictions surfaced between spans. One flag per (subject, measure) —
+        # the same disagreement usually shows up across several span pairs, and a reader wants
+        # to be told once that two documents disagree, not once per sentence that proves it.
+        seen_conflicts: set[str] = set()
         for e in self._g.all_edges(tenant):
-            if e.type == EdgeType.CONTRADICTS:
-                flags.append(self._flag("contradiction", e.src,
-                             f"Contradictory evidence between {e.src} and {e.dst}.", tenant))
+            if e.type != EdgeType.CONTRADICTS:
+                continue
+            subject = str(e.props.get("subject") or e.src)
+            measure = str(e.props.get("measure") or "value")
+            key = f"{subject}:{measure}"
+            if key in seen_conflicts:
+                continue
+            seen_conflicts.add(key)
+            # The "between X and Y" phrasing is load-bearing — the console parses it to show
+            # the two sides next to each other. The summary follows it, not replaces it.
+            detail = str(e.props.get("summary") or "")
+            flags.append(self._flag(
+                "contradiction", key,
+                f"Contradictory evidence between {e.props.get('left_doc', e.src)} and "
+                f"{e.props.get('right_doc', e.dst)}. {detail}".strip(), tenant))
         # Trigger 3: vendor/SOP change markers on documents.
         for d in self._g.nodes_by_label(NodeLabel.DOCUMENT.value, tenant):
             if d.props.get("vendor_changed") or d.props.get("sop_changed"):

@@ -1,0 +1,15 @@
+tag,description,instrument_type,associated_asset,measured_variable,units,range_min,range_max,alarm_low,alarm_high,trip_high,location
+TE-101B,Boiler Feed Pump B outboard bearing temperature,RTD PT100 duplex element,P-101B,Bearing metal temperature,degC,0,150,,85,100,P-101B outboard bearing housing
+VE-101B,Boiler Feed Pump B bearing housing vibration,Accelerometer with velocity integrator,P-101B,Overall vibration velocity,mm/s RMS,0,25,,4.5,7.1,P-101B outboard bearing housing horizontal
+PT-101,Boiler Feed Pump B discharge pressure,Piezoresistive pressure transmitter,P-101B,Gauge pressure,bar,0,160,55,,,P-101B discharge header downstream of NRV
+FT-101,Boiler Feed Pump B discharge flow,Orifice plate with DP transmitter,P-101B,Volumetric flow,m3/h,0,320,72,,,P-101B discharge header upstream of MOV-118 tee
+PDI-S14,Suction Strainer 14 differential pressure,Differential pressure indicator/transmitter,S-14,Differential pressure,bar,0,2.5,,0.5,,Across S-14 on the P-101B suction line
+MOV-118,Minimum-flow recirculation valve position,Electro-pneumatic positioner with position transmitter,P-101B,Valve position,percent open,0,100,,,,P-101B recirculation line to deaerator
+PT-102,Boiler Feed Pump B suction pressure,Piezoresistive pressure transmitter,P-101B,Gauge pressure,bar,0,16,2.0,,,P-101B suction line downstream of S-14
+TE-101A,Boiler Feed Pump A outboard bearing temperature,RTD PT100 duplex element,P-101A,Bearing metal temperature,degC,0,150,,85,100,P-101A outboard bearing housing
+VE-101A,Boiler Feed Pump A bearing housing vibration,Accelerometer with velocity integrator,P-101A,Overall vibration velocity,mm/s RMS,0,25,,4.5,7.1,P-101A outboard bearing housing horizontal
+LT-105,Deaerator storage tank level,Guided wave radar level transmitter,D-105,Liquid level,percent,0,100,25,85,,D-105 storage section side nozzle
+LT-201,Knockout Drum liquid level,Differential pressure level transmitter,V-201,Liquid level,percent,0,100,10,70,80,V-201 bridle standpipe
+PDI-S15,Suction Strainer 15 differential pressure,Differential pressure indicator/transmitter,S-15,Differential pressure,bar,0,2.5,,0.5,,Across S-15 on the P-101A suction line
+TE-301,Economiser feedwater outlet temperature,RTD PT100 single element,E-301,Process temperature,degC,0,300,,215,,E-301 feedwater outlet nozzle
+IE-101B,Boiler Feed Pump B motor stator current,Current transformer with transducer,M-101B,Motor line current,A,0,180,,145,160,6.6 kV switchgear panel 4B

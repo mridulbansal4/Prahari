@@ -181,15 +181,17 @@ class EmbeddedStore:
                 ),
             )
 
-    def get_span(self, span_id: str) -> Span | None:
-        r = self._conn.execute("SELECT * FROM spans WHERE span_id=?", (span_id,)).fetchone()
-        if not r:
-            return None
+    @staticmethod
+    def _row_to_span(r: Any) -> Span:
         cr = json.loads(r["char_range"]) if r["char_range"] else None
         return Span(
             span_id=r["span_id"], tenant=r["tenant"], doc_id=r["doc_id"], page=r["page"],
             text=r["text"], char_range=tuple(cr) if cr else None,
         )
+
+    def get_span(self, span_id: str) -> Span | None:
+        r = self._conn.execute("SELECT * FROM spans WHERE span_id=?", (span_id,)).fetchone()
+        return self._row_to_span(r) if r else None
 
     def nodes_by_label(self, label: str, tenant: str) -> list[Node]:
         rows = self._conn.execute(
@@ -212,6 +214,10 @@ class EmbeddedStore:
     def all_edges(self, tenant: str) -> list[Edge]:
         rows = self._conn.execute("SELECT * FROM edges WHERE tenant=?", (tenant,)).fetchall()
         return [self._row_to_edge(r) for r in rows]
+
+    def all_spans(self, tenant: str) -> list[Span]:
+        rows = self._conn.execute("SELECT * FROM spans WHERE tenant=?", (tenant,)).fetchall()
+        return [self._row_to_span(r) for r in rows]
 
     @staticmethod
     def _edge_valid_as_of(edge: Edge, as_of: date | None) -> bool:

@@ -185,17 +185,71 @@ def seed() -> dict:
             {"clause": "PESO SMPV r.12", "instrument": "PESO",
              "total_clauses_in_instrument": 30, "periodicity_months": 24}, TENANT)
 
-    # ---- organizational memory: Anil (the retiring expert) ----
-    anil = Node(id="person-anil", label=NodeLabel.PERSON, tenant=TENANT,
-                props={"name": "Anil", "role": "reliability", "tenure_years": 34,
-                       "retirement_risk": True})
-    g.upsert_node(anil)
-    g.upsert_edge(Edge(id="knows-anil-p101b", type=EdgeType.KNOWS, src="person-anil",
-                       dst="asset-p101b", tenant=TENANT,
-                       props={"expertise": "strainer fouling and BFP bearing failures"}))
-    g.upsert_edge(Edge(id="knows-anil-fm", type=EdgeType.KNOWS, src="person-anil",
-                       dst="fm-bearing-overheat", tenant=TENANT,
-                       props={"expertise": "boiler feed pump bearing overheating"}))
+    # ---- organizational memory: the roster, and what each person actually knows ----
+    # Every nugget below is traceable to the document corpus (shift logs, the 2023 incident
+    # report, the strainer history) — none is invented for the demo. Captured through the
+    # service so the text is written as a citable span and indexed for retrieval, exactly as a
+    # nugget typed into the capture form would be.
+    people = [
+        ("person-anil", "Anil Kumar", "reliability", 34, True),
+        ("person-suresh", "Suresh Nair", "rotating equipment", 21, False),
+        ("person-priya", "Priya Menon", "instrumentation", 12, False),
+        ("person-ravi-s", "Ravi Sharma", "shift supervisor", 17, False),
+    ]
+    for pid, name, role, tenure, risk in people:
+        c.org_memory.upsert_person(pid, name, role, tenure, risk, TENANT, "system:seed")
+
+    captured = [
+        # Anil — the retiring expert; the knowledge most at risk.
+        ("person-anil", "asset-p101b", "Restart sequence for the parallel BFPs", "rule",
+         ["restart", "cavitation", "P-101A", "P-101B"],
+         "Never restart P-101A before P-101B after a shutdown. The common suction header "
+         "drains toward A, and starting A first pulls the header down and cavitates B. "
+         "Start B, let the header repressurise, then bring A up."),
+        ("person-anil", "asset-p101b", "Strainer DP predicts bearing trouble", "lesson",
+         ["S-14", "strainer", "bearing", "PDI-S14"],
+         "Watch PDI-S14, not just vibration. Every bearing event on P-101B I have seen was "
+         "preceded by strainer differential creeping past 0.5 bar for a week or two. "
+         "Vibration is the last symptom to appear, not the first."),
+        ("person-anil", "fm-bearing-overheat", "Low-flow churn is the real cause", "rule",
+         ["min flow", "MOV-118", "churn"],
+         "Bearing overheating on this pump is almost never a bearing fault. It is the pump "
+         "running under its 72 m3/h minimum continuous flow and churning the water. Check "
+         "flow and MOV-118 before anyone opens a bearing housing."),
+        # Suresh — rotating equipment.
+        ("person-suresh", "asset-p101b", "Seal flush cooler fouls silently", "tip",
+         ["API 682", "Plan 23", "seal"],
+         "There is no gauge on the Plan 23 seal flush loop, so fouling is invisible on the "
+         "DCS. Feel the cooler return line by hand — if it is not appreciably cooler than "
+         "the supply, the loop is not circulating and the seal is running hot."),
+        ("person-suresh", "fm-bearing-overheat", "Alignment reads differently hot", "tip",
+         ["alignment", "thermal growth"],
+         "Cold alignment on this set looks fine and still runs rough. Take cold readings, "
+         "then apply the vendor thermal growth offsets before you sign it off."),
+        # Priya — instrumentation.
+        ("person-priya", "asset-p101b", "TE-101B reads about 5% high", "tip",
+         ["TE-101B", "calibration", "pyrometer"],
+         "TE-101B has read roughly 5% high since the 2024 loop check — verified against a "
+         "portable pyrometer. An 85 C indication is nearer 81 C in reality. Worth knowing "
+         "before anyone trips the unit on an indicated alarm."),
+        ("person-priya", "asset-s14", "PDI-S14 needs a zero check after cleaning", "tip",
+         ["PDI-S14", "strainer"],
+         "After S-14 is cleaned, re-zero PDI-S14. The transmitter holds a small offset if "
+         "it is isolated while the basket is out, which makes a clean strainer look fouled."),
+        # Ravi — shift supervisor.
+        ("person-ravi-s", "asset-p101b", "MOV-118 sticks in summer", "rule",
+         ["MOV-118", "min flow", "summer"],
+         "MOV-118 sticks on hot afternoons — it will show commanded-open on the DCS and "
+         "barely move. There is no position-deviation alarm, so you have to look at the "
+         "feedback. If P-101B is running hot in the afternoon, check the valve physically."),
+        ("person-ravi-s", "asset-p101b", "P-101B runs hot on hot afternoons", "lesson",
+         ["ambient", "afternoon"],
+         "This is a daytime problem, not a night one. Overnight the pump sits normal; it is "
+         "the afternoon ambient plus reduced flow that pushes the bearing up."),
+    ]
+    for pid, target, title, kind, tags, text in captured:
+        c.org_memory.add_knows(pid, target, title, TENANT, "system:seed",
+                               text=text, kind=kind, tags=tags)
 
     # ---- decision-replay chain (M3, additive) ----
     _seed_decision_graph(g, sink, s_strainer, s_oem)

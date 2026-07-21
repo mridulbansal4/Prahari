@@ -32,15 +32,45 @@ prompts/               versioned prompt files + manifest (CP-5/CP-7)
 tests/                 critical-path release gates (Bible §14)
 ```
 
-## Run (embedded, no external services)
+## Run locally — no Docker, no external services
+
+The default `embedded` profile is the supported local runtime: SQLite for all three stores, a
+local embedder, and the template-synth model rung. **No containers, no servers, no API key.**
 
 ```bash
 py -3.12 -m venv .venv && .venv\Scripts\activate     # Windows
 pip install -e ".[dev]"
 python -m app.seed
-pytest -q                    # 11 critical-path tests
-uvicorn app.main:app         # http://localhost:8000/docs
+pytest -q                    # critical-path + drawing/contradiction gates
+uvicorn app.main:app --port 8000        # http://localhost:8000/docs
 ```
+
+State lives in `.prahari_state/prahari.db` and is shared between `seed` and `uvicorn`.
+
+### Optional: the production store family (still no Docker)
+
+Set `PRAHARI_PROFILE=production` and point the settings at **local installs**:
+
+| Store | Local install | Setting |
+|---|---|---|
+| Graph | Neo4j Community / Neo4j Desktop → `neo4j console` | `PRAHARI_GRAPH_URI=bolt://localhost:7687` |
+| Vector | Qdrant native binary → `./qdrant` | `PRAHARI_VECTOR_URL=http://localhost:6333` |
+| Relational | Postgres service | `PRAHARI_PG_DSN=postgresql://…` |
+
+Install the drivers with `pip install -e ".[production]"`. There is no queue or broker tier —
+`PRAHARI_REDIS_URL` exists as a setting but nothing reads it.
+
+### Optional: document understanding
+
+Both default to `none`, so a fresh checkout boots free and GPU-less. When a provider is absent
+the affected document is **quarantined with a stated reason** rather than silently mangled.
+
+- **OCR** (`PRAHARI_OCR_PROVIDER`) — text out of scanned pages. Unlimited-OCR needs a GPU or a
+  hosted endpoint; PaddleOCR runs on CPU but is an optional install.
+- **VLM** (`PRAHARI_VLM_PROVIDER`) — reasoning over engineering drawings. Reads a P&ID and
+  returns components and connectivity, which become graph edges. Billed per call when hosted.
+
+See `.env.example` for every key.
 
 ## Invariant → mechanism map (Bible §14.10)
 

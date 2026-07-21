@@ -219,12 +219,35 @@ class Correction(BaseModel):
 
 
 # ------------------------------------------------------------------------ organizational memory
+class KnowledgeItem(BaseModel):
+    """One piece of captured expertise.
+
+    `label` is the short title; `text` is the knowledge itself — the rule, the war story, the
+    thing that walks out of the door at retirement. Capturing only the label was the original
+    shape, and it lost precisely the part worth keeping.
+
+    When `text` is present it is also written as a provenance-stamped Span, so a captured
+    nugget is citable in an answer exactly like a sentence from a document. `span_id` is that
+    citation handle.
+    """
+
+    target_kind: str
+    target_ref: str
+    label: str
+    text: str = ""
+    kind: str = "tip"  # tip | rule | faq | lesson | incident
+    tags: list[str] = Field(default_factory=list)
+    captured_on: str | None = None
+    span_id: str | None = None
+    used_in_answers: int = 0
+
+
 class ExpertiseRecord(BaseModel):
     person_id: str
     name: str
     role: str
     tenure_years: int
-    knows: list[dict[str, str]]  # [{target_kind, target_ref, label}]
+    knows: list[KnowledgeItem]
     retirement_risk: bool = False
 
 

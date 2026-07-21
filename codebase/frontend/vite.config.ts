@@ -5,7 +5,9 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173,
+    // Moved off 5173: a service worker registered under that origin kept serving a cached
+    // shell, so shell changes appeared as "the old UI is back". A new port is a clean scope.
+    port: 5174,
     proxy: {
       "/v1": {
         target: process.env.VITE_API_BASE || "http://localhost:8000",

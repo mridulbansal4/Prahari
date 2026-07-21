@@ -208,6 +208,20 @@ class Neo4jGraphStore:
             )
             return [self._edge_from(dict(r["r"]), r["t2"], r["src"], r["dst"]) for r in rows]
 
+    def all_spans(self, tenant):
+        with self._driver.session() as s:
+            rows = s.run("MATCH (sp:Span {tenant:$t}) RETURN sp", t=tenant)
+            return [
+                Span(
+                    span_id=(d := dict(r["sp"])).get("id", ""),
+                    doc_id=d.get("doc_id", ""),
+                    page=d.get("page"),
+                    text=d.get("text", ""),
+                    tenant=d.get("tenant", tenant),
+                )
+                for r in rows
+            ]
+
     def delete_edge(self, edge_id):
         with self._driver.session() as s:
             s.run("MATCH ()-[r {id:$id}]-() DELETE r", id=edge_id)

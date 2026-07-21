@@ -79,9 +79,12 @@ async def add_knows(
     principal: Principal = Depends(require_module("M5", Access.FULL)),
     c: Container = Depends(container),
 ) -> dict:
-    c.org_memory.add_knows(body.person_id, body.target_ref, body.expertise, principal.tenant,
-                           principal.subject)
-    return {"ok": True}
+    item = c.org_memory.add_knows(body.person_id, body.target_ref, body.expertise,
+                                  principal.tenant, principal.subject, text=body.text,
+                                  kind=body.kind, tags=body.tags)
+    # Return the stored item so the caller can confirm the knowledge text was kept, rather
+    # than trusting a bare {"ok": true}.
+    return {"ok": True, "item": item.model_dump(mode="json")}
 
 
 # ------------------------------------------------------------------- M4 Knowledge Evolution

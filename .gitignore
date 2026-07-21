@@ -10,6 +10,7 @@ venv/
 .pytest_cache/
 *.sqlite3
 *.db
+.prahari_state/
 codebase/backend/app/data/runtime/
 
 # Node
@@ -26,8 +27,10 @@ Thumbs.db
 .vscode/
 
 # SENTINEL runtime state (embedded profile scratch)
-**/.prahari_state/
+**/.sentinel_state/
 
-# Local tooling (excluded per project preference)
-.claude/
-# .github/ is tracked again — CI (lint + tests + eval gate) is re-enabled.
+
+
+
+.github
+.github/

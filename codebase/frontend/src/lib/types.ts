@@ -62,6 +62,29 @@ export interface Me {
   modules: string[];
 }
 
+/** One captured piece of expertise. `text` is the knowledge itself; `span_id` is present when
+ *  it was written as a citable span, which is what lets it appear in an answer. */
+export interface KnowledgeItem {
+  target_kind: string;
+  target_ref: string;
+  label: string;
+  text: string;
+  kind: string; // tip | rule | faq | lesson | incident
+  tags: string[];
+  captured_on: string | null;
+  span_id: string | null;
+  used_in_answers: number;
+}
+
+export interface ExpertiseRecord {
+  person_id: string;
+  name: string;
+  role: string;
+  tenure_years: number;
+  knows: KnowledgeItem[];
+  retirement_risk: boolean;
+}
+
 export interface ResolutionProposal {
   proposal_id: string;
   canonical_asset_id: string;

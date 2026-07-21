@@ -42,6 +42,7 @@ class IGraphStore(Protocol):
     def evidence_spans(self, node_id: str, tenant: str) -> list[Span]: ...
     def edges_from(self, node_id: str, edge_type: str, tenant: str) -> list[Edge]: ...
     def all_edges(self, tenant: str) -> list[Edge]: ...
+    def all_spans(self, tenant: str) -> list[Span]: ...
     def delete_edge(self, edge_id: str) -> None: ...
     def snapshot(self) -> dict[str, Any]: ...
 
@@ -76,6 +77,45 @@ class IRelationalStore(Protocol):
         to: str | None = None,
         limit: int = 200,
     ) -> list[AuditEntry]: ...
+
+
+@runtime_checkable
+class IOcrProvider(Protocol):
+    """Text out of a scanned page (Bible §3.1 parse/ocr stage).
+
+    Strictly transcription: given rendered page images, return the text on them. It answers
+    "what does this page say", never "what does this diagram mean" — that is IDrawingReader.
+    An unavailable provider must report ``available() is False`` so ingestion can quarantine
+    the document with a stated reason rather than admit an empty or guessed parse (BR-1).
+    """
+
+    id: str
+
+    def available(self) -> bool: ...
+
+    def read_pages(self, pages: list[bytes], mime: str = "image/png") -> list[str]:
+        """One transcribed string per input page image, in order."""
+        ...
+
+
+@runtime_checkable
+class IDrawingReader(Protocol):
+    """Structured reasoning over an engineering drawing (P&ID, schematic, GA).
+
+    This is NOT OCR. It is asked what the diagram *means* — which equipment appears, what is
+    connected to what and in which direction, what the ratings and annotations say — and
+    returns a validated structure that ingestion turns into graph nodes and edges with
+    provenance. Topology that the model does not actually report must never be synthesised;
+    an unavailable reader quarantines the drawing instead (CP-1/BR-1).
+    """
+
+    id: str
+
+    def available(self) -> bool: ...
+
+    def read_drawing(self, page: bytes, mime: str = "image/png", hint: str | None = None) -> Any:
+        """Return a ``DrawingExtraction`` (ingestion.drawing_schema) for one drawing page."""
+        ...
 
 
 @runtime_checkable

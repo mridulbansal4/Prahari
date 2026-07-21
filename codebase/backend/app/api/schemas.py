@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 # ---- auth / shell ----
@@ -91,3 +91,7 @@ class KnowsUpsert(BaseModel):
     person_id: str
     target_ref: str
     expertise: str
+    # Additive: without these the capture path stored only a label and dropped the knowledge.
+    text: str = ""
+    kind: str = "tip"  # tip | rule | faq | lesson | incident
+    tags: list[str] = Field(default_factory=list)

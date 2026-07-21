@@ -19,7 +19,7 @@ A faithful implementation of the **Prahari Product Requirements Bible (PRB)**, s
 
 ```
 PRAHARI/
-├─ 00_CLAUDE_IMPLEMENTATION_RULES.md          # governance (authority order)
+├─ 00_IMPLEMENTATION_RULES.md                 # governance (authority order)
 ├─ 01_PROJECT_CONTEXT.md                      # problem statement & vision
 ├─ 02_SENTINEL_Product_Requirements_Bible.md  # master implementation — the source of truth
 ├─ 03_design.md                               # design system (UI authority)
@@ -110,7 +110,7 @@ the system refuse honestly.
 
 ## Governance
 
-This codebase obeys `CLAUDE_IMPLEMENTATION_RULES.md`. Authority order:
+This codebase obeys `IMPLEMENTATION_RULES.md`. Authority order:
 
 1. Engineering invariants **CP-1…CP-10**
 2. **Prahari Product Requirements Bible** — *what* to build

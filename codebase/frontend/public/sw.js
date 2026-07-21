@@ -1,8 +1,8 @@
 // Prahari service worker (M12 / NFR-12) — makes Field Mode usable with zero network.
 // App shell: cache-first. API GETs: network-first with a cache fallback so the last-known
 // cached answers/graph slice render offline (CP-9 field mode), honestly labelled by the app.
-const SHELL = "prahari-shell-v2";
-const API = "prahari-api-v2";
+const SHELL = "prahari-shell-v4";
+const API = "prahari-api-v4";
 const SHELL_ASSETS = ["/", "/index.html", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (e) => {
