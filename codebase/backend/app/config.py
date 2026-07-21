@@ -57,14 +57,10 @@ class Settings(BaseSettings):
     oidc_role_claim: str = "role"
 
     # --- Model provider (CP-5) -----------------------------------------------------
-    # If a key is present we may use the cloud reasoning provider; otherwise the local /
-    # template-synth rungs of the CP-9 ladder serve grounded, structured answers offline.
-    model_api_key: str | None = None
-    model_id: str = "claude-fable-5"
-    model_base_url: str = "https://api.anthropic.com"
-
-    # Gemini provider (CP-5) — a low-cost Flash model keeps token usage down. When a key is set
-    # this is the preferred Full-rung reasoning model. Model id is configurable.
+    # Gemini is the primary reasoning provider — a low-cost Flash model keeps token usage
+    # down. With a key set it serves the Full CP-9 rung. Without one, the ladder falls to a
+    # local open-weights server if reachable, then to template synthesis, which still answers
+    # grounded and cited — just structured rather than narrated.
     gemini_api_key: str | None = None
     gemini_model: str = "gemini-flash-lite-latest"  # lowest-cost tier (fewest tokens)
     gemini_base_url: str = "https://generativelanguage.googleapis.com"

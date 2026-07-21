@@ -83,9 +83,11 @@ Format: Problem · Alternatives · Chosen · Trade-off · Consequence. Governanc
 ## ADR-P02 — Offline template synthesizer is the model's degradation rung, not the default answer engine
 - **Problem:** Investigations must be deterministic on the seeded corpus for the demo (Bible
   §11.7) and must work with no API key, yet CP-5 requires a real provider abstraction.
-- **Chosen:** `IModelProvider` has three concrete providers: `AnthropicProvider` (CP-5
-  default when `PRAHARI_MODEL_API_KEY` is set), `LocalOpenWeightsProvider` (air-gap), and
-  `TemplateSynthProvider` (the CP-9 `-model` rung — structured, grounded, no prose). Selection
+- **Chosen:** `IModelProvider` has three concrete providers: `GeminiProvider` (the primary
+  reasoning model, used when `PRAHARI_GEMINI_API_KEY` is set), `LocalOpenWeightsProvider`
+  (air-gap), and `TemplateSynthProvider` (the CP-9 `-model` rung — structured, grounded, no
+  prose). A single hosted provider keeps the abstraction honest without carrying vendors the
+  product does not ship against; a second one is a class plus a router branch. Selection
   and fallback are driven by the circuit breaker (Bible §2.7). The template synthesizer only
   ever emits claims that map to a provided context span, so grounding/citation invariants hold
   even at the lowest rung.

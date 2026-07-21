@@ -9,7 +9,6 @@ from ..config import Settings
 from ..resilience.circuit_breaker import CircuitBreaker
 from ..resilience.degradation import Rung
 from .providers import (
-    AnthropicProvider,
     GeminiProvider,
     LocalOpenWeightsProvider,
     TemplateSynthProvider,
@@ -17,12 +16,15 @@ from .providers import (
 
 
 class ModelRouter:
+    """Gemini is the primary reasoning provider. Below it sit a local open-weights server for
+    air-gapped sites and the template synthesizer, which always answers — grounded and cited,
+    just not narrated (the CP-9 ``-model`` rung)."""
+
     def __init__(self, settings: Settings) -> None:
         self._s = settings
         self._breaker = CircuitBreaker()
         self._template = TemplateSynthProvider()
         self._gemini = GeminiProvider(settings) if settings.gemini_api_key else None
-        self._cloud = AnthropicProvider(settings) if settings.model_api_key else None
         self._local = LocalOpenWeightsProvider()
 
     def select(self) -> tuple[object, Rung]:
@@ -33,8 +35,6 @@ class ModelRouter:
             return self._template, Rung.NO_MODEL
         if self._gemini and self._gemini.available():
             return self._gemini, Rung.FULL
-        if self._cloud and self._cloud.available():
-            return self._cloud, Rung.FULL
         if self._local.available():
             return self._local, Rung.FULL
         # No prose model reachable → CP-9 -model rung with structured synthesis.

@@ -14,7 +14,6 @@ os.environ["PRAHARI_PROFILE"] = "embedded"
 # Keep tests deterministic + offline: never use a live model, even if a .env sets one
 # (env vars override the .env file in pydantic-settings). Tests exercise the template-synth rung.
 os.environ["PRAHARI_GEMINI_API_KEY"] = ""
-os.environ["PRAHARI_MODEL_API_KEY"] = ""
 os.environ["PRAHARI_FORCE_RUNG"] = ""
 
 
