@@ -1,9 +1,11 @@
 // Documents — upload plus the library, grouped by the doc_type the backend actually detected
 // (previously this was guessed from the filename, which mis-filed anything oddly named).
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DocumentContentView } from "../components/DocumentContent";
 import { Badge, EmptyState, Notice, Skeleton, ViewHeader } from "../components/ui";
 import { api } from "../lib/api";
 import { ensureSession } from "../lib/session";
+import type { DocumentContent } from "../lib/types";
 
 interface Job {
   job_id: string;
@@ -82,6 +84,21 @@ export function DocumentsView() {
   const [uploads, setUploads] = useState<Upload[]>([]);
   const [dragging, setDragging] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+
+  // The open document's content viewer.
+  const [openDoc, setOpenDoc] = useState<{ id: string; filename: string } | null>(null);
+  const [content, setContent] = useState<DocumentContent | null>(null);
+  const [contentError, setContentError] = useState<string | null>(null);
+
+  const openDocument = useCallback((id: string, filename: string) => {
+    setOpenDoc({ id, filename });
+    setContent(null);
+    setContentError(null);
+    ensureSession()
+      .then(() => api.documentContent(id))
+      .then(setContent)
+      .catch(() => setContentError("Couldn't load this document's content."));
+  }, []);
 
   const refresh = useCallback(async () => {
     try {
@@ -295,6 +312,14 @@ export function DocumentsView() {
                     {j.node_count} {j.node_count === 1 ? "thing" : "things"} identified ·{" "}
                     {j.span_count} {j.span_count === 1 ? "passage" : "passages"} kept as evidence
                   </p>
+                  <button
+                    type="button"
+                    className="btn btn--outline"
+                    style={{ minHeight: 32, marginTop: "var(--sp-sm)" }}
+                    onClick={() => openDocument(j.doc_id, j.filename)}
+                  >
+                    View content
+                  </button>
                   {j.stage_log && j.stage_log.length > 0 && (
                     <details style={{ marginTop: "var(--sp-xs)" }}>
                       <summary
@@ -336,6 +361,56 @@ export function DocumentsView() {
           </div>
         )}
       </div>
+
+      {/* Content preview — a modal over the library, so the list stays put and there is no
+          page navigation. Close with the ✕, the backdrop, or Escape. */}
+      {openDoc && (
+        <div
+          className="doc-modal-scrim"
+          role="dialog"
+          aria-modal="true"
+          aria-label={openDoc.filename}
+          onClick={() => setOpenDoc(null)}
+          onKeyDown={(e) => e.key === "Escape" && setOpenDoc(null)}
+        >
+          <div className="doc-modal" onClick={(e) => e.stopPropagation()}>
+            <header className="doc-modal-head">
+              <div style={{ minWidth: 0 }}>
+                <div className="t-title-md" style={{ wordBreak: "break-word" }}>
+                  {openDoc.filename}
+                </div>
+                <div className="t-caption">
+                  {content
+                    ? `${content.passage_count} passages · ${content.page_count} ${
+                        content.page_count === 1 ? "page" : "pages"
+                      } · the content the system reads and cites`
+                    : "Loading…"}
+                </div>
+              </div>
+              <button
+                type="button"
+                className="doc-modal-close"
+                onClick={() => setOpenDoc(null)}
+                aria-label="Close"
+                autoFocus
+              >
+                ✕
+              </button>
+            </header>
+
+            <div className="doc-modal-body">
+              {contentError && <Notice tone="error">{contentError}</Notice>}
+              {!content && !contentError && (
+                <div className="stack" style={{ gap: "var(--sp-sm)" }}>
+                  <Skeleton height={28} width={320} />
+                  <Skeleton height={240} />
+                </div>
+              )}
+              {content && <DocumentContentView content={content} />}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

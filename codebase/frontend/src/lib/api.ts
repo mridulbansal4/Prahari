@@ -168,6 +168,8 @@ export const api = {
     return (await res.json()) as { doc_id: string; job_id: string; status: string };
   },
   ingestionJobs: () => req<{ jobs: any[]; quarantined: any[] }>("GET", "/v1/ingestion"),
+  documentContent: (docId: string) =>
+    req<import("./types").DocumentContent>("GET", `/v1/documents/${docId}/content`),
   setDegradation: (rung: string) =>
     req<{ rung: string }>("POST", `/v1/admin/degrade?rung=${encodeURIComponent(rung)}`),
   health: () => req<any>("GET", "/v1/health"),

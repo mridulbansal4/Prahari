@@ -219,6 +219,12 @@ class EmbeddedStore:
         rows = self._conn.execute("SELECT * FROM spans WHERE tenant=?", (tenant,)).fetchall()
         return [self._row_to_span(r) for r in rows]
 
+    def spans_for_document(self, doc_id: str, tenant: str) -> list[Span]:
+        rows = self._conn.execute(
+            "SELECT * FROM spans WHERE doc_id=? AND tenant=?", (doc_id, tenant)
+        ).fetchall()
+        return [self._row_to_span(r) for r in rows]
+
     @staticmethod
     def _edge_valid_as_of(edge: Edge, as_of: date | None) -> bool:
         if as_of is None:

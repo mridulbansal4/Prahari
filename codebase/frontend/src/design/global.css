@@ -365,6 +365,75 @@ select {
   }
 }
 
+/* ---------- Document preview modal ---------- */
+.doc-modal-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--overlay-scrim, rgba(12, 10, 9, 0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-lg);
+}
+.doc-modal {
+  width: min(1000px, 94vw);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
+}
+.doc-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-base);
+  padding: var(--sp-base) var(--sp-lg);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+.doc-modal-close {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-card);
+  color: var(--muted);
+  cursor: pointer;
+  font: var(--t-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.doc-modal-close:hover {
+  background: var(--surface-strong);
+  color: var(--ink);
+}
+.doc-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--sp-lg);
+}
+
+@media (max-width: 640px) {
+  .doc-modal-scrim {
+    padding: var(--sp-xs);
+  }
+  .doc-modal {
+    max-height: 94vh;
+  }
+  .doc-modal-body {
+    padding: var(--sp-base);
+  }
+}
+
 /* ---------- Floating chat widget ---------- */
 .chat-fab {
   position: fixed;

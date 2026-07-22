@@ -85,6 +85,19 @@ export interface ExpertiseRecord {
   retirement_risk: boolean;
 }
 
+export interface DocumentContent {
+  doc_id: string;
+  filename: string;
+  type: string | null;
+  format: "markdown" | "csv" | "json" | "text";
+  /** "original" = the clean file from disk; "parsed" = reconstructed from extracted passages. */
+  source: "original" | "parsed";
+  page_count: number;
+  passage_count: number;
+  text: string;
+  passages: { span_id: string; page: number | null; text: string }[];
+}
+
 export interface ResolutionProposal {
   proposal_id: string;
   canonical_asset_id: string;
