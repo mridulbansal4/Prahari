@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 150" width="1200" height="150" font-family="Georgia, serif">
+  <rect width="1200" height="150" fill="#0B0D0F"/>
+  <g transform="translate(556,34) scale(1.0)"><path d="M36 22 C28 7 16 7 16 22 C16 37 28 37 36 22 C44 7 56 7 56 22 C56 37 44 37 36 22 Z" fill="none" stroke="#3FAAB8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 22 C52 7 40 7 40 22 C40 37 52 37 60 22 C68 7 80 7 80 22 C80 37 68 37 60 22 Z" fill="none" stroke="#3FAAB8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <text x="600" y="112" text-anchor="middle" fill="#767e87" font-size="15" font-family="Inter, Arial, sans-serif" letter-spacing="1">Prahari — a decision-intelligence layer that shows its work.</text>
+</svg>

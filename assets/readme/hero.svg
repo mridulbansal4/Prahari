@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" width="1200" height="380" font-family="Georgia, 'Times New Roman', serif">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#12262b"/>
+      <stop offset="100%" stop-color="#0B0D0F"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="380" fill="url(#glow)"/>
+  <g transform="translate(505,64) scale(2.05)"><path d="M36 22 C28 7 16 7 16 22 C16 37 28 37 36 22 C44 7 56 7 56 22 C56 37 44 37 36 22 Z" fill="none" stroke="#3FAAB8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 22 C52 7 40 7 40 22 C40 37 52 37 60 22 C68 7 80 7 80 22 C80 37 68 37 60 22 Z" fill="none" stroke="#3FAAB8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <text x="600" y="230" text-anchor="middle" fill="#f2f4f6" font-size="72" letter-spacing="6">PRAHARI</text>
+  <text x="600" y="272" text-anchor="middle" fill="#3FAAB8" font-size="21" letter-spacing="3" font-family="Inter, Arial, sans-serif">INDUSTRIAL DECISION INTELLIGENCE OS</text>
+  <text x="600" y="322" text-anchor="middle" fill="#adb5bd" font-size="17" font-family="Inter, Arial, sans-serif">Every answer carries its evidence, its confidence, and the path it took to get there.</text>
+  <line x1="360" y1="348" x2="840" y2="348" stroke="#2b3036" stroke-width="1"/>
+</svg>
