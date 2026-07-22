@@ -1,5 +1,6 @@
 // Knowledge map — two modes: the current answer's trace, and a plant-wide browse assembled
 // from every traversal walked so far (see lib/graph.ts for why that assembly is necessary).
+import { openChat } from "../lib/chat";
 import { useEffect, useState } from "react";
 import { GraphLegend, TraversalTrace } from "../components/GraphCanvas";
 import { NetworkGraph, type NetNode } from "../components/NetworkGraph";
@@ -11,10 +12,8 @@ type Mode = "trace" | "plant";
 
 export function KnowledgeMapView({
   run,
-  onAskAbout,
 }: {
   run: RunState;
-  onAskAbout: (q: string) => void;
 }) {
   const hasTrace = run.hops.length > 0;
   const [mode, setMode] = useState<Mode>(hasTrace ? "trace" : "plant");
@@ -84,7 +83,9 @@ export function KnowledgeMapView({
             nodes={active.nodes}
             links={active.links}
             height={560}
-            onAskAbout={(n: NetNode) => onAskAbout(`Tell me about ${n.detail}`)}
+            onAskAbout={(n: NetNode) =>
+              openChat({ prompt: `Tell me about ${n.detail}`, context: n.detail })
+            }
           />
 
           {mode === "plant" && plant && (

@@ -2,6 +2,7 @@
 // its sources and confidence. No chat bubble, no avatar, no assistant persona.
 import { useState } from "react";
 import type { Citation, Claim, InvestigationResult } from "../lib/types";
+import { docLabel, useDocNames } from "../lib/docNames";
 import { Badge, Confidence } from "./ui";
 
 function CitationPeek({ citation }: { citation: Citation }) {
@@ -66,6 +67,9 @@ export function CitationChips({ citations }: { citations: Citation[] }) {
 
 function ClaimRow({ claim, index }: { claim: Claim; index: number }) {
   const [open, setOpen] = useState<number | null>(null);
+  const docNames = useDocNames();
+  // Name the document behind this claim, from its first citation. Real source only.
+  const source = claim.citations[0] ? docLabel(docNames, claim.citations[0].doc_id) : "";
   return (
     <li
       style={{
@@ -108,7 +112,7 @@ function ClaimRow({ claim, index }: { claim: Claim; index: number }) {
             </button>
           ))}
         </p>
-        <Confidence state={claim.confidence} />
+        <Confidence state={claim.confidence} source={source} />
       </div>
       {open !== null && claim.citations[open] && <CitationPeek citation={claim.citations[open]} />}
     </li>

@@ -7,6 +7,7 @@
 // The investigation controller lives HERE, above the views, so a run started in Ask keeps
 // streaming while the user reads Alerts or the map and is still there when they come back.
 import { useCallback, useEffect, useState } from "react";
+import { ChatWidget } from "./components/ChatWidget";
 import { Sidebar } from "./components/Sidebar";
 import { loadAlerts, type Alert } from "./lib/alerts";
 import type { Coverage } from "./lib/types";
@@ -76,17 +77,12 @@ export default function App() {
           {view === "past" && <PastAnswersView onAsk={askAndGo} />}
           {view === "documents" && <DocumentsView />}
           {view === "alerts" && (
-            <AlertsView
-              alerts={alerts}
-              coverage={coverage}
-              loading={alertsLoading}
-              onAsk={askAndGo}
-            />
+            <AlertsView alerts={alerts} coverage={coverage} loading={alertsLoading} />
           )}
-          {view === "map" && <KnowledgeMapView run={run} onAskAbout={askAndGo} />}
-          {view === "assets" && <AssetMapView alerts={alerts} onAsk={askAndGo} />}
+          {view === "map" && <KnowledgeMapView run={run} />}
+          {view === "assets" && <AssetMapView alerts={alerts} />}
           {view === "expert" && (
-            <ExpertKnowledgeView onAsk={askAndGo} onOpenAlerts={() => setView("alerts")} />
+            <ExpertKnowledgeView onOpenAlerts={() => setView("alerts")} />
           )}
           {view === "decisions" && <DecisionsView onAsk={askAndGo} />}
           {view === "audit" && <AuditView />}
@@ -99,6 +95,10 @@ export default function App() {
           </span>
         </div>
       </main>
+
+      {/* Floating ask-anywhere widget; summoned with context by "Ask about this" affordances. */}
+      {/* "Understand better" jumps to the full Ask page and re-runs the question there. */}
+      <ChatWidget onOpenFull={askAndGo} />
     </div>
   );
 }

@@ -4,6 +4,7 @@
 // means anything if the knowledge itself is here: not "Anil knows about strainers" but the
 // actual rule he'd tell you. So each item shows its text, and the capture form writes new
 // text through the real endpoint rather than pretending to.
+import { openChat } from "../lib/chat";
 import { useCallback, useEffect, useState } from "react";
 import { Badge, EmptyState, LoadingBar, Notice, Skeleton, ViewHeader } from "../components/ui";
 import { api } from "../lib/api";
@@ -28,7 +29,7 @@ const KIND_OPTIONS = [
 
 /* --------------------------------------------------------------- one item */
 
-function KnowledgeRow({ item, onAsk }: { item: KnowledgeItem; onAsk: (q: string) => void }) {
+function KnowledgeRow({ item }: { item: KnowledgeItem }) {
   const [open, setOpen] = useState(false);
   const hasText = item.text.trim().length > 0;
 
@@ -118,7 +119,12 @@ function KnowledgeRow({ item, onAsk }: { item: KnowledgeItem; onAsk: (q: string)
             <button
               type="button"
               className="btn btn--text"
-              onClick={() => onAsk(`What do we know about ${item.label}?`)}
+              onClick={() =>
+                openChat({
+                  prompt: `What do we know about ${item.label}?`,
+                  context: item.label,
+                })
+              }
             >
               Ask about this →
             </button>
@@ -304,10 +310,8 @@ function CaptureForm({
 /* ------------------------------------------------------------------- view */
 
 export function ExpertKnowledgeView({
-  onAsk,
   onOpenAlerts,
 }: {
-  onAsk: (q: string) => void;
   onOpenAlerts: () => void;
 }) {
   const [people, setPeople] = useState<ExpertiseRecord[] | null>(null);
@@ -449,7 +453,7 @@ export function ExpertKnowledgeView({
             ) : (
               <div className="stack" style={{ gap: "var(--sp-xs)" }}>
                 {p.knows.map((k, i) => (
-                  <KnowledgeRow key={`${k.target_ref}-${i}`} item={k} onAsk={onAsk} />
+                  <KnowledgeRow key={`${k.target_ref}-${i}`} item={k} />
                 ))}
               </div>
             )}

@@ -1,4 +1,5 @@
 // Alerts — the differentiator. What the system found without being asked.
+import { openChat } from "../lib/chat";
 import { useState } from "react";
 import { Badge, EmptyState, Skeleton, ViewHeader } from "../components/ui";
 import {
@@ -8,7 +9,14 @@ import {
   type AlertKind,
   type TriageState,
 } from "../lib/alerts";
+import { docLabel, useDocNames } from "../lib/docNames";
 import type { Coverage } from "../lib/types";
+
+/** Replace opaque doc ids (doc-abc… / DOC-…) anywhere in a string with real filenames. */
+function prettifyDocs(text: string, names: Map<string, string> | null): string {
+  if (!names) return text;
+  return text.replace(/\b(doc-[0-9a-f]{6,}|DOC-[A-Z0-9-]+)\b/g, (m) => names.get(m) ?? m);
+}
 
 const KIND_COPY: Record<AlertKind, { badge: string; tone: "error" | "neutral" }> = {
   overdue: { badge: "Overdue", tone: "error" },
@@ -21,16 +29,15 @@ function AlertCard({
   alert,
   triage,
   onTriage,
-  onAsk,
 }: {
   alert: Alert;
   triage?: TriageState;
   onTriage: (s: TriageState | null) => void;
-  onAsk: (q: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const copy = KIND_COPY[alert.kind];
   const muted = triage === "snoozed" || triage === "reviewed";
+  const docNames = useDocNames();
 
   return (
     <div className="card card--hover" style={{ opacity: muted ? 0.6 : 1 }}>
@@ -46,7 +53,14 @@ function AlertCard({
       </div>
 
       <p className="t-body-sm" style={{ marginTop: "var(--sp-xs)" }}>
-        {alert.detail}
+        {/* For a conflict the two documents are already named in the Source A/B boxes below,
+            so drop the redundant "between X and Y" preamble and keep just the disagreement. */}
+        {prettifyDocs(
+          alert.conflict
+            ? alert.detail.replace(/^Contradictory evidence between[^.]*\.\s*/i, "")
+            : alert.detail,
+          docNames,
+        )}
       </p>
 
       {/* Contradictions show the two sides next to each other — that is the whole point. */}
@@ -70,7 +84,7 @@ function AlertCard({
           >
             <div className="t-label">Source A</div>
             <div className="t-body-sm ink" style={{ wordBreak: "break-word" }}>
-              {alert.conflict.left}
+              {docLabel(docNames, alert.conflict.left)}
             </div>
           </div>
           <span aria-hidden="true" className="t-caption">
@@ -86,7 +100,7 @@ function AlertCard({
           >
             <div className="t-label">Source B</div>
             <div className="t-body-sm ink" style={{ wordBreak: "break-word" }}>
-              {alert.conflict.right}
+              {docLabel(docNames, alert.conflict.right)}
             </div>
           </div>
         </div>
@@ -131,11 +145,12 @@ function AlertCard({
               className="btn btn--outline"
               style={{ minHeight: 34 }}
               onClick={() =>
-                onAsk(
-                  alert.assetTag
+                openChat({
+                  prompt: alert.assetTag
                     ? `What should I know about ${alert.assetTag}?`
                     : `Tell me about ${alert.involves}`,
-                )
+                  context: alert.title,
+                })
               }
             >
               Ask about this
@@ -171,12 +186,10 @@ export function AlertsView({
   alerts,
   coverage,
   loading,
-  onAsk,
 }: {
   alerts: Alert[];
   coverage: Coverage | null;
   loading: boolean;
-  onAsk: (q: string) => void;
 }) {
   const [triage, setTriage] = useState<Record<string, TriageState>>(() => loadTriage());
   const [showDismissed, setShowDismissed] = useState(false);
@@ -228,7 +241,6 @@ export function AlertsView({
               alert={a}
               triage={triage[a.id]}
               onTriage={(s) => setOne(a.id, s)}
-              onAsk={onAsk}
             />
           ))}
         </div>
@@ -254,7 +266,6 @@ export function AlertsView({
                   alert={a}
                   triage={triage[a.id]}
                   onTriage={(s) => setOne(a.id, s)}
-                  onAsk={onAsk}
                 />
               ))}
             </div>

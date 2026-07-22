@@ -14,6 +14,10 @@ os.environ["PRAHARI_PROFILE"] = "embedded"
 # Keep tests deterministic + offline: never use a live model, even if a .env sets one
 # (env vars override the .env file in pydantic-settings). Tests exercise the template-synth rung.
 os.environ["PRAHARI_GEMINI_API_KEY"] = ""
+# Keep document-understanding offline in tests too, so a real .env key never makes a test
+# reach the network. The drawing/OCR tests inject their own stub providers.
+os.environ["PRAHARI_VLM_PROVIDER"] = "none"
+os.environ["PRAHARI_OCR_PROVIDER"] = "none"
 os.environ["PRAHARI_FORCE_RUNG"] = ""
 
 

@@ -348,6 +348,137 @@ select {
   animation: bar-slide 1.4s var(--ease) infinite;
 }
 
+/* ---------- Page title ----------
+ * Bolder and a step larger than display-lg, matching the weight of the Prahari wordmark.
+ * (A deliberate exception to the 300-weight display rule, requested for the page headings.) */
+.page-title {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.4px;
+  color: var(--ink);
+}
+@media (max-width: 639px) {
+  .page-title {
+    font-size: 32px;
+  }
+}
+
+/* ---------- Floating chat widget ---------- */
+.chat-fab {
+  position: fixed;
+  bottom: var(--sp-lg);
+  right: var(--sp-lg);
+  z-index: 60;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--r-full);
+  /* White launcher so the black double-infinity mark reads as drawn. */
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface-card);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.chat-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.chat-panel {
+  position: fixed;
+  bottom: var(--sp-lg);
+  right: var(--sp-lg);
+  z-index: 61;
+  width: min(400px, calc(100vw - var(--sp-xl)));
+  height: min(560px, calc(100vh - var(--sp-xxl)));
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  /* A genuine overlay (token ladder Lift 4: topmost popovers) — real elevation, still soft. */
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-sm) var(--sp-base);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+  color: var(--ink); /* the logo (currentColor) reads ink on the white header */
+}
+.chat-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font: var(--t-body);
+  padding: 4px 6px;
+  border-radius: var(--r-sm);
+}
+.chat-icon-btn:hover {
+  color: var(--ink);
+}
+
+.chat-context {
+  padding: var(--sp-xs) var(--sp-base);
+  background: var(--canvas-soft);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+
+.chat-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* vertical scroll only — no sideways drift */
+  overflow-wrap: anywhere;
+  padding: var(--sp-base);
+}
+/* Let every flex child shrink and wrap inside the narrow panel, and cap widths, so a long
+   filename or a wide row can never force a horizontal scrollbar. */
+.chat-body *,
+.chat-body *::before,
+.chat-body *::after {
+  min-width: 0;
+  max-width: 100%;
+}
+.chat-body svg {
+  height: auto;
+}
+/* Tighter answer card in the panel — full-width padding wastes the little room there is. */
+.chat-panel .card {
+  padding: var(--sp-sm) var(--sp-base);
+}
+
+.chat-input {
+  display: flex;
+  gap: var(--sp-xs);
+  padding: var(--sp-sm) var(--sp-base);
+  border-top: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+.chat-input .input {
+  min-height: 40px;
+}
+
+@media (max-width: 479px) {
+  .chat-panel {
+    width: calc(100vw - var(--sp-base));
+    height: calc(100vh - var(--sp-xxl));
+    right: calc(var(--sp-base) / 2);
+    bottom: calc(var(--sp-base) / 2);
+  }
+}
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -626,6 +757,13 @@ select {
 .doc-grid,
 .alert-grid {
   grid-template-columns: 1fr;
+}
+/* Cards size to their own content instead of stretching to the tallest in the row, so a short
+   alert next to a tall one no longer carries a block of empty space. */
+.alert-grid,
+.doc-grid,
+.how-grid {
+  align-items: start;
 }
 .ask-grid,
 .map-grid {

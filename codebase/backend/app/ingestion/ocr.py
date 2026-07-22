@@ -55,9 +55,19 @@ class UnlimitedOcrProvider:
 
     id = "unlimited-ocr"
 
+    # A model-agnostic transcription instruction. Unlimited-OCR's own "<image>document
+    # parsing." sentinel is model-specific; a plain instruction also works on a general hosted
+    # vision model (NVIDIA, etc.), so the same adapter serves both a local and a hosted endpoint.
+    _PROMPT = (
+        "Transcribe every piece of text visible in this document image, exactly as printed, "
+        "preserving line and paragraph breaks. Do not summarise, explain, or add anything. "
+        "Output only the transcribed text."
+    )
+
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
         self._base = (settings.unlimited_ocr_base_url or "").rstrip("/")
+        self._key = settings.unlimited_ocr_api_key
 
     def available(self) -> bool:
         if self._settings.unlimited_ocr_local:
@@ -70,16 +80,20 @@ class UnlimitedOcrProvider:
             raise RuntimeError(
                 "Unlimited-OCR selected but PRAHARI_UNLIMITED_OCR_BASE_URL is not set."
             )
+        headers = {"content-type": "application/json"}
+        if self._key:  # a hosted endpoint needs a Bearer token; a local one ignores it
+            headers["Authorization"] = f"Bearer {self._key}"
         out: list[str] = []
         for page in pages:
             b64 = base64.b64encode(page).decode("ascii")
             body: dict[str, Any] = {
                 "model": self._settings.unlimited_ocr_model,
+                "max_tokens": 4096,
                 "messages": [
                     {
                         "role": "user",
                         "content": [
-                            {"type": "text", "text": "<image>document parsing."},
+                            {"type": "text", "text": self._PROMPT},
                             {
                                 "type": "image_url",
                                 "image_url": {"url": f"data:{mime};base64,{b64}"},
@@ -90,6 +104,7 @@ class UnlimitedOcrProvider:
             }
             resp = httpx.post(
                 f"{self._base}/chat/completions",
+                headers=headers,
                 json=body,
                 timeout=120.0,  # page-level VLM transcription is slow; generous by design
             )

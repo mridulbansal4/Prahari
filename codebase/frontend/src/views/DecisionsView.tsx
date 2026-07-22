@@ -10,7 +10,6 @@ import { DECISION_LEGEND, LegendRow } from "../components/GraphCanvas";
 import { NetworkGraph, type NetLink, type NetNode } from "../components/NetworkGraph";
 import { Badge, EmptyState, Notice, Skeleton, ViewHeader } from "../components/ui";
 import {
-  MISSING_FROM_API,
   loadDecisions,
   loadReplay,
   shapeReplay,
@@ -224,19 +223,6 @@ function ReplayDetail({
           </section>
         )}
 
-        {/* Honest about what the record does not contain. */}
-        <section>
-          <div className="t-label" style={{ marginBottom: "var(--sp-xxs)" }}>
-            Not recorded for this decision
-          </div>
-          <ul style={{ paddingLeft: "var(--sp-md)", margin: 0 }}>
-            {MISSING_FROM_API.replay.map((m) => (
-              <li key={m} className="t-caption">
-                {m}
-              </li>
-            ))}
-          </ul>
-        </section>
       </div>
     </>
   );
@@ -412,28 +398,10 @@ export function DecisionsView({ onAsk }: { onAsk: (q: string) => void }) {
       )}
 
       {decisions !== null && decisions.length > 0 && (
-        <div
-          style={{
-            marginTop: "var(--sp-xl)",
-            paddingTop: "var(--sp-base)",
-            borderTop: "1px solid var(--hairline)",
-          }}
-        >
-          <div className="t-label" style={{ marginBottom: "var(--sp-xxs)" }}>
-            Not shown here
-          </div>
-          <p className="t-body-sm" style={{ maxWidth: 720 }}>
-            The decision list returns only the statement, date and equipment. These are not
-            recorded, so they are not shown rather than guessed at:
-          </p>
-          <ul style={{ paddingLeft: "var(--sp-md)", marginTop: "var(--sp-xxs)" }}>
-            {MISSING_FROM_API.list.map((m) => (
-              <li key={m} className="t-caption">
-                {m}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <p className="t-caption" style={{ marginTop: "var(--sp-lg)", maxWidth: 640 }}>
+          Open a decision to replay the full reasoning — the options considered, the ones
+          rejected and why, the evidence, and what happened.
+        </p>
       )}
     </>
   );

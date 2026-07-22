@@ -263,34 +263,133 @@ def seed() -> dict:
 
 
 def _seed_decision_graph(g, sink, s_strainer, s_oem) -> None:
-    chain = [
-        ("dec-obs-2019", NodeLabel.OBSERVATION, {"title": "2019: recurring high vibration on P-101B",
-                                                 "date": "2019-03-11"}),
-        ("dec-hyp-2019", NodeLabel.HYPOTHESIS, {"title": "Hypothesis: suction strainer fouling"}),
-        ("dec-evi-2019", NodeLabel.EVIDENCE, {"title": "Strainer S-14 found fouled on inspection"}),
-        ("dec-decision-2019", NodeLabel.DECISION, {"title": "Clean strainer; do NOT shut the unit down",
-                                                   "date": "2019-03-12", "asset_id": "asset-p101b"}),
-        ("dec-alt-2019", NodeLabel.ALTERNATIVE, {"title": "Rejected alternative: full unit shutdown",
-                                                 "text": "Rejected — production impact judged to "
-                                                 "outweigh risk given strainer was cleanable online."}),
-        ("dec-risk-2019", NodeLabel.RISK_ACCEPTED, {"title": "Accepted risk: continued run to next TA"}),
-        ("dec-out-2019", NodeLabel.OUTCOME, {"title": "Vibration returned to normal after cleaning"}),
-        ("dec-les-2019", NodeLabel.LESSON_LEARNED, {"title": "Lesson: strainer DP trend predicts BFP "
-                                                    "vibration; monitor DP, not just vibration."}),
+    # Four recorded decisions, each a full reasoning chain
+    # (Observation → Hypothesis → Evidence → Decision → Alternative → RiskAccepted → Outcome →
+    # LessonLearned) so the page reads like real institutional memory, not a single example.
+    # Every chain is drawn from the document corpus — the 2019 strainer call, the 2023 seal
+    # failure, the TE-101B calibration bias, and the MOV-118 sticking valve.
+    chains = [
+        {
+            "eff": date(2019, 3, 11),
+            "evidence_span": s_strainer,
+            "nodes": [
+                ("dec-obs-2019", NodeLabel.OBSERVATION,
+                 {"title": "2019: recurring high vibration on P-101B", "date": "2019-03-11"}),
+                ("dec-hyp-2019", NodeLabel.HYPOTHESIS,
+                 {"title": "Hypothesis: suction strainer fouling"}),
+                ("dec-evi-2019", NodeLabel.EVIDENCE,
+                 {"title": "Strainer S-14 found fouled on inspection"}),
+                ("dec-decision-2019", NodeLabel.DECISION,
+                 {"title": "Clean the strainer online rather than shut the unit down",
+                  "date": "2019-03-12", "asset_id": "asset-p101b"}),
+                ("dec-alt-2019", NodeLabel.ALTERNATIVE,
+                 {"title": "Rejected: full unit shutdown",
+                  "text": "Rejected — the production impact of a shutdown outweighed the risk, "
+                          "given the strainer was cleanable online."}),
+                ("dec-risk-2019", NodeLabel.RISK_ACCEPTED,
+                 {"title": "Accepted risk: continued run to the next turnaround"}),
+                ("dec-out-2019", NodeLabel.OUTCOME,
+                 {"title": "Vibration returned to normal after cleaning"}),
+                ("dec-les-2019", NodeLabel.LESSON_LEARNED,
+                 {"title": "Lesson: strainer DP trend predicts BFP vibration — monitor DP, "
+                           "not just vibration."}),
+            ],
+        },
+        {
+            "eff": date(2023, 8, 20),
+            "evidence_span": s_oem,
+            "nodes": [
+                ("dec-obs-2023", NodeLabel.OBSERVATION,
+                 {"title": "2023: mechanical seal failure on P-101B", "date": "2023-08-18"}),
+                ("dec-hyp-2023", NodeLabel.HYPOTHESIS,
+                 {"title": "Hypothesis: prolonged run below minimum continuous flow"}),
+                ("dec-evi-2023", NodeLabel.EVIDENCE,
+                 {"title": "Teardown found MOV-118 stuck and S-14 fouled — pump ran below 72 m³/h"}),
+                ("dec-decision-2023", NodeLabel.DECISION,
+                 {"title": "Replace the seal and fit a low-flow protective trip",
+                  "date": "2023-08-20", "asset_id": "asset-p101b"}),
+                ("dec-alt-2023", NodeLabel.ALTERNATIVE,
+                 {"title": "Rejected: replace the seal only",
+                  "text": "Rejected — a like-for-like seal swap leaves the low-flow cause in "
+                          "place, so the failure would recur."}),
+                ("dec-risk-2023", NodeLabel.RISK_ACCEPTED,
+                 {"title": "Accepted risk: trip setpoint tightening pending MOC approval"}),
+                ("dec-out-2023", NodeLabel.OUTCOME,
+                 {"title": "Pump returned to service; no repeat seal failure since"}),
+                ("dec-les-2023", NodeLabel.LESSON_LEARNED,
+                 {"title": "Lesson: the seal is the symptom — minimum-flow protection is the fix."}),
+            ],
+        },
+        {
+            "eff": date(2024, 6, 3),
+            "evidence_span": s_oem,
+            "nodes": [
+                ("dec-obs-2024", NodeLabel.OBSERVATION,
+                 {"title": "TE-101B alarms that don't match field readings", "date": "2024-06-01"}),
+                ("dec-hyp-2024", NodeLabel.HYPOTHESIS,
+                 {"title": "Hypothesis: TE-101B reads about 5% high"}),
+                ("dec-evi-2024", NodeLabel.EVIDENCE,
+                 {"title": "Bearing temperature verified against a portable pyrometer"}),
+                ("dec-decision-2024", NodeLabel.DECISION,
+                 {"title": "Keep the 85 °C alarm and recalibrate TE-101B",
+                  "date": "2024-06-03", "asset_id": "asset-p101b"}),
+                ("dec-alt-2024", NodeLabel.ALTERNATIVE,
+                 {"title": "Rejected: raise the alarm setpoint",
+                  "text": "Rejected — moving the setpoint to suppress the nuisance alarm would "
+                          "mask a genuine overheat. Fix the instrument, not the limit."}),
+                ("dec-risk-2024", NodeLabel.RISK_ACCEPTED,
+                 {"title": "Accepted risk: operate with a known instrument bias until calibration"}),
+                ("dec-out-2024", NodeLabel.OUTCOME,
+                 {"title": "Recalibration scheduled; no spurious trips after operator briefing"}),
+                ("dec-les-2024", NodeLabel.LESSON_LEARNED,
+                 {"title": "Lesson: fix the instrument, don't move the setpoint."}),
+            ],
+        },
+        {
+            "eff": date(2023, 9, 12),
+            "evidence_span": s_strainer,
+            "nodes": [
+                ("dec-obs-mov", NodeLabel.OBSERVATION,
+                 {"title": "MOV-118 sticks on hot afternoons, running P-101B below min flow",
+                  "date": "2023-09-10"}),
+                ("dec-hyp-mov", NodeLabel.HYPOTHESIS,
+                 {"title": "Hypothesis: actuator binding with no position-feedback alarm"}),
+                ("dec-evi-mov", NodeLabel.EVIDENCE,
+                 {"title": "Valve moved 6% and stopped despite a full-open command"}),
+                ("dec-decision-mov", NodeLabel.DECISION,
+                 {"title": "Overhaul the MOV-118 actuator and add a position-deviation alarm",
+                  "date": "2023-09-12", "asset_id": "asset-p101b"}),
+                ("dec-alt-mov", NodeLabel.ALTERNATIVE,
+                 {"title": "Rejected: replace the whole valve",
+                  "text": "Rejected — a full valve replacement carries a long lead time when the "
+                          "fault is confined to the actuator."}),
+                ("dec-risk-mov", NodeLabel.RISK_ACCEPTED,
+                 {"title": "Accepted risk: manual afternoon checks until the alarm is commissioned"}),
+                ("dec-out-mov", NodeLabel.OUTCOME,
+                 {"title": "Actuator overhauled; the deviation alarm now catches sticking early"}),
+                ("dec-les-mov", NodeLabel.LESSON_LEARNED,
+                 {"title": "Lesson: a commanded-open signal is not proof of movement — "
+                           "alarm on the feedback."}),
+            ],
+        },
     ]
-    spans = {NodeLabel.EVIDENCE: [s_strainer], NodeLabel.HYPOTHESIS: [s_strainer],
-             NodeLabel.OBSERVATION: [s_oem]}
-    prev = None
-    for nid, label, props in chain:
-        node = Node(id=nid, label=label, tenant=TENANT, props=props, effective_from=date(2019, 3, 11))
-        if label in (NodeLabel.HYPOTHESIS, NodeLabel.EVIDENCE):
-            sink.write_node(node, spans=spans.get(label, []))
-        else:
-            g.upsert_node(node)
-        if prev:
-            g.upsert_edge(Edge(id=f"led-{prev}-{nid}", type=EdgeType.LED_TO, src=prev, dst=nid,
-                               tenant=TENANT))
-        prev = nid
+
+    for chain in chains:
+        spans = {
+            NodeLabel.EVIDENCE: [chain["evidence_span"]],
+            NodeLabel.HYPOTHESIS: [chain["evidence_span"]],
+        }
+        prev = None
+        for nid, label, props in chain["nodes"]:
+            node = Node(id=nid, label=label, tenant=TENANT, props=props, effective_from=chain["eff"])
+            if label in (NodeLabel.HYPOTHESIS, NodeLabel.EVIDENCE):
+                sink.write_node(node, spans=spans.get(label, []))
+            else:
+                g.upsert_node(node)
+            if prev:
+                g.upsert_edge(Edge(id=f"led-{prev}-{nid}", type=EdgeType.LED_TO, src=prev,
+                                   dst=nid, tenant=TENANT))
+            prev = nid
 
 
 if __name__ == "__main__":

@@ -88,10 +88,11 @@ class Settings(BaseSettings):
     # else nothing. Default "none" keeps a fresh checkout free and GPU-less: scanned documents
     # are quarantined with a reason rather than guessed at.
     ocr_provider: Literal["none", "auto", "unlimited", "paddle"] = "none"
-    unlimited_ocr_base_url: str | None = None  # local vLLM/SGLang OpenAI-compatible endpoint
+    unlimited_ocr_base_url: str | None = None  # OpenAI-compatible vision endpoint (local or hosted)
     unlimited_ocr_model: str = "Unlimited-OCR"
     unlimited_ocr_mode: Literal["gundam", "base"] = "gundam"  # gundam=single page, base=multi
     unlimited_ocr_local: bool = False  # True = in-process transformers (requires CUDA)
+    unlimited_ocr_api_key: str | None = None  # Bearer token for a hosted endpoint (e.g. NVIDIA)
     paddle_ocr_lang: str = "en"
     ocr_dpi: int = 300  # PDF page raster resolution handed to the OCR model
 
@@ -102,7 +103,9 @@ class Settings(BaseSettings):
     vlm_provider: Literal["none", "cosmos", "openai_vision", "local"] = "none"
     nvidia_api_key: str | None = None
     cosmos_base_url: str = "https://integrate.api.nvidia.com/v1"
-    cosmos_model: str = "nvidia/cosmos3-nano-reasoner"
+    # A vision model on NVIDIA's hosted catalog that actually reads a P&ID's tags and
+    # connectivity. (The earlier cosmos3-nano-reasoner id returns 404 — it is not published.)
+    cosmos_model: str = "nvidia/nemotron-nano-12b-v2-vl"
     vlm_base_url: str | None = None  # any OpenAI-compatible vision endpoint
     vlm_model: str | None = None
     vlm_api_key: str | None = None

@@ -1,5 +1,6 @@
 // Asset map — the moat, surfaced. One physical thing goes by many names across drawings,
 // sensors, work orders and conversation; this shows them resolved into one asset.
+import { openChat } from "../lib/chat";
 import { useEffect, useState } from "react";
 import { Badge, EmptyState, Skeleton, ViewHeader } from "../components/ui";
 import { api } from "../lib/api";
@@ -29,10 +30,8 @@ function identifierName(ref: string): string {
 
 export function AssetMapView({
   alerts,
-  onAsk,
 }: {
   alerts: Alert[];
-  onAsk: (q: string) => void;
 }) {
   const [assets, setAssets] = useState<Asset[] | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
@@ -175,7 +174,12 @@ export function AssetMapView({
                     type="button"
                     className="btn btn--primary"
                     style={{ marginTop: "var(--sp-lg)" }}
-                    onClick={() => onAsk(`What should I know about ${asset.tag}?`)}
+                    onClick={() =>
+                      openChat({
+                        prompt: `What should I know about ${asset.tag}?`,
+                        context: `${asset.tag} — ${asset.name}`,
+                      })
+                    }
                   >
                     Ask about {asset.tag}
                   </button>

@@ -65,7 +65,7 @@ export function Section({
             <div className="t-label" style={{ marginBottom: "var(--sp-sm)" }}>
               {label}
             </div>
-            <h2 className="t-display-lg">{title}</h2>
+            <h2 className="page-title">{title}</h2>
             <p className="t-body" style={{ marginTop: "var(--sp-sm)", color: "var(--body)" }}>
               {help}
             </p>
@@ -101,7 +101,7 @@ export function ViewHeader({
       }}
     >
       <div style={{ maxWidth: 680 }}>
-        <h1 className="t-display-lg">{title}</h1>
+        <h1 className="page-title">{title}</h1>
         <p className="t-body" style={{ marginTop: "var(--sp-xs)" }}>
           {helper}
         </p>
@@ -236,13 +236,13 @@ const CONFIDENCE: Record<ConfidenceState, { label: string; filled: number }> = {
   abstained: { label: "Not answered", filled: 0 },
 };
 
-export function Confidence({ state }: { state: ConfidenceState }) {
+export function Confidence({ state, source }: { state: ConfidenceState; source?: string }) {
   const { label, filled } = CONFIDENCE[state] ?? CONFIDENCE.inferred;
   return (
     <span
       className="row"
       style={{ gap: "var(--sp-xs)", flexShrink: 0 }}
-      title={`Confidence: ${label}`}
+      title={source ? `${source} — ${label}` : `Confidence: ${label}`}
     >
       <span aria-hidden="true" className="row" style={{ gap: 3 }}>
         {[0, 1, 2].map((i) => (
@@ -258,6 +258,13 @@ export function Confidence({ state }: { state: ConfidenceState }) {
         ))}
       </span>
       <span className="t-caption" style={{ color: "var(--muted)" }}>
+        {/* The source document that backs this claim, named ahead of the confidence label. */}
+        {source && (
+          <span className="ink" style={{ fontWeight: 500 }}>
+            {source}
+          </span>
+        )}
+        {source ? " · " : ""}
         {label}
       </span>
     </span>
